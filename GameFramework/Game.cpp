@@ -46,11 +46,11 @@ LRESULT Game::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_KEYDOWN:
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wParam) << std::endl;
-
-		if (static_cast<unsigned int>(wParam) == 27) PostQuitMessage(0);
+	case WM_KEYUP:
+		if (wParam == VK_ESCAPE)
+		{
+			PostQuitMessage(0);
+		}
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);
