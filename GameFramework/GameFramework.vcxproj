@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderContext.h" />
     <ClInclude Include="Window.h" />

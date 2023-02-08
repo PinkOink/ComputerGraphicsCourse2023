@@ -1,32 +1,9 @@
-#include "Game.h"
+#include "GameSimpleTriangles.h"
 
 
-class GameChild : public Game
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
-public:
-  GameChild()
-    : Game("SimpleTriangles")
-  {}
-
-protected:
-  bool update()
-  {
-    return true;
-  }
-  bool draw()
-  {
-    mRenderContext->beginFrame();
-    mRenderContext->endFrame();
-    
-    return true;
-  }
-};
-
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
-  PSTR cmdLine, int showCmd)
-{
-  GameChild game;
+  GameSimpleTriangles game;
   if (!game.init())
     return -1;
 

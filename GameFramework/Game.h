@@ -1,7 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "Window.h"
 #include "RenderContext.h"
+#include "GameComponent.h"
 
 
 class Game
@@ -12,22 +15,27 @@ public:
 
 protected:
   Game(const char* gameName = "BaseGame");
+  virtual ~Game();
+
+  // This method must be implemented by children of Game
+  virtual bool createGameComponents() = 0;
+
+private:
   Game(const Game& rhs) = delete;
   Game(Game&& rhs) = delete;
   Game& operator=(const Game& rhs) = delete;
   Game& operator=(Game&& rhs) = delete;
-  virtual ~Game();
 
-
-  // These methods must be implemented by child classes
-  virtual bool update() = 0;
-  virtual bool draw() = 0;
-
-public:
+  bool update();
+  bool draw();
+  
+protected:
   Window* mWindow = nullptr;
   RenderContext* mRenderContext = nullptr;
 
 protected:
   const char* mGameName;
+
+  std::vector<GameComponent*> mGameComponents;
 };
 
