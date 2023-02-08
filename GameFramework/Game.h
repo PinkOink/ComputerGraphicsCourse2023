@@ -11,7 +11,7 @@ public:
   bool run();
 
 protected:
-  Game();
+  Game(const char* gameName = "BaseGame");
   Game(const Game& rhs) = delete;
   Game(Game&& rhs) = delete;
   Game& operator=(const Game& rhs) = delete;

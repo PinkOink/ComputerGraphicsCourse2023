@@ -40,8 +40,8 @@ bool Game::run()
 	return true;
 }
 
-Game::Game()
-	: mGameName("BaseGame")
+Game::Game(const char* gameName)
+	: mGameName(gameName)
 {}
 
 Game::~Game()

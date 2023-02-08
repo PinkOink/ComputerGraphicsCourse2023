@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Game.h"
 
 
@@ -6,7 +5,7 @@ class GameChild : public Game
 {
 public:
   GameChild()
-    : Game()
+    : Game("SimpleTriangles")
   {}
 
 protected:
