@@ -2,15 +2,10 @@
 #include "Game.h"
 
 
-namespace
-{
-  Game* gGame = nullptr;
-}
-
-
 bool Game::init()
 {
-	if (!mWindow.init(mInstanceHandle, mGameName))
+	mWindow = new Window();
+	if (!mWindow->init(mGameName, 800, 600))
 	{
 		MessageBox(0, L"Window initialization failed", 0, 0);
 		assert(false);
@@ -20,53 +15,21 @@ bool Game::init()
 	return true;
 }
 
-int Game::run()
+bool Game::run()
 {
-	MSG msg = { 0 };
-
-	while (msg.message != WM_QUIT)
+	while (!mWindow->shouldQuit())
 	{
-		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+		mWindow->processMessages();
 	}
 
-	return (int)msg.wParam;
+	return true;
 }
 
-Game* Game::getGame()
-{
-  assert(gGame);
-  return gGame;
-}
-
-LRESULT Game::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_KEYUP:
-		if (wParam == VK_ESCAPE)
-		{
-			PostQuitMessage(0);
-		}
-		return 0;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-	default:
-		return DefWindowProc(hwnd, msg, wParam, lParam);
-	}
-}
-
-Game::Game(HINSTANCE hInstance)
-	: mInstanceHandle(hInstance), mGameName(L"Game"), mWindow()
-{
-	assert(gGame == nullptr);
-	gGame = this;
-}
+Game::Game()
+	: mGameName("BaseGame")
+{}
 
 Game::~Game()
 {
+	delete mWindow;
 }

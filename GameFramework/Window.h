@@ -1,16 +1,24 @@
 #pragma once
 
 
-class Window
+class Window final
 {
 public:
   Window();
+  Window(const Window& rhs) = delete;
+  Window(Window&& rhs) = delete;
+  Window& operator=(const Window& rhs) = delete;
+  Window& operator=(Window&& rhs) = delete;
+  ~Window();
 
-  bool init(HINSTANCE hInstance, const LPCWSTR& appName);
+  bool init(const char* appName, unsigned int width, unsigned int height);
+  void processMessages();
 
-  HWND getWindowHandle() { return mWindowHandle; }
+  void* getWindowHandle();
+  bool shouldQuit();
 
 protected:
-  HWND mWindowHandle = nullptr;
+  unsigned int mWidth = 0;
+  unsigned int mHeight = 0;
 };
 

@@ -1,42 +1,87 @@
 #include "pch.h"
 #include "Window.h"
-#include "Game.h"
 
 
 namespace
 {
 	LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		return Game::getGame()->msgProc(hwnd, msg, wParam, lParam);
+		// TODO: add Input to game and send there messages from here
+		switch (msg)
+		{
+		case WM_KEYUP:
+			if (wParam == VK_ESCAPE)
+			{
+				PostQuitMessage(0);
+			}
+			return 0;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
+		default:
+			return DefWindowProc(hwnd, msg, wParam, lParam);
+		}
 	}
+
+	struct WindowImpl final
+	{
+		HWND mWindowHandle = nullptr;
+		HINSTANCE mInstanceHandle = nullptr;
+
+		bool mQuitRequested = false;
+
+		const LPCWSTR mClassNameWin = L"GameFrameworkWindow";
+		const char* mClassNameChar = "GameFrameworkWindow";
+	};
+
+	static WindowImpl* gWindowImpl = nullptr;
 };
 
 
 Window::Window()
 {}
 
-bool Window::init(HINSTANCE hInstance, const LPCWSTR& appName)
+Window::~Window()
 {
-	if (mWindowHandle) 
+	if (gWindowImpl)
+	{
+		if (gWindowImpl->mWindowHandle)
+		{
+			DestroyWindow(gWindowImpl->mWindowHandle);
+		}
+		if (gWindowImpl->mInstanceHandle)
+		{
+			UnregisterClassW(gWindowImpl->mClassNameWin, gWindowImpl->mInstanceHandle);
+		}
+	}
+}
+
+bool Window::init(const char* appName, unsigned int width, unsigned int height)
+{
+	if (gWindowImpl)
 	{
 		MessageBox(0, L"Window has already been initialized", 0, 0);
 		assert(false);
 		return false;
 	}
 
-	LPCWSTR className = L"Window";
+	gWindowImpl = new WindowImpl;
+	mWidth = width;
+	mHeight = height;
+
+	gWindowImpl->mInstanceHandle = GetModuleHandle(NULL);
 
 	WNDCLASS wc;
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = MainWndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
+	wc.hInstance = gWindowImpl->mInstanceHandle;
 	wc.hIcon = LoadIcon(0, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(0, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 	wc.lpszMenuName = 0;
-	wc.lpszClassName = className;
+	wc.lpszClassName = gWindowImpl->mClassNameWin;
 
 	if (!RegisterClass(&wc))
 	{
@@ -45,30 +90,50 @@ bool Window::init(HINSTANCE hInstance, const LPCWSTR& appName)
 		return false;
 	}
 
-	// Don't care at this point
-	auto screenWidth = 800;
-	auto screenHeight = 800;
-
-	RECT R = { 0, 0, screenWidth, screenHeight };
+	RECT R = { 0, 0, (LONG)mWidth, (LONG)mHeight };
 	AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
-	int width = R.right - R.left;
-	int height = R.bottom - R.top;
 
-	mWindowHandle = CreateWindow(className, appName,
-		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, 0, 0, hInstance, 0);
-	if (!mWindowHandle)
+	gWindowImpl->mWindowHandle = CreateWindowA(gWindowImpl->mClassNameChar, appName,
+		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, mWidth, mHeight, 0, 0, gWindowImpl->mInstanceHandle, 0);
+	if (!gWindowImpl->mWindowHandle)
 	{
 		MessageBox(0, L"CreateWindow failed", 0, 0);
 		assert(false);
 		return false;
 	}
 
-	ShowWindow(mWindowHandle, SW_SHOW);
+	ShowWindow(gWindowImpl->mWindowHandle, SW_SHOW);
 
-	SetForegroundWindow(mWindowHandle);
-	SetFocus(mWindowHandle);
+	SetForegroundWindow(gWindowImpl->mWindowHandle);
+	SetFocus(gWindowImpl->mWindowHandle);
 
 	ShowCursor(true);
 
 	return true;
+}
+
+void Window::processMessages()
+{
+	MSG message = {};
+
+	while (PeekMessage(&message, 0, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&message);
+		DispatchMessage(&message);
+	}
+
+	if (message.message == WM_QUIT)
+	{
+		gWindowImpl->mQuitRequested = true;
+	}
+}
+
+void* Window::getWindowHandle()
+{
+	return &(gWindowImpl->mWindowHandle);
+}
+
+bool Window::shouldQuit()
+{
+	return gWindowImpl->mQuitRequested;
 }

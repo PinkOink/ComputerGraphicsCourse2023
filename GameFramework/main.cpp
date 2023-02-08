@@ -5,8 +5,8 @@
 class GameChild : public Game
 {
 public:
-  GameChild(HINSTANCE hInstance)
-    : Game(hInstance)
+  GameChild()
+    : Game()
   {}
 };
 
@@ -14,9 +14,11 @@ public:
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
   PSTR cmdLine, int showCmd)
 {
-  GameChild game(hInstance);
+  GameChild game;
   if (!game.init())
-    return 0;
+    return -1;
 
-  return game.run();
+  game.run();
+
+  return 0;
 }
