@@ -128,12 +128,12 @@ void Window::processMessages()
 	}
 }
 
-void* Window::getWindowHandle()
+void* Window::getWindowHandle() const
 {
 	return &(gWindowImpl->mWindowHandle);
 }
 
-bool Window::shouldQuit()
+bool Window::shouldQuit() const
 {
 	return gWindowImpl->mQuitRequested;
 }

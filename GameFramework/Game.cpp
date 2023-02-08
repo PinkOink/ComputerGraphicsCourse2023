@@ -12,14 +12,29 @@ bool Game::init()
 		return false;
 	}
 
+	mRenderContext = new RenderContext();
+	if (!mRenderContext->init(mWindow))
+	{
+		MessageBox(0, L"RenderContext initialization failed", 0, 0);
+		assert(false);
+		return false;
+	}
+
 	return true;
 }
 
 bool Game::run()
 {
+	bool res = true;
 	while (!mWindow->shouldQuit())
 	{
 		mWindow->processMessages();
+
+		res = update();
+		assert(res);
+
+		res = draw();
+		assert(res);
 	}
 
 	return true;
@@ -32,4 +47,5 @@ Game::Game()
 Game::~Game()
 {
 	delete mWindow;
+	delete mRenderContext;
 }

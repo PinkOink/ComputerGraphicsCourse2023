@@ -5,17 +5,20 @@ class Window final
 {
 public:
   Window();
+  ~Window();
+
   Window(const Window& rhs) = delete;
   Window(Window&& rhs) = delete;
   Window& operator=(const Window& rhs) = delete;
   Window& operator=(Window&& rhs) = delete;
-  ~Window();
 
   bool init(const char* appName, unsigned int width, unsigned int height);
   void processMessages();
 
-  void* getWindowHandle();
-  bool shouldQuit();
+  unsigned int getWidth() const { return mWidth; }
+  unsigned int getHeight() const { return mHeight; }
+  void* getWindowHandle() const;
+  bool shouldQuit() const;
 
 protected:
   unsigned int mWidth = 0;

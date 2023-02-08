@@ -8,6 +8,19 @@ public:
   GameChild()
     : Game()
   {}
+
+protected:
+  bool update()
+  {
+    return true;
+  }
+  bool draw()
+  {
+    mRenderContext->beginFrame();
+    mRenderContext->endFrame();
+    
+    return true;
+  }
 };
 
 
