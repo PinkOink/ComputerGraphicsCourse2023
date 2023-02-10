@@ -36,7 +36,12 @@ bool Game::init()
 
 	for (auto component : mGameComponents)
 	{
-		component->init();
+		res = component->init();
+
+		assert(res);
+		if (!res) {
+			break;
+		}
 	}
 
 	return res;

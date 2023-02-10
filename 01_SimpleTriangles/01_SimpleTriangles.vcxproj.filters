@@ -34,8 +34,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\SimpleTriangles.hlsl">
+    <CopyFileToFolders Include="Resource\SimpleTriangles.hlsl">
       <Filter>Shaders</Filter>
-    </None>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

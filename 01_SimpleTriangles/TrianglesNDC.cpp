@@ -77,7 +77,7 @@ bool TrianglesNDC::init()
 		ID3DBlob* errorVertexCode = nullptr;
 
 		res = D3DCompileFromFile(
-			L"./Shaders/SimpleTriangles.hlsl",
+			L"./Resource/SimpleTriangles.hlsl",
 			nullptr /*macros*/,
 			nullptr /*include*/,
 			"VSMain",
@@ -151,7 +151,7 @@ bool TrianglesNDC::init()
 		ID3DBlob* pixelBC;
 		ID3DBlob* errorPixelCode;
 		res = D3DCompileFromFile(
-			L"./Shaders/SimpleTriangles.hlsl", 
+			L"./Resource/SimpleTriangles.hlsl", 
 			shaderMacros, 
 			nullptr /*include*/, 
 			"PSMain", 
