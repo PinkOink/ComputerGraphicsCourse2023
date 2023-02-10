@@ -135,13 +135,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameSimpleTriangles.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TrianglesNDC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimpleTriangles.h" />
     <ClInclude Include="TrianglesNDC.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\SimpleTriangles.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

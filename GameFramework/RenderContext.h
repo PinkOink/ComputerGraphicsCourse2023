@@ -22,9 +22,12 @@ public:
   RenderContext& operator=(const RenderContext& rhs) = delete;
   RenderContext& operator=(RenderContext&& rhs) = delete;
 
-protected:
+  // for easy acces to device and context
+public:
   Microsoft::WRL::ComPtr<ID3D11Device> mDevice;
   Microsoft::WRL::ComPtr<ID3D11DeviceContext> mContext;
+
+protected:
   Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
 
   Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mBackBufferView;

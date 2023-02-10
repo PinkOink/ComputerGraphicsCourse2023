@@ -32,6 +32,11 @@ bool Game::init()
 		return false;
 	}
 
+	for (auto component : mGameComponents)
+	{
+		component->init();
+	}
+
 	return res;
 }
 
