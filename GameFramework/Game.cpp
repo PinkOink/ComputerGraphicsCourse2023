@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Game.h"
 
+#include <sstream>
+
 
 bool Game::init()
 {
@@ -44,9 +46,15 @@ bool Game::run()
 {
 	bool res = true;
 
+	mTimer.Reset();
+
 	while (!mWindow->shouldQuit())
 	{
 		mWindow->processMessages();
+
+		mTimer.Tick();
+
+		updateFrameStats();
 
 		res = update();
 		assert(res);
@@ -82,7 +90,7 @@ bool Game::update()
 
 	for (auto component : mGameComponents)
 	{
-		res = component->update();
+		res = component->update(mTimer.DeltaTime());
 		if (!res)
 			return false;
 	}
@@ -104,4 +112,29 @@ bool Game::draw()
 	mRenderContext->endFrame();
 
 	return res;
+}
+
+void Game::updateFrameStats()
+{
+	static int frameCounter = 0;
+	static float timeElapsed = 0.0f;
+
+	frameCounter++;
+
+	if ((mTimer.TotalTime() - timeElapsed) >= 1.0f)
+	{
+		float fps = (float)frameCounter; // fps = frameCnt / 1
+		float mspf = 1000.0f / fps;
+
+		std::ostringstream windowName;
+		windowName.precision(6);
+		windowName << mGameName << "    "
+			<< "FPS: " << fps << "    "
+			<< "Frame Time: " << mspf << " (ms)";
+		mWindow->rename(windowName.str().c_str());
+
+		// Reset for next average.
+		frameCounter = 0;
+		timeElapsed += 1.0f;
+	}
 }

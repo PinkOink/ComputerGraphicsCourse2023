@@ -128,6 +128,11 @@ void Window::processMessages()
 	}
 }
 
+void Window::rename(const char* newName)
+{
+	SetWindowTextA(gWindowImpl->mWindowHandle, newName);
+}
+
 void* Window::getWindowHandle() const
 {
 	return &(gWindowImpl->mWindowHandle);

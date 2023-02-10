@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "RenderContext.h"
 #include "GameComponent.h"
+#include "Timer.h"
 
 
 class Game
@@ -28,10 +29,14 @@ private:
 
   bool update();
   bool draw();
+
+  void updateFrameStats();
   
 protected:
   Window* mWindow = nullptr;
   RenderContext* mRenderContext = nullptr;
+
+  Timer mTimer;
 
 protected:
   const char* mGameName;

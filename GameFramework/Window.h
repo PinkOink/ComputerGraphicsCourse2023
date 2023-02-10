@@ -14,6 +14,7 @@ public:
 
   bool init(const char* appName, unsigned int width, unsigned int height);
   void processMessages();
+  void rename(const char* newName);
 
   unsigned int getWidth() const { return mWidth; }
   unsigned int getHeight() const { return mHeight; }

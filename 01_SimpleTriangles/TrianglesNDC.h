@@ -9,7 +9,7 @@ public:
   TrianglesNDC(RenderContext* context);
 
   virtual bool init();
-  virtual bool update();
+  virtual bool update(float deltaTime);
   virtual bool draw();
 
   virtual ~TrianglesNDC();

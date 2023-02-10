@@ -199,7 +199,7 @@ bool TrianglesNDC::init()
   return SUCCEEDED(res);
 }
 
-bool TrianglesNDC::update()
+bool TrianglesNDC::update(float deltaTime)
 {
   return true;
 }
