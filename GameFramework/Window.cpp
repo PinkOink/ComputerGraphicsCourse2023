@@ -4,25 +4,6 @@
 
 namespace
 {
-	LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		// TODO: add Input to game and send there messages from here
-		switch (msg)
-		{
-		case WM_KEYUP:
-			if (wParam == VK_ESCAPE)
-			{
-				PostQuitMessage(0);
-			}
-			return 0;
-		case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
-		default:
-			return DefWindowProc(hwnd, msg, wParam, lParam);
-		}
-	}
-
 	struct WindowImpl final
 	{
 		HWND mWindowHandle = nullptr;
@@ -35,6 +16,26 @@ namespace
 	};
 
 	static WindowImpl* gWindowImpl = nullptr;
+
+	LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		// TODO: add Input to game and send there messages from here
+		switch (msg)
+		{
+		case WM_KEYUP:
+			if (wParam == VK_ESCAPE)
+			{
+				DestroyWindow(hwnd);
+			}
+			break;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
+		default:
+			return DefWindowProc(hwnd, msg, wParam, lParam);
+		}
+		return 0;
+	}
 };
 
 
@@ -118,13 +119,14 @@ void Window::processMessages()
 
 	while (PeekMessage(&message, 0, 0, 0, PM_REMOVE))
 	{
+		if (message.message == WM_QUIT)
+		{
+			gWindowImpl->mQuitRequested = true;
+			break;
+		}
+
 		TranslateMessage(&message);
 		DispatchMessage(&message);
-	}
-
-	if (message.message == WM_QUIT)
-	{
-		gWindowImpl->mQuitRequested = true;
 	}
 }
 
