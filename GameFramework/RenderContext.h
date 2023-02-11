@@ -14,6 +14,8 @@ public:
 
   bool init(Window* window);
 
+  bool onResize(unsigned int width, unsigned int height);
+
   void beginFrame();
   void endFrame();
 
@@ -22,16 +24,16 @@ public:
   RenderContext& operator=(const RenderContext& rhs) = delete;
   RenderContext& operator=(RenderContext&& rhs) = delete;
 
-  // for easy acces to device and context
+  // for easy access to device and context
 public:
-  Microsoft::WRL::ComPtr<ID3D11Device> mDevice;
-  Microsoft::WRL::ComPtr<ID3D11DeviceContext> mContext;
+  Microsoft::WRL::ComPtr<ID3D11Device> mDevice = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11DeviceContext> mContext = nullptr;
 
 protected:
-  Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+  Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain = nullptr;
 
-  Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mBackBufferView;
-  Microsoft::WRL::ComPtr<ID3D11Texture2D> mBackBufferTex;
+  D3D11_VIEWPORT mViewport = {};
+  Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mBackBufferView = nullptr;
 
   // remove after render targets will be set manually
   float mWidth = 0;

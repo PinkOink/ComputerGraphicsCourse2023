@@ -1,6 +1,9 @@
 #pragma once
 
 
+class Game;
+
+
 class Window final
 {
 public:
@@ -12,17 +15,13 @@ public:
   Window& operator=(const Window& rhs) = delete;
   Window& operator=(Window&& rhs) = delete;
 
-  bool init(const char* appName, unsigned int width, unsigned int height);
+  bool init(Game* game, const char* appName, unsigned int width, unsigned int height);
   void processMessages();
   void rename(const char* newName);
 
-  unsigned int getWidth() const { return mWidth; }
-  unsigned int getHeight() const { return mHeight; }
+  unsigned int getWidth() const;
+  unsigned int getHeight() const;
   void* getWindowHandle() const;
   bool shouldQuit() const;
-
-protected:
-  unsigned int mWidth = 0;
-  unsigned int mHeight = 0;
 };
 

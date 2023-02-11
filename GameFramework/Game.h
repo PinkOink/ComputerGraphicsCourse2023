@@ -14,6 +14,11 @@ public:
   virtual bool init();
   bool run();
 
+  void pause();
+  void unpause();
+
+  bool onResize(unsigned int width, unsigned int height);
+
 protected:
   Game(const char* gameName = "BaseGame");
   virtual ~Game();
@@ -39,7 +44,9 @@ protected:
   Timer mTimer;
 
 protected:
-  const char* mGameName;
+  const char* mGameName = nullptr;
+
+  bool mPaused = false;
 
   std::vector<GameComponent*> mGameComponents;
 };

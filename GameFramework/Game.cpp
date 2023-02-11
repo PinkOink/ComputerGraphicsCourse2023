@@ -9,7 +9,7 @@ bool Game::init()
 	bool res = true;
 
 	mWindow = new Window();
-	res = mWindow->init(mGameName, 800, 600);
+	res = mWindow->init(this, mGameName, 800, 600);
 	if (!res)
 	{
 		MessageBox(0, L"Window initialization failed", 0, 0);
@@ -57,22 +57,44 @@ bool Game::run()
 	{
 		mWindow->processMessages();
 
-		mTimer.Tick();
+		if (!mPaused)
+		{
+			mTimer.Tick();
 
-		updateFrameStats();
+			updateFrameStats();
 
-		res = update();
-		assert(res);
-		if (!res)
-			return false;
+			res = update();
+			assert(res);
+			if (!res)
+				return false;
 
-		res = draw();
-		assert(res);
-		if (!res)
-			return false;
+			res = draw();
+			assert(res);
+			if (!res)
+				return false;
+		}
+		else
+		{
+			Sleep(100);
+		}
 	}
 
 	return true;
+}
+
+void Game::pause()
+{
+	mPaused = true;
+}
+
+void Game::unpause()
+{
+	mPaused = false;
+}
+
+bool Game::onResize(unsigned int width, unsigned int height)
+{
+	return (mRenderContext != nullptr) ? mRenderContext->onResize(width, height) : true;
 }
 
 Game::Game(const char* gameName)

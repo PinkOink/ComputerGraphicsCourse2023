@@ -9,6 +9,9 @@
 #pragma comment(lib, "dxguid.lib")
 
 
+static const unsigned int BACKBUFFER_COUNT = 2;
+
+
 RenderContext::RenderContext()
 {}
 
@@ -25,7 +28,7 @@ bool RenderContext::init(Window* window)
 	D3D_FEATURE_LEVEL featureLevel[] = { D3D_FEATURE_LEVEL_11_1 };
 
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
-	swapDesc.BufferCount = 2;
+	swapDesc.BufferCount = BACKBUFFER_COUNT;
 	swapDesc.BufferDesc.Width = window->getWidth();
 	swapDesc.BufferDesc.Height = window->getHeight();
 	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -37,7 +40,7 @@ bool RenderContext::init(Window* window)
 	swapDesc.OutputWindow = *(HWND*)window->getWindowHandle();
 	swapDesc.Windowed = true;
 	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	swapDesc.Flags = 0;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
 
@@ -57,27 +60,58 @@ bool RenderContext::init(Window* window)
 
 	assert(SUCCEEDED(res));
 
-	res = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&mBackBufferTex));
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBufferTex;
+	res = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBufferTex));
 	assert(SUCCEEDED(res));
-	res = mDevice->CreateRenderTargetView(mBackBufferTex.Get(), nullptr, &mBackBufferView);
+	res = mDevice->CreateRenderTargetView(backBufferTex.Get(), nullptr, &mBackBufferView);
 	assert(SUCCEEDED(res));
 
+	mViewport.TopLeftX = 0;
+	mViewport.TopLeftY = 0;
+	mViewport.Width = mWidth;
+	mViewport.Height = mHeight;
+	mViewport.MinDepth = 0;
+	mViewport.MaxDepth = 1.0f;
+
   return true;
+}
+
+bool RenderContext::onResize(unsigned int width, unsigned int height)
+{
+	mWidth = (float)width;
+	mHeight = (float)height;
+
+	HRESULT res = S_OK;
+
+	mBackBufferView.Reset();
+
+	res = mSwapChain->ResizeBuffers(BACKBUFFER_COUNT, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	assert(SUCCEEDED(res));
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBufferTex;
+	res = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBufferTex));
+	assert(SUCCEEDED(res));
+	res = mDevice->CreateRenderTargetView(backBufferTex.Get(), nullptr, &mBackBufferView);
+	assert(SUCCEEDED(res));
+
+	mViewport.TopLeftX = 0;
+	mViewport.TopLeftY = 0;
+	mViewport.Width = mWidth;
+	mViewport.Height = mHeight;
+	mViewport.MinDepth = 0;
+	mViewport.MaxDepth = 1.0f;
+
+	mContext->RSSetViewports(1, &mViewport);
+	mContext->OMSetRenderTargets(1, mBackBufferView.GetAddressOf(), nullptr);
+
+	return SUCCEEDED(res);
 }
 
 void RenderContext::beginFrame()
 {
 	mContext->ClearState();
 
-	D3D11_VIEWPORT viewport = {};
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = static_cast<float>(mWidth);
-	viewport.Height = static_cast<float>(mHeight);
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1.0f;
-
-	mContext->RSSetViewports(1, &viewport);
+	mContext->RSSetViewports(1, &mViewport);
 
 	mContext->OMSetRenderTargets(1, mBackBufferView.GetAddressOf(), nullptr);
 	mContext->ClearRenderTargetView(mBackBufferView.Get(), DirectX::Colors::Aqua);
