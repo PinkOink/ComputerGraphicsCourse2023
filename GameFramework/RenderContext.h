@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <wrl.h>
+#include <fstream>
 
 #include "Window.h"
 
@@ -18,6 +19,12 @@ public:
 
   void beginFrame();
   void endFrame();
+
+  ID3D11Buffer* createVertexBuffer(void* vertexMem, unsigned int vertexSize);
+  ID3D11Buffer* createIndexBuffer(void* indexMem, unsigned int indexSize);
+
+  ID3D11VertexShader* createVertexShader(const std::wstring& fileName, ID3DBlob** vsBlob, const std::string& entrypoint = "VSMain", const D3D_SHADER_MACRO* defines = nullptr);
+  ID3D11PixelShader* createPixelShader(const std::wstring& fileName, const std::string& entrypoint = "PSMain", const D3D_SHADER_MACRO* defines = nullptr);
 
   RenderContext(const RenderContext& rhs) = delete;
   RenderContext(RenderContext&& rhs) = delete;

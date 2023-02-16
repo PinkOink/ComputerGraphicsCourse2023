@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include <DirectXMath.h>
-#include <d3dcompiler.h>
 
 
 TrianglesNDC::TrianglesNDC(RenderContext* context)
@@ -27,22 +26,7 @@ bool TrianglesNDC::init()
 			DirectX::XMFLOAT4(-0.5f,  0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 		};
 
-		D3D11_BUFFER_DESC vertexBufDesc = {};
-		vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		vertexBufDesc.CPUAccessFlags = 0;
-		vertexBufDesc.MiscFlags = 0;
-		vertexBufDesc.StructureByteStride = 0;
-		vertexBufDesc.ByteWidth = sizeof(points);
-
-		D3D11_SUBRESOURCE_DATA vertexData = {};
-		vertexData.pSysMem = points;
-		vertexData.SysMemPitch = 0;
-		vertexData.SysMemSlicePitch = 0;
-
-		res = mContext->mDevice->CreateBuffer(&vertexBufDesc, &vertexData, &mVertexBuffer);
-
-		assert(SUCCEEDED(res));
+		mVertexBuffer = mContext->createVertexBuffer(points, sizeof(points));
   }
 
 	// Create Index Buffer
@@ -52,63 +36,16 @@ bool TrianglesNDC::init()
 			0, 1, 2,
 			1, 0, 3
 		};
-		D3D11_BUFFER_DESC indexBufDesc = {};
-		indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		indexBufDesc.CPUAccessFlags = 0;
-		indexBufDesc.MiscFlags = 0;
-		indexBufDesc.StructureByteStride = 0;
-		indexBufDesc.ByteWidth = sizeof(indeces);
 
-		D3D11_SUBRESOURCE_DATA indexData = {};
-		indexData.pSysMem = indeces;
-		indexData.SysMemPitch = 0;
-		indexData.SysMemSlicePitch = 0;
-
-		res = mContext->mDevice->CreateBuffer(&indexBufDesc, &indexData, &mIndexBuffer);
-
-		assert(SUCCEEDED(res));
+		mIndexBuffer = mContext->createIndexBuffer(indeces, sizeof(indeces));
 	}
 
 	// Create Vertex Shader and Input Layout
 	if (SUCCEEDED(res))
 	{
 		ID3DBlob* vertexBC = nullptr;
-		ID3DBlob* errorVertexCode = nullptr;
 
-		res = D3DCompileFromFile(
-			L"./Resource/SimpleTriangles.hlsl",
-			nullptr /*macros*/,
-			nullptr /*include*/,
-			"VSMain",
-			"vs_5_0",
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-			0,
-			&vertexBC,
-			&errorVertexCode
-		);
-
-		if (FAILED(res)) {
-			// If the shader failed to compile it should have written something to the error message.
-			if (errorVertexCode) {
-				char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
-
-				std::cout << compileErrors << std::endl;
-			}
-			else
-			{
-				MessageBox(0, L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
-			}
-
-			return false;
-		}
-
-		res = mContext->mDevice->CreateVertexShader(
-			vertexBC->GetBufferPointer(),
-			vertexBC->GetBufferSize(),
-			nullptr, &mVertexShader);
-
-		assert(SUCCEEDED(res));
+		mVertexShader = mContext->createVertexShader(L"./Resource/SimpleTriangles.hlsl", &vertexBC);
 
 		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 			D3D11_INPUT_ELEMENT_DESC {
@@ -148,40 +85,7 @@ bool TrianglesNDC::init()
 			nullptr, nullptr 
 		};
 
-		ID3DBlob* pixelBC;
-		ID3DBlob* errorPixelCode;
-		res = D3DCompileFromFile(
-			L"./Resource/SimpleTriangles.hlsl", 
-			shaderMacros, 
-			nullptr /*include*/, 
-			"PSMain", 
-			"ps_5_0", 
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 
-			0, 
-			&pixelBC, 
-			&errorPixelCode
-		);
-
-		if (FAILED(res)) {
-			// If the shader failed to compile it should have written something to the error message.
-			if (errorPixelCode) {
-				char* compileErrors = (char*)(errorPixelCode->GetBufferPointer());
-
-				std::cout << compileErrors << std::endl;
-			} else
-			{
-				MessageBox(0, L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
-			}
-
-			return false;
-		}
-
-		res = mContext->mDevice->CreatePixelShader(
-			pixelBC->GetBufferPointer(),
-			pixelBC->GetBufferSize(),
-			nullptr, &mPixelShader);		
-
-		assert(SUCCEEDED(res));
+		mPixelShader = mContext->createPixelShader(L"./Resource/SimpleTriangles.hlsl", "PSMain", shaderMacros);
 	}
 
 	// Create state

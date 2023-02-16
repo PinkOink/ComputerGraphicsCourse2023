@@ -2,6 +2,7 @@
 #include "RenderContext.h"
 
 #include <DirectXColors.h>
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -122,4 +123,143 @@ void RenderContext::endFrame()
 	mContext->OMSetRenderTargets(0, nullptr, nullptr);
 
 	mSwapChain->Present(1, 0);
+}
+
+ID3D11Buffer* RenderContext::createVertexBuffer(void* vertexMem, unsigned int vertexSize)
+{
+	HRESULT res = S_OK;
+
+	ID3D11Buffer* buf = nullptr;
+
+	D3D11_BUFFER_DESC vertexBufDesc = {};
+	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufDesc.CPUAccessFlags = 0;
+	vertexBufDesc.MiscFlags = 0;
+	vertexBufDesc.StructureByteStride = 0;
+	vertexBufDesc.ByteWidth = vertexSize;
+
+	D3D11_SUBRESOURCE_DATA vertexData = {};
+	vertexData.pSysMem = vertexMem;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	res = mDevice->CreateBuffer(&vertexBufDesc, &vertexData, &buf);
+
+	assert(SUCCEEDED(res));
+
+	return buf;
+}
+
+ID3D11Buffer* RenderContext::createIndexBuffer(void* indexMem, unsigned int indexSize)
+{
+	HRESULT res = S_OK;
+
+	ID3D11Buffer* buf = nullptr;
+
+	D3D11_BUFFER_DESC indexBufDesc = {};
+	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufDesc.CPUAccessFlags = 0;
+	indexBufDesc.MiscFlags = 0;
+	indexBufDesc.StructureByteStride = 0;
+	indexBufDesc.ByteWidth = indexSize;
+
+	D3D11_SUBRESOURCE_DATA indexData = {};
+	indexData.pSysMem = indexMem;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	res = mDevice->CreateBuffer(&indexBufDesc, &indexData, &buf);
+
+	assert(SUCCEEDED(res));
+
+	return buf;
+}
+
+ID3D11VertexShader* RenderContext::createVertexShader(const std::wstring& fileName, ID3DBlob** vsBlob, const std::string& entrypoint, const D3D_SHADER_MACRO* defines)
+{
+	HRESULT res = S_OK;
+
+	ID3D11VertexShader* vs = nullptr;
+	ID3DBlob* errorVertexCode = nullptr;
+
+	res = D3DCompileFromFile(
+		fileName.c_str(),
+		defines,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		entrypoint.c_str(),
+		"vs_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		0,
+		vsBlob,
+		&errorVertexCode
+	);
+
+	if (FAILED(res)) {
+		// If the shader failed to compile it should have written something to the error message.
+		if (errorVertexCode) {
+			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
+
+			std::cout << compileErrors << std::endl;
+		} else
+		{
+			MessageBox(0, fileName.c_str(), L"Missing Shader File", MB_OK);
+		}
+
+		return nullptr;
+	}
+
+	res = mDevice->CreateVertexShader(
+		(*vsBlob)->GetBufferPointer(),
+		(*vsBlob)->GetBufferSize(),
+		nullptr, &vs);
+
+	assert(SUCCEEDED(res));
+
+	return vs;
+}
+
+ID3D11PixelShader* RenderContext::createPixelShader(const std::wstring& fileName, const std::string& entrypoint, const D3D_SHADER_MACRO* defines)
+{
+	HRESULT res = S_OK;
+
+	ID3D11PixelShader* ps = nullptr;
+	ID3DBlob* pixelBC = nullptr;
+	ID3DBlob* errorPixelCode = nullptr;
+
+	res = D3DCompileFromFile(
+		fileName.c_str(),
+		defines,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		entrypoint.c_str(),
+		"ps_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		0,
+		&pixelBC,
+		&errorPixelCode
+	);
+
+	if (FAILED(res)) {
+		// If the shader failed to compile it should have written something to the error message.
+		if (errorPixelCode) {
+			char* compileErrors = (char*)(errorPixelCode->GetBufferPointer());
+
+			std::cout << compileErrors << std::endl;
+		} else
+		{
+			MessageBox(0, fileName.c_str(), L"Missing Shader File", MB_OK);
+		}
+
+		return nullptr;
+	}
+
+	res = mDevice->CreatePixelShader(
+		pixelBC->GetBufferPointer(),
+		pixelBC->GetBufferSize(),
+		nullptr, &ps);
+
+	assert(SUCCEEDED(res));
+
+	return ps;
 }
