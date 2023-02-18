@@ -1,4 +1,5 @@
 #pragma once
+
 #include <GameComponent.h>
 #include <RenderContext.h>
 
@@ -25,7 +26,6 @@ protected:
   Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
   Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
 
-  // TODO: add strides and offsets to vertex buffer
   Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer = nullptr;
   Microsoft::WRL::ComPtr<ID3D11Buffer> mIndexBuffer = nullptr;
 };

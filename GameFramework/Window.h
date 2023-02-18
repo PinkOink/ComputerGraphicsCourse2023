@@ -23,5 +23,7 @@ public:
   unsigned int getHeight() const;
   void* getWindowHandle() const;
   bool shouldQuit() const;
+
+  void requestQuit();
 };
 

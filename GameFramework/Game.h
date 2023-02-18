@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Window.h"
+#include "InputDevice.h"
 #include "RenderContext.h"
 #include "GameComponent.h"
 #include "Timer.h"
@@ -37,16 +38,17 @@ private:
 
   void updateFrameStats();
   
-protected:
+public:
   Window* mWindow = nullptr;
   RenderContext* mRenderContext = nullptr;
-
-  Timer mTimer;
+  InputDevice* mInputDevice = nullptr;
 
 protected:
   const char* mGameName = nullptr;
 
   bool mPaused = false;
+
+  Timer mTimer;
 
   std::vector<GameComponent*> mGameComponents;
 };

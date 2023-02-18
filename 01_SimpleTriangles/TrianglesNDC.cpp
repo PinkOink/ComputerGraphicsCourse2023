@@ -1,8 +1,8 @@
 #include "TrianglesNDC.h"
 
-#include <iostream>
+#include <SimpleMath.h>
 
-#include <DirectXMath.h>
+#include <iostream>
 
 
 TrianglesNDC::TrianglesNDC(RenderContext* context)
@@ -19,11 +19,11 @@ bool TrianglesNDC::init()
 	// Create Vertex Buffer
 	if (SUCCEEDED(res))
   {
-		DirectX::XMFLOAT4 points[8] = {
-			DirectX::XMFLOAT4( 0.5f,  0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
-			DirectX::XMFLOAT4( 0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f,  0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		DirectX::SimpleMath::Vector4 points[8] = {
+			DirectX::SimpleMath::Vector4( 0.5f,  0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(0.0f, 0.0f, 1.0f, 1.0f),
+			DirectX::SimpleMath::Vector4( 0.5f, -0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(-0.5f,  0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
 		};
 
 		mVertexBuffer = mContext->createVertexBuffer(points, sizeof(points));
@@ -61,7 +61,7 @@ bool TrianglesNDC::init()
 				0,
 				DXGI_FORMAT_R32G32B32A32_FLOAT,
 				0,
-				sizeof(DirectX::XMFLOAT4),
+				sizeof(DirectX::SimpleMath::Vector4),
 				D3D11_INPUT_PER_VERTEX_DATA,
 				0}
 		};
@@ -118,7 +118,7 @@ bool TrianglesNDC::draw()
 	mContext->mContext->VSSetShader(mVertexShader.Get(), nullptr, 0);
 	mContext->mContext->PSSetShader(mPixelShader.Get(), nullptr, 0);
 
-	UINT strides[] = { sizeof(DirectX::XMFLOAT4) * 2 };
+	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector4) * 2 };
 	UINT offsets[] = { 0 };
 	mContext->mContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), strides, offsets);
 	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

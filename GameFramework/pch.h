@@ -9,11 +9,9 @@
 
 // add headers that you want to pre-compile here
 
-// TODO: make proper custom asserts
 #include <assert.h>
 #include <iostream>
 
-// TODO: remove later
 #include <Windows.h>
 
 #endif //PCH_H

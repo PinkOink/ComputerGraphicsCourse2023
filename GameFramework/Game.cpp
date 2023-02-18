@@ -26,6 +26,14 @@ bool Game::init()
 		return false;
 	}
 
+	mInputDevice = new InputDevice(mWindow);
+	if (mInputDevice == nullptr)
+	{
+		MessageBox(0, L"RenderContext initialization failed", 0, 0);
+		assert(false);
+		return false;
+	}
+
 	res = createGameComponents();
 	if (!res)
 	{
@@ -62,6 +70,11 @@ bool Game::run()
 			mTimer.Tick();
 
 			updateFrameStats();
+
+			if (mInputDevice->IsKeyDown(Keys::Escape))
+			{
+				mWindow->requestQuit();
+			}
 
 			res = update();
 			assert(res);

@@ -26,7 +26,6 @@ namespace
 	LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		bool res = true;
-		// TODO: add Input to game and send there messages from here
 		switch (msg)
 		{
 		case WM_SIZE:
@@ -48,6 +47,58 @@ namespace
 		case WM_EXITSIZEMOVE:
 			gWindowImpl->mGame->unpause();
 			break;
+
+		case WM_INPUT:
+		{
+			UINT dwSize = 0;
+			GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
+			LPBYTE lpb = new BYTE[dwSize];
+			if (lpb == nullptr)
+			{
+				break;
+			}
+
+			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER)) != dwSize)
+			{
+				OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+			}
+
+			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(lpb);
+
+			if (raw->header.dwType == RIM_TYPEKEYBOARD)
+			{
+				//printf(" Kbd: make=%04i Flags:%04i Reserved:%04i ExtraInformation:%08i, msg=%04i VK=%i \n",
+				//	raw->data.keyboard.MakeCode,
+				//	raw->data.keyboard.Flags,
+				//	raw->data.keyboard.Reserved,
+				//	raw->data.keyboard.ExtraInformation,
+				//	raw->data.keyboard.Message,
+				//	raw->data.keyboard.VKey);
+
+				gWindowImpl->mGame->mInputDevice->OnKeyDown({
+					raw->data.keyboard.MakeCode,
+					raw->data.keyboard.Flags,
+					raw->data.keyboard.VKey,
+					raw->data.keyboard.Message
+					});
+			} else if (raw->header.dwType == RIM_TYPEMOUSE)
+			{
+				//printf(" Mouse: X=%04d Y:%04d \n", raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+				gWindowImpl->mGame->mInputDevice->OnMouseMove({
+					raw->data.mouse.usFlags,
+					raw->data.mouse.usButtonFlags,
+					static_cast<int>(raw->data.mouse.ulExtraInformation),
+					static_cast<int>(raw->data.mouse.ulRawButtons),
+					static_cast<short>(raw->data.mouse.usButtonData),
+					raw->data.mouse.lLastX,
+					raw->data.mouse.lLastY
+					});
+			}
+
+			delete[] lpb;
+
+			break;
+		}
 
 		case WM_KEYUP:
 			if (wParam == VK_ESCAPE)
@@ -189,4 +240,10 @@ void* Window::getWindowHandle() const
 bool Window::shouldQuit() const
 {
 	return gWindowImpl->mQuitRequested;
+}
+
+void Window::requestQuit()
+{
+	gWindowImpl->mQuitRequested = true;
+	DestroyWindow(gWindowImpl->mWindowHandle);
 }
