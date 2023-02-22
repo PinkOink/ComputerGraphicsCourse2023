@@ -12,6 +12,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>GameFramework.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <CopyFileToFolders>
       <DestinationFolders>$(OutDir)\Resource</DestinationFolders>

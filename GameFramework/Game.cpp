@@ -76,6 +76,8 @@ bool Game::run()
 				mWindow->requestQuit();
 			}
 
+			processInputDevice();
+
 			res = update();
 			assert(res);
 			if (!res)
@@ -153,6 +155,9 @@ bool Game::draw()
 
 	return res;
 }
+
+void Game::processInputDevice()
+{}
 
 void Game::updateFrameStats()
 {

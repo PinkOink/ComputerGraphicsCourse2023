@@ -27,6 +27,8 @@ protected:
   // This method must be implemented by children of Game
   virtual bool createGameComponents() = 0;
 
+  virtual void processInputDevice();
+
 private:
   Game(const Game& rhs) = delete;
   Game(Game&& rhs) = delete;

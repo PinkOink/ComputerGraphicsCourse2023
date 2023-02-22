@@ -1,39 +1,37 @@
-#include "TrianglesNDC.h"
+#include "SquareRenderItem.h"
 
 #include <SimpleMath.h>
 
-#include <iostream>
 
-
-TrianglesNDC::TrianglesNDC(RenderContext* context)
+SquareRenderItem::SquareRenderItem(RenderContext* context)
   : mContext(context)
 {}
 
-bool TrianglesNDC::init()
+bool SquareRenderItem::init()
 {
 	HRESULT res = S_OK;
 
-  mTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	// Create Vertex Buffer
 	if (SUCCEEDED(res))
-  {
+	{
 		DirectX::SimpleMath::Vector4 points[8] = {
-			DirectX::SimpleMath::Vector4( 0.5f,  0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 0.0f, 0.0f, 1.0f),
-			DirectX::SimpleMath::Vector4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(0.0f, 0.0f, 1.0f, 1.0f),
-			DirectX::SimpleMath::Vector4( 0.5f, -0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(0.0f, 1.0f, 0.0f, 1.0f),
-			DirectX::SimpleMath::Vector4(-0.5f,  0.5f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(+1.0f, +1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(-1.0f, -1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(+1.0f, -1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+			DirectX::SimpleMath::Vector4(-1.0f, +1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
 		};
 
 		mVertexBuffer = mContext->createVertexBuffer(points, sizeof(points));
-  }
+	}
 
 	// Create Index Buffer
 	if (SUCCEEDED(res))
 	{
 		int indeces[] = {
-			0, 1, 2,
-			1, 0, 3
+			0, 2, 1,
+			1, 3, 0
 		};
 
 		mIndexBuffer = mContext->createIndexBuffer(indeces, sizeof(indeces));
@@ -44,7 +42,7 @@ bool TrianglesNDC::init()
 	{
 		ID3DBlob* vertexBC = nullptr;
 
-		mVertexShader = mContext->createVertexShader(L"./Resource/SimpleTriangles.hlsl", &vertexBC);
+		mVertexShader = mContext->createVertexShader(L"./Resource/SquareVS.hlsl", &vertexBC, "main");
 
 		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 			D3D11_INPUT_ELEMENT_DESC {
@@ -75,16 +73,10 @@ bool TrianglesNDC::init()
 		assert(SUCCEEDED(res));
 	}
 
-	// Create pixel shader
+	// Create Pixel Shader
 	if (SUCCEEDED(res))
 	{
-		D3D_SHADER_MACRO shaderMacros[] = { 
-			"TEST", "1", 
-			"TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", 
-			nullptr, nullptr 
-		};
-
-		mPixelShader = mContext->createPixelShader(L"./Resource/SimpleTriangles.hlsl", "PSMain", shaderMacros);
+		mPixelShader = mContext->createPixelShader(L"./Resource/SquarePS.hlsl", "main");
 	}
 
 	// Create state
@@ -99,15 +91,15 @@ bool TrianglesNDC::init()
 		assert(SUCCEEDED(res));
 	}
 
-  return SUCCEEDED(res);
+	return SUCCEEDED(res);
 }
 
-bool TrianglesNDC::update(float deltaTime)
+bool SquareRenderItem::update(float deltaTime)
 {
   return true;
 }
 
-bool TrianglesNDC::draw()
+bool SquareRenderItem::draw()
 {
 	mContext->mContext->RSSetState(mRastState.Get());
 
@@ -124,8 +116,8 @@ bool TrianglesNDC::draw()
 
 	mContext->mContext->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
-  return true;
+	return true;
 }
 
-TrianglesNDC::~TrianglesNDC()
+SquareRenderItem::~SquareRenderItem()
 {}

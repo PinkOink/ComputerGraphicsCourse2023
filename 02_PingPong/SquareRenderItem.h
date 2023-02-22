@@ -4,16 +4,16 @@
 #include <RenderContext.h>
 
 
-class TrianglesNDC : public GameComponent
+class SquareRenderItem : public GameComponent
 {
 public:
-  TrianglesNDC(RenderContext* context);
+  SquareRenderItem(RenderContext* context);
 
   virtual bool init();
   virtual bool update(float deltaTime);
   virtual bool draw();
 
-  virtual ~TrianglesNDC();
+  ~SquareRenderItem();
 
 protected:
   RenderContext* mContext;

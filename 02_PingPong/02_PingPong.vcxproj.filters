@@ -14,30 +14,35 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{cbd0ff4e-8629-4dcb-8416-62bb71219cba}</UniqueIdentifier>
+      <UniqueIdentifier>{708bdb49-d386-46c2-9703-c5658ac36b5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TrianglesNDC.cpp">
+    <ClCompile Include="SquareRenderItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PingPongGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameSimpleTriangles.h">
+    <ClInclude Include="PingPongGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TrianglesNDC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="SquareRenderItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resource\SimpleTriangles.hlsl">
+    <FxCompile Include="Resource\SquareVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resource\SquarePS.hlsl">
       <Filter>Shaders</Filter>
     </CopyFileToFolders>
   </ItemGroup>
