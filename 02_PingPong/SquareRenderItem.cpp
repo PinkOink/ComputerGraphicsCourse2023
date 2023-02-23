@@ -6,11 +6,17 @@
 struct SquareCB
 {
 	DirectX::SimpleMath::Matrix transform;
+	DirectX::SimpleMath::Vector4 color;
 };
 
 
-SquareRenderItem::SquareRenderItem(RenderContext* context, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 scale)
-	: mContext(context), mPos(pos), mScale(scale)
+SquareRenderItem::SquareRenderItem(
+	RenderContext* context, 
+	DirectX::SimpleMath::Vector3 pos, 
+	DirectX::SimpleMath::Vector3 scale,
+	DirectX::SimpleMath::Vector4 color
+)
+	: mContext(context), mPos(pos), mScale(scale), mColor(color)
 {}
 
 bool SquareRenderItem::init()
@@ -22,11 +28,11 @@ bool SquareRenderItem::init()
 	// Create Vertex Buffer
 	if (SUCCEEDED(res))
 	{
-		DirectX::SimpleMath::Vector4 points[8] = {
-			DirectX::SimpleMath::Vector4(+1.0f, +1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
-			DirectX::SimpleMath::Vector4(-1.0f, -1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
-			DirectX::SimpleMath::Vector4(+1.0f, -1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
-			DirectX::SimpleMath::Vector4(-1.0f, +1.0f, 0.5f, 1.0f),	DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+		DirectX::SimpleMath::Vector4 points[] = {
+			DirectX::SimpleMath::Vector4(+1.0f, +1.0f, 0.5f, 1.0f),
+			DirectX::SimpleMath::Vector4(-1.0f, -1.0f, 0.5f, 1.0f),
+			DirectX::SimpleMath::Vector4(+1.0f, -1.0f, 0.5f, 1.0f),
+			DirectX::SimpleMath::Vector4(-1.0f, +1.0f, 0.5f, 1.0f)
 		};
 
 		mVertexBuffer = mContext->createVertexBuffer(points, sizeof(points));
@@ -48,6 +54,7 @@ bool SquareRenderItem::init()
 	{
 		SquareCB cb = {};
 		cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+		cb.color = mColor;
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
 	}
@@ -66,14 +73,6 @@ bool SquareRenderItem::init()
 				DXGI_FORMAT_R32G32B32A32_FLOAT,
 				0,
 				0,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0},
-			D3D11_INPUT_ELEMENT_DESC {
-				"COLOR",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				sizeof(DirectX::SimpleMath::Vector4),
 				D3D11_INPUT_PER_VERTEX_DATA,
 				0}
 		};
@@ -109,18 +108,15 @@ bool SquareRenderItem::init()
 	return SUCCEEDED(res);
 }
 
-bool SquareRenderItem::update(float deltaTime)
+bool SquareRenderItem::draw()
 {
 	SquareCB cb = {};
 	cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+	cb.color = mColor;
 
 	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(SquareCB));
 
-  return true;
-}
 
-bool SquareRenderItem::draw()
-{
 	mContext->mContext->RSSetState(mRastState.Get());
 
 	mContext->mContext->IASetInputLayout(mLayout.Get());
@@ -129,7 +125,7 @@ bool SquareRenderItem::draw()
 	mContext->mContext->VSSetShader(mVertexShader.Get(), nullptr, 0);
 	mContext->mContext->PSSetShader(mPixelShader.Get(), nullptr, 0);
 
-	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector4) * 2 };
+	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector4) };
 	UINT offsets[] = { 0 };
 	mContext->mContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), strides, offsets);
 	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

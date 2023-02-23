@@ -2,6 +2,8 @@
 
 #include <Game.h>
 
+#include "PingPongPhysics.h"
+
 class PingPongGame : public Game
 {
 public:
@@ -13,6 +15,9 @@ protected:
   virtual void processInputDevice();
 
 protected:
-  MulticastDelegate<const Keys> mKeysDelegate;
+  PingPongPhysics* mPhys = nullptr;
+
+  // mRacketSpeed units in 1 second
+  float mRacketSpeed = 1.0f;
 };
 

@@ -1,6 +1,7 @@
 #include "PingPongGame.h"
 
-#include "SquareRenderItem.h"
+#include "PingPongPhysics.h"
+#include "PingPongRender.h"
 
 
 PingPongGame::PingPongGame()
@@ -9,10 +10,14 @@ PingPongGame::PingPongGame()
 
 bool PingPongGame::createGameComponents()
 {
-  mKeysDelegate.AddLambda([](Keys key) {});
+  DirectX::SimpleMath::Vector2 racketSize = { 0.02f, 0.1f };
+  float ballSize = 0.01f;
 
-  mGameComponents.push_back(new SquareRenderItem(mRenderContext, DirectX::SimpleMath::Vector3(-0.85f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.01f, 0.1f, 1.0f)));
-  mGameComponents.push_back(new SquareRenderItem(mRenderContext, DirectX::SimpleMath::Vector3(0.85f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.01f, 0.1f, 1.0f)));
+  mPhys = new PingPongPhysics(racketSize, ballSize, 1.05f);
+  PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, racketSize, ballSize);
+
+  mGameComponents.push_back(mPhys);
+  mGameComponents.push_back(renderer);
 
   return true;
 }
@@ -21,6 +26,19 @@ void PingPongGame::processInputDevice()
 {
   if (mInputDevice->IsKeyDown(Keys::W))
   {
-    mKeysDelegate.Broadcast(Keys::W);
+    mPhys->addPlayer1Speed(+mRacketSpeed);
+  }
+  if (mInputDevice->IsKeyDown(Keys::S))
+  {
+    mPhys->addPlayer1Speed(-mRacketSpeed);
+  }
+
+  if (mInputDevice->IsKeyDown(Keys::Up))
+  {
+    mPhys->addPlayer2Speed(+mRacketSpeed);
+  }
+  if (mInputDevice->IsKeyDown(Keys::Down))
+  {
+    mPhys->addPlayer2Speed(-mRacketSpeed);
   }
 }

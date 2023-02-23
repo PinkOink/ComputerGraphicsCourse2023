@@ -27,6 +27,12 @@
     <ClCompile Include="PingPongGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PingPongPhysics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PingPongRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PingPongGame.h">
@@ -35,15 +41,17 @@
     <ClInclude Include="SquareRenderItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resource\SquareVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
+    <ClInclude Include="PingPongPhysics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PingPongRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resource\SquarePS.hlsl">
       <Filter>Shaders</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Resource\SquareVS.hlsl" />
   </ItemGroup>
 </Project>

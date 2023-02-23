@@ -129,10 +129,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PingPongGame.cpp" />
+    <ClCompile Include="PingPongPhysics.cpp" />
+    <ClCompile Include="PingPongRender.cpp" />
     <ClCompile Include="SquareRenderItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PingPongGame.h" />
+    <ClInclude Include="PingPongPhysics.h" />
+    <ClInclude Include="PingPongRender.h" />
     <ClInclude Include="SquareRenderItem.h" />
   </ItemGroup>
   <ItemGroup>

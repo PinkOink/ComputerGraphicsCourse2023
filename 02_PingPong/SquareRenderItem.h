@@ -6,13 +6,21 @@
 #include <SimpleMath.h>
 
 
-class SquareRenderItem : public GameComponent
+class SquareRenderItem
 {
 public:
-  SquareRenderItem(RenderContext* context, DirectX::SimpleMath::Vector3 pos = { 0.0f, 0.0f, 0.0f }, DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f });
+  SquareRenderItem(
+    RenderContext* context,
+    DirectX::SimpleMath::Vector3 pos = { 0.0f, 0.0f, 0.0f },
+    DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
+    DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f }
+  );
+
+  void setPosition(DirectX::SimpleMath::Vector3 pos) { mPos = pos; }
+  void setScale(DirectX::SimpleMath::Vector3 scale) { mScale = scale; }
+  void setColor(DirectX::SimpleMath::Vector4 color) { mColor = color; }
 
   virtual bool init();
-  virtual bool update(float deltaTime);
   virtual bool draw();
 
   ~SquareRenderItem();
@@ -35,5 +43,6 @@ protected:
 
   DirectX::SimpleMath::Vector3 mPos;
   DirectX::SimpleMath::Vector3 mScale;
+  DirectX::SimpleMath::Vector4 mColor;
 };
 
