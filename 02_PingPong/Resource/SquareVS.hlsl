@@ -11,12 +11,17 @@ struct VertexOut
     float4 col : COLOR;
 };
 
+cbuffer SquareCB : register(b0)
+{
+    float4x4 transform;
+};
+
 
 VertexOut main(VertexIn input)
 {
     VertexOut output;
     
-    output.pos = input.pos;
+    output.pos = mul(input.pos, transform);
     output.col = input.col;
     
     return output;

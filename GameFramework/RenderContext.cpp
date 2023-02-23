@@ -177,6 +177,42 @@ ID3D11Buffer* RenderContext::createIndexBuffer(void* indexMem, unsigned int inde
 	return buf;
 }
 
+ID3D11Buffer* RenderContext::createConstantBuffer(void* initialMem, unsigned int bufferSize)
+{
+	HRESULT res = S_OK;
+
+	ID3D11Buffer* buf = nullptr;
+
+	D3D11_BUFFER_DESC constantBufDesc = {};
+	constantBufDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constantBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constantBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constantBufDesc.MiscFlags = 0;
+	constantBufDesc.StructureByteStride = 0;
+	constantBufDesc.ByteWidth = bufferSize;
+
+	D3D11_SUBRESOURCE_DATA cbData = {};
+	cbData.pSysMem = initialMem;
+	cbData.SysMemPitch = 0;
+	cbData.SysMemSlicePitch = 0;
+
+	res = mDevice->CreateBuffer(&constantBufDesc, &cbData, &buf);
+
+	assert(SUCCEEDED(res));
+
+	return buf;
+}
+
+void RenderContext::updateConstantBuffer(ID3D11Buffer* buf, void* updateMem, unsigned int bufferSize)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	mContext->Map(buf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	memcpy(mappedResource.pData, updateMem, bufferSize);
+	mContext->Unmap(buf, 0);
+}
+
 ID3D11VertexShader* RenderContext::createVertexShader(const std::wstring& fileName, ID3DBlob** vsBlob, const std::string& entrypoint, const D3D_SHADER_MACRO* defines)
 {
 	HRESULT res = S_OK;

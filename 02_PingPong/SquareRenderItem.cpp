@@ -3,8 +3,14 @@
 #include <SimpleMath.h>
 
 
-SquareRenderItem::SquareRenderItem(RenderContext* context)
-  : mContext(context)
+struct SquareCB
+{
+	DirectX::SimpleMath::Matrix transform;
+};
+
+
+SquareRenderItem::SquareRenderItem(RenderContext* context, DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 scale)
+	: mContext(context), mPos(pos), mScale(scale)
 {}
 
 bool SquareRenderItem::init()
@@ -35,6 +41,15 @@ bool SquareRenderItem::init()
 		};
 
 		mIndexBuffer = mContext->createIndexBuffer(indeces, sizeof(indeces));
+	}
+
+	// Create Constant Buffer
+	if (SUCCEEDED(res))
+	{
+		SquareCB cb = {};
+		cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+
+		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
 	}
 
 	// Create Vertex Shader and Input Layout
@@ -96,6 +111,11 @@ bool SquareRenderItem::init()
 
 bool SquareRenderItem::update(float deltaTime)
 {
+	SquareCB cb = {};
+	cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+
+	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(SquareCB));
+
   return true;
 }
 
@@ -113,6 +133,8 @@ bool SquareRenderItem::draw()
 	UINT offsets[] = { 0 };
 	mContext->mContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), strides, offsets);
 	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	mContext->mContext->VSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
 
 	mContext->mContext->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
