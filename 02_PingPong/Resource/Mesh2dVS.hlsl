@@ -10,7 +10,7 @@ struct VertexOut
     float4 col : COLOR;
 };
 
-cbuffer SquareCB : register(b0)
+cbuffer MeshCB : register(b0)
 {
     float4x4 transform;
     float4 color;

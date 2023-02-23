@@ -12,8 +12,9 @@ bool PingPongGame::createGameComponents()
 {
   DirectX::SimpleMath::Vector2 racketSize = { 0.02f, 0.1f };
   float ballSize = 0.01f;
+  float ballStartSpeed = 0.5f;
 
-  mPhys = new PingPongPhysics(racketSize, ballSize, 1.05f);
+  mPhys = new PingPongPhysics(racketSize, ballSize, ballStartSpeed, 1.05f);
   PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, racketSize, ballSize);
 
   mGameComponents.push_back(mPhys);

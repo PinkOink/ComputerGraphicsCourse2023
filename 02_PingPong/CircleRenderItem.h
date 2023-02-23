@@ -5,11 +5,12 @@
 #include <SimpleMath.h>
 
 
-class SquareRenderItem
+class CircleRenderItem
 {
 public:
-  SquareRenderItem(
+  CircleRenderItem(
     RenderContext* context,
+    unsigned int circleSectionsNum,
     DirectX::SimpleMath::Vector3 pos = { 0.0f, 0.0f, 0.0f },
     DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
     DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f }
@@ -21,7 +22,7 @@ public:
 
   bool draw();
 
-  ~SquareRenderItem();
+  ~CircleRenderItem();
 
 protected:
   RenderContext* mContext;
@@ -42,5 +43,7 @@ protected:
   DirectX::SimpleMath::Vector3 mPos;
   DirectX::SimpleMath::Vector3 mScale;
   DirectX::SimpleMath::Vector4 mColor;
+
+  unsigned int mCircleSectionsNum;
 };
 

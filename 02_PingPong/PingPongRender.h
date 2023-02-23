@@ -4,6 +4,7 @@
 
 #include "PingPongPhysics.h"
 #include "SquareRenderItem.h"
+#include "CircleRenderItem.h"
 
 
 class PingPongRender : public GameComponent
@@ -24,5 +25,7 @@ protected:
 
   SquareRenderItem mRacket1;
   SquareRenderItem mRacket2;
+
+  CircleRenderItem mCircle;
 };
 

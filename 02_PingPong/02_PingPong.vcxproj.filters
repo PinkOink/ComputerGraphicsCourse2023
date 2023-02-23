@@ -33,6 +33,9 @@
     <ClCompile Include="PingPongRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CircleRenderItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PingPongGame.h">
@@ -47,11 +50,14 @@
     <ClInclude Include="PingPongRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CircleRenderItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resource\SquarePS.hlsl">
+    <CopyFileToFolders Include="Resource\Mesh2dPS.hlsl">
       <Filter>Shaders</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resource\SquareVS.hlsl" />
+    <CopyFileToFolders Include="Resource\Mesh2dVS.hlsl" />
   </ItemGroup>
 </Project>

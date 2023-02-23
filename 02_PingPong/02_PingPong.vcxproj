@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircleRenderItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PingPongGame.cpp" />
     <ClCompile Include="PingPongPhysics.cpp" />
@@ -134,20 +135,21 @@
     <ClCompile Include="SquareRenderItem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircleRenderItem.h" />
     <ClInclude Include="PingPongGame.h" />
     <ClInclude Include="PingPongPhysics.h" />
     <ClInclude Include="PingPongRender.h" />
     <ClInclude Include="SquareRenderItem.h" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resource\SquarePS.hlsl">
+    <CopyFileToFolders Include="Resource\Mesh2dPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resource\SquareVS.hlsl">
+    <CopyFileToFolders Include="Resource\Mesh2dVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

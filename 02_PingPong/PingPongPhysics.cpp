@@ -3,8 +3,8 @@
 #include <algorithm>
 
 
-PingPongPhysics::PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballSpeedScale)
-  : mBallSpeedScale(ballSpeedScale)
+PingPongPhysics::PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballStartSpeed, float ballScaleSpeed)
+  : mBallSpeedScale(ballScaleSpeed)
 {
   mPlayer1.mPosition = { -1.0f + racketSize.x / 2.0f, 0.0f };
   mPlayer1.mSize = racketSize;  

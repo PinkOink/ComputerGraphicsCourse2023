@@ -1,7 +1,4 @@
-#include "SquareRenderItem.h"
-
-#include <SimpleMath.h>
-
+#include "CircleRenderItem.h"
 
 struct CircleCB
 {
@@ -10,40 +7,60 @@ struct CircleCB
 };
 
 
-SquareRenderItem::SquareRenderItem(
-	RenderContext* context, 
-	DirectX::SimpleMath::Vector3 pos, 
+CircleRenderItem::CircleRenderItem(
+	RenderContext* context,
+	unsigned int circleSectionsNum,
+	DirectX::SimpleMath::Vector3 pos,
 	DirectX::SimpleMath::Vector3 scale,
 	DirectX::SimpleMath::Vector4 color
 )
-	: mContext(context), mPos(pos), mScale(scale), mColor(color)
+	: mContext(context), mPos(pos), mScale(scale), mColor(color), mCircleSectionsNum(circleSectionsNum)
 {
 	HRESULT res = S_OK;
+
+	assert(mCircleSectionsNum >= 3);
 
 	mTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	// Create Vertex Buffer
 	if (SUCCEEDED(res))
 	{
-		DirectX::SimpleMath::Vector4 points[] = {
-			DirectX::SimpleMath::Vector4(+1.0f, +1.0f, 0.5f, 1.0f),
-			DirectX::SimpleMath::Vector4(-1.0f, -1.0f, 0.5f, 1.0f),
-			DirectX::SimpleMath::Vector4(+1.0f, -1.0f, 0.5f, 1.0f),
-			DirectX::SimpleMath::Vector4(-1.0f, +1.0f, 0.5f, 1.0f)
-		};
+		std::vector<DirectX::SimpleMath::Vector4> points;
 
-		mVertexBuffer = mContext->createVertexBuffer(points, sizeof(points));
+		points.reserve(mCircleSectionsNum + 1);
+
+		points.push_back(DirectX::SimpleMath::Vector4(0.0f, 0.0f, 0.5f, 1.0f));
+
+		DirectX::SimpleMath::Vector4 circlePoint = { 1.0f, 0.0f, 0.5f, 1.0f };
+		DirectX::SimpleMath::Matrix rot = DirectX::SimpleMath::Matrix::CreateRotationZ(2 * 3.14159265359f / mCircleSectionsNum);
+		for (unsigned int i = 0; i < mCircleSectionsNum; ++i)
+		{
+			points.push_back(circlePoint);
+			circlePoint = DirectX::SimpleMath::Vector4::Transform(circlePoint, rot);
+		}
+
+		mVertexBuffer = mContext->createVertexBuffer(points.data(), sizeof(DirectX::SimpleMath::Vector4) * (unsigned int)points.size());
 	}
 
 	// Create Index Buffer
 	if (SUCCEEDED(res))
 	{
-		int indeces[] = {
-			0, 2, 1,
-			1, 3, 0
-		};
+		std::vector<int> indeces;
 
-		mIndexBuffer = mContext->createIndexBuffer(indeces, sizeof(indeces));
+		indeces.reserve(mCircleSectionsNum * 3);
+
+		for (unsigned int i = 0; i < mCircleSectionsNum - 1; ++i)
+		{
+			indeces.push_back(0);
+			indeces.push_back(i + 1);
+			indeces.push_back(i + 2);
+		}
+
+		indeces.push_back(0);
+		indeces.push_back(mCircleSectionsNum);
+		indeces.push_back(1);
+
+		mIndexBuffer = mContext->createIndexBuffer(indeces.data(), sizeof(int) * (unsigned int)indeces.size());
 	}
 
 	// Create Constant Buffer
@@ -103,7 +120,7 @@ SquareRenderItem::SquareRenderItem(
 	}
 }
 
-bool SquareRenderItem::draw()
+bool CircleRenderItem::draw()
 {
 	CircleCB cb = {};
 	cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
@@ -127,10 +144,10 @@ bool SquareRenderItem::draw()
 
 	mContext->mContext->VSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
 
-	mContext->mContext->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	mContext->mContext->DrawIndexedInstanced(mCircleSectionsNum * 3, 1, 0, 0, 0);
 
 	return true;
 }
 
-SquareRenderItem::~SquareRenderItem()
+CircleRenderItem::~CircleRenderItem()
 {}

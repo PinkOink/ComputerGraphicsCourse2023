@@ -23,7 +23,7 @@ struct BallPhysicBody
 class PingPongPhysics : public GameComponent
 {
 public:
-  PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballSpeedScale);
+  PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballStartSpeed, float ballScaleSpeed);
 
   void addPlayer1Speed(float speed) { mPlayer1.mSpeed += speed; }
   void addPlayer2Speed(float speed) { mPlayer2.mSpeed += speed; }

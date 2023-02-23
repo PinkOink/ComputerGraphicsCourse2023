@@ -5,24 +5,13 @@ PingPongRender::PingPongRender(RenderContext* context, const PingPongPhysics* ph
   : mContext(context), 
   mPhysics(physics), 
   mRacket1(context, { physics->getPlayer1Pos().x, physics->getPlayer1Pos().y, 0.5f }, { racketSize.x, racketSize.y, 1.0f }),
-  mRacket2(context, { physics->getPlayer2Pos().x, physics->getPlayer2Pos().y, 0.5f }, { racketSize.x, racketSize.y, 1.0f })
+  mRacket2(context, { physics->getPlayer2Pos().x, physics->getPlayer2Pos().y, 0.5f }, { racketSize.x, racketSize.y, 1.0f }),
+  mCircle(context, 16, { physics->getBallPos().x, physics->getBallPos().y, 0.5f }, { ballSize, ballSize, 1.0f })
 {}
 
 bool PingPongRender::init()
 {
-  bool res = true;
-
-  if (res)
-  {
-    mRacket1.init();
-  }
-
-  if (res)
-  {
-    mRacket2.init();
-  }
-
-  return res;
+  return true;
 }
 
 bool PingPongRender::update(float deltaTime)
@@ -37,6 +26,8 @@ bool PingPongRender::draw()
 
   mRacket1.draw();
   mRacket2.draw();
+
+  mCircle.draw();
 
   return true;
 }
