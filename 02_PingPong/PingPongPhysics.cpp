@@ -112,11 +112,11 @@ namespace
 PingPongPhysics::PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballStartSpeed, float ballScaleSpeed)
   : mBallStartSpeed(ballStartSpeed), mBallSpeedScale(ballScaleSpeed)
 {
-  mPlayer1.mPosition = { -1.0f + racketSize.x / 2.0f, 0.0f };
+  mPlayer1.mPosition = { -0.9f + racketSize.x / 2.0f, 0.0f };
   mPlayer1.mSize = racketSize;  
   mPlayer1.mSpeed = 0.0f;
   
-  mPlayer2.mPosition = { +1.0f - racketSize.x / 2.0f, 0.0f };
+  mPlayer2.mPosition = { +0.9f - racketSize.x / 2.0f, 0.0f };
   mPlayer2.mSize = racketSize;
   mPlayer2.mSpeed = 0.0f;
 
