@@ -196,8 +196,16 @@ bool PingPongPhysics::update(float deltaTime)
         // Add random rotation after collision
         mBall.mDir = randomVectorRotation(mBall.mDir, -3.14f / 4.0f, +3.14f / 4.0f);
       }
-
     } while (ballMoveReq > 1e-6);
+
+    if (mBall.mPosition.x <= -1)
+    {
+      mOnBallExit.Execute(-1);
+    }    
+    else if (mBall.mPosition.x >= 1)
+    {
+      mOnBallExit.Execute(+1);
+    }
   }
 
   return true;

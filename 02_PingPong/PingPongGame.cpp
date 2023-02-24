@@ -13,6 +13,7 @@ bool PingPongGame::createGameComponents()
   mPhys = new PingPongPhysics(mRacketSize, mRacketSize.x * 2, mBallSize, mBallStartSpeed, 1.05f);
   PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, mRacketSize, mBallSize);
   mPhys->pausePhysics();
+  mPhys->mOnBallExit.BindLambda([this](int side) { this->onBallExit(side); });
 
   mGameComponents.push_back(mPhys);
   mGameComponents.push_back(renderer);
@@ -20,14 +21,33 @@ bool PingPongGame::createGameComponents()
   return true;
 }
 
+bool PingPongGame::update()
+{
+  if (mState == GAMESTATE::SHOWWIN)
+  {
+    if (mShowWinTimeCount >= mShowWinTime)
+    {
+      mState = GAMESTATE::PLAY;
+      mPhys->restartPhysics();
+      mPhys->unpausePhysics();
+    }
+    else
+    {
+      mShowWinTimeCount += mTimer.DeltaTime();
+    }
+  }
+
+  return Game::update();
+}
+
 void PingPongGame::processInputDevice()
 {
-  if (mMenu)
+  if (mState == GAMESTATE::MENU)
   {
     if (mInputDevice->IsKeyDown(Keys::D1))
     {
+      mState = GAMESTATE::PLAY;
       mPlayer2AI = true;
-      mMenu = false;
 
       mPhys->unpausePhysics();
 
@@ -35,8 +55,8 @@ void PingPongGame::processInputDevice()
     }
     if (mInputDevice->IsKeyDown(Keys::D2))
     {
+      mState = GAMESTATE::PLAY;
       mPlayer2AI = false;
-      mMenu = false;
 
       mPhys->unpausePhysics();
 
@@ -51,48 +71,57 @@ void PingPongGame::processInputDevice()
       mPhys->restartPhysics();
       mPhys->pausePhysics();
 
-      mMenu = true;
+      mState = GAMESTATE::MENU;
 
       return;
     }
 
-    // Player 1
-    if (mInputDevice->IsKeyDown(Keys::W))
+    if (mState != GAMESTATE::SHOWWIN)
     {
-      mPhys->addPlayer1Speed(+mRacketSpeed);
-    }
-    if (mInputDevice->IsKeyDown(Keys::S))
-    {
-      mPhys->addPlayer1Speed(-mRacketSpeed);
-    }
+      // Player 1
+      if (mInputDevice->IsKeyDown(Keys::W))
+      {
+        mPhys->addPlayer1Speed(+mRacketSpeed);
+      }
+      if (mInputDevice->IsKeyDown(Keys::S))
+      {
+        mPhys->addPlayer1Speed(-mRacketSpeed);
+      }
 
-    // Player 2
-    if (mPlayer2AI)
-    {
-      // AI controlled
-      float ballY = mPhys->getBallPos().y;
-      float racketY = mPhys->getPlayer2Pos().y;
+      // Player 2
+      if (mPlayer2AI)
+      {
+        // AI controlled
+        float ballY = mPhys->getBallPos().y;
+        float racketY = mPhys->getPlayer2Pos().y;
 
-      if (ballY < racketY - mRacketAIZone)
+        if (ballY < racketY - mRacketAIZone)
+        {
+          mPhys->addPlayer2Speed(-mRacketSpeed);
+        }
+        if (ballY > racketY + mRacketAIZone)
+        {
+          mPhys->addPlayer2Speed(+mRacketSpeed);
+        }
+      } else
       {
-        mPhys->addPlayer2Speed(-mRacketSpeed);
-      }
-      if (ballY > racketY + mRacketAIZone)
-      {
-        mPhys->addPlayer2Speed(+mRacketSpeed);
-      }
-    }
-    else
-    {
-      // Human controlled
-      if (mInputDevice->IsKeyDown(Keys::Up))
-      {
-        mPhys->addPlayer2Speed(+mRacketSpeed);
-      }
-      if (mInputDevice->IsKeyDown(Keys::Down))
-      {
-        mPhys->addPlayer2Speed(-mRacketSpeed);
+        // Human controlled
+        if (mInputDevice->IsKeyDown(Keys::Up))
+        {
+          mPhys->addPlayer2Speed(+mRacketSpeed);
+        }
+        if (mInputDevice->IsKeyDown(Keys::Down))
+        {
+          mPhys->addPlayer2Speed(-mRacketSpeed);
+        }
       }
     }
   }
+}
+
+void PingPongGame::onBallExit(int side)
+{
+  mPhys->pausePhysics();
+  mState = GAMESTATE::SHOWWIN;
+  mShowWinTimeCount = 0.0f;
 }

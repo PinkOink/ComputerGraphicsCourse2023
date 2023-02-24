@@ -12,10 +12,21 @@ public:
 protected:
   virtual bool createGameComponents();
 
+  virtual bool update();
   virtual void processInputDevice();
 
+  void onBallExit(int side);
+
 protected:
-  bool mMenu = true;
+  enum class GAMESTATE
+  {
+    MENU,
+    PLAY,
+    SHOWWIN
+  };
+
+protected:
+  GAMESTATE mState = GAMESTATE::MENU;
   bool mPlayer2AI = false;
 
   PingPongPhysics* mPhys = nullptr;
@@ -27,5 +38,8 @@ protected:
 
   float mBallSize = 0.01f;
   float mBallStartSpeed = 0.5f;
+
+  float mShowWinTime = 2.0f; // seconds
+  float mShowWinTimeCount = 0.0f; // seconds
 };
 

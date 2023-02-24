@@ -27,6 +27,9 @@ protected:
   // This method must be implemented by children of Game
   virtual bool createGameComponents() = 0;
 
+  virtual bool update();
+  virtual bool draw();
+
   virtual void processInputDevice();
 
 private:
@@ -34,9 +37,6 @@ private:
   Game(Game&& rhs) = delete;
   Game& operator=(const Game& rhs) = delete;
   Game& operator=(Game&& rhs) = delete;
-
-  bool update();
-  bool draw();
 
   void updateFrameStats();
   

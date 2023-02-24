@@ -1,5 +1,6 @@
 #pragma once
 #include <GameComponent.h>
+#include <Delegates.h>
 
 #include <SimpleMath.h>
 
@@ -45,6 +46,9 @@ public:
   void restartPhysics();
 
   virtual ~PingPongPhysics() = default;
+
+public:
+  Delegate<void, int> mOnBallExit;
 
 protected:
   bool mPaused = false;
