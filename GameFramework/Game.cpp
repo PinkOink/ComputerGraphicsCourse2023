@@ -9,7 +9,7 @@ bool Game::init()
 	bool res = true;
 
 	mWindow = new Window();
-	res = mWindow->init(this, mGameName, 800, 600);
+	res = mWindow->init(this, mGameName, 800, 800);
 	if (!res)
 	{
 		MessageBox(0, L"Window initialization failed", 0, 0);

@@ -146,6 +146,7 @@ bool PingPongPhysics::update(float deltaTime)
     do
     {
       bool collisionDetected = false;
+      bool racketCollisionDetected = false;
 
       DirectX::SimpleMath::Vector2 collisionNorm1;
       DirectX::SimpleMath::Vector2 collisionNorm2;
@@ -155,8 +156,10 @@ bool PingPongPhysics::update(float deltaTime)
       float moveBeforeWall1 = FLT_MAX;
       float moveBeforeWall2 = FLT_MAX;
 
-      collisionDetected |= checkMoveBallVsRacket(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, mPlayer1.mPosition, mPlayer1.mSize, moveBeforePlayer1, collisionNorm1);
-      collisionDetected |= checkMoveBallVsRacket(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, mPlayer2.mPosition, mPlayer2.mSize, moveBeforePlayer2, collisionNorm2);
+      racketCollisionDetected |= checkMoveBallVsRacket(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, mPlayer1.mPosition, mPlayer1.mSize, moveBeforePlayer1, collisionNorm1);
+      racketCollisionDetected |= checkMoveBallVsRacket(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, mPlayer2.mPosition, mPlayer2.mSize, moveBeforePlayer2, collisionNorm2);
+
+      collisionDetected |= racketCollisionDetected;
 
       collisionDetected |= checkMoveBallVsWall(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, { 0.0f, +1.0f }, { 0.0f, -1.0f }, moveBeforeWall1);
       collisionDetected |= checkMoveBallVsWall(mBall.mPosition, mBall.mDir, mBall.mSize, mBall.mSpeed * deltaTime, { 0.0f, -1.0f }, { 0.0f, +1.0f }, moveBeforeWall2);
@@ -183,10 +186,14 @@ bool PingPongPhysics::update(float deltaTime)
         mBall.mDir = DirectX::SimpleMath::Vector2::Reflect(mBall.mDir, { 0.0f, +1.0f });
       }
 
+      if (racketCollisionDetected)
+      {
+        // Add speed after collision with racket
+        mBall.mSpeed *= mBallSpeedScale;
+      }
       if (collisionDetected)
       {
-        // Add random rotation and speed after collision
-        mBall.mSpeed *= mBallSpeedScale;
+        // Add random rotation after collision
         mBall.mDir = randomVectorRotation(mBall.mDir, -3.14f / 4.0f, +3.14f / 4.0f);
       }
 
