@@ -16,6 +16,7 @@ bool PingPongGame::createGameComponents()
 
   mPhys = new PingPongPhysics(racketSize, ballSize, ballStartSpeed, 1.05f);
   PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, racketSize, ballSize);
+  mPhys->pausePhysics();
 
   mGameComponents.push_back(mPhys);
   mGameComponents.push_back(renderer);

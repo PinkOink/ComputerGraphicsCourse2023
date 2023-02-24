@@ -25,6 +25,7 @@ bool PingPongRender::draw()
   mRacket2.setPosition({ mPhysics->getPlayer2Pos().x, mPhysics->getPlayer2Pos().y, 0.5f });
 
   mCircle.setPosition({ mPhysics->getBallPos().x, mPhysics->getBallPos().y, 0.5f });
+  mCircle.setColor({ 1.0f, mPhysics->getBallStartSpeed() / mPhysics->getBallCurSpeed(), mPhysics->getBallStartSpeed() / mPhysics->getBallCurSpeed(), 1.0f});
 
   mRacket1.draw();
   mRacket2.draw();

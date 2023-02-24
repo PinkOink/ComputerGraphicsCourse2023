@@ -33,7 +33,8 @@ public:
   DirectX::SimpleMath::Vector2 getPlayer2Pos() const { return mPlayer2.mPosition; }
 
   DirectX::SimpleMath::Vector2 getBallPos() const { return mBall.mPosition; }
-  float getBallSpeedValue() const { return mBall.mSpeed; }
+  float getBallCurSpeed() const { return mBall.mSpeed; }
+  float getBallStartSpeed() const { return mBallStartSpeed; }
 
   virtual bool init();
   virtual bool update(float deltaTime);
