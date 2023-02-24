@@ -42,4 +42,17 @@ void PingPongGame::processInputDevice()
   {
     mPhys->addPlayer2Speed(-mRacketSpeed);
   }
+
+  if (mInputDevice->IsKeyDown(Keys::R))
+  {
+    mPhys->restartPhysics();
+  }
+  if (mInputDevice->IsKeyDown(Keys::Q))
+  {
+    mPhys->pausePhysics();
+  }
+  if (mInputDevice->IsKeyDown(Keys::E))
+  {
+    mPhys->unpausePhysics();
+  }
 }
