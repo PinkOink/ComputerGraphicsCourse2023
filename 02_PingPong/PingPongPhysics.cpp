@@ -109,14 +109,14 @@ namespace
 }
 
 
-PingPongPhysics::PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float ballSize, float ballStartSpeed, float ballScaleSpeed)
-  : mBallStartSpeed(ballStartSpeed), mBallSpeedScale(ballScaleSpeed)
+PingPongPhysics::PingPongPhysics(DirectX::SimpleMath::Vector2 racketSize, float racketOffset, float ballSize, float ballStartSpeed, float ballScaleSpeed)
+  : mBallStartSpeed(ballStartSpeed), mBallSpeedScale(ballScaleSpeed), mRacketOffset(racketOffset)
 {
-  mPlayer1.mPosition = { -0.9f + racketSize.x / 2.0f, 0.0f };
+  mPlayer1.mPosition = { -1.0f + racketOffset + racketSize.x / 2.0f, 0.0f };
   mPlayer1.mSize = racketSize;  
   mPlayer1.mSpeed = 0.0f;
   
-  mPlayer2.mPosition = { +0.9f - racketSize.x / 2.0f, 0.0f };
+  mPlayer2.mPosition = { +1.0f - racketOffset - racketSize.x / 2.0f, 0.0f };
   mPlayer2.mSize = racketSize;
   mPlayer2.mSpeed = 0.0f;
 
@@ -213,10 +213,10 @@ void PingPongPhysics::unpausePhysics()
 
 void PingPongPhysics::restartPhysics()
 {
-  mPlayer1.mPosition = { -1.0f + mPlayer1.mSize.x / 2.0f, 0.0f };
+  mPlayer1.mPosition = { -1.0f + mRacketOffset + mPlayer1.mSize.x / 2.0f, 0.0f };
   mPlayer1.mSpeed = 0.0f;
 
-  mPlayer2.mPosition = { +1.0f - mPlayer2.mSize.x / 2.0f, 0.0f };
+  mPlayer2.mPosition = { +1.0f - mRacketOffset - mPlayer2.mSize.x / 2.0f, 0.0f };
   mPlayer2.mSpeed = 0.0f;
 
   mBall.mPosition = { 0.0f, 0.0f };

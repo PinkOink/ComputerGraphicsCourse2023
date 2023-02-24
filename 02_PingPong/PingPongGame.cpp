@@ -10,12 +10,8 @@ PingPongGame::PingPongGame()
 
 bool PingPongGame::createGameComponents()
 {
-  DirectX::SimpleMath::Vector2 racketSize = { 0.02f, 0.1f };
-  float ballSize = 0.01f;
-  float ballStartSpeed = 0.5f;
-
-  mPhys = new PingPongPhysics(racketSize, ballSize, ballStartSpeed, 1.05f);
-  PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, racketSize, ballSize);
+  mPhys = new PingPongPhysics(mRacketSize, mRacketSize.x, mBallSize, mBallStartSpeed, 1.05f);
+  PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, mRacketSize, mBallSize);
   mPhys->pausePhysics();
 
   mGameComponents.push_back(mPhys);
@@ -26,34 +22,77 @@ bool PingPongGame::createGameComponents()
 
 void PingPongGame::processInputDevice()
 {
-  if (mInputDevice->IsKeyDown(Keys::W))
+  if (mMenu)
   {
-    mPhys->addPlayer1Speed(+mRacketSpeed);
-  }
-  if (mInputDevice->IsKeyDown(Keys::S))
-  {
-    mPhys->addPlayer1Speed(-mRacketSpeed);
-  }
+    if (mInputDevice->IsKeyDown(Keys::D1))
+    {
+      mPlayer2AI = true;
+      mMenu = false;
 
-  if (mInputDevice->IsKeyDown(Keys::Up))
-  {
-    mPhys->addPlayer2Speed(+mRacketSpeed);
-  }
-  if (mInputDevice->IsKeyDown(Keys::Down))
-  {
-    mPhys->addPlayer2Speed(-mRacketSpeed);
-  }
+      mPhys->unpausePhysics();
 
-  if (mInputDevice->IsKeyDown(Keys::R))
-  {
-    mPhys->restartPhysics();
+      return;
+    }
+    if (mInputDevice->IsKeyDown(Keys::D2))
+    {
+      mPlayer2AI = false;
+      mMenu = false;
+
+      mPhys->unpausePhysics();
+
+      return;
+    }
   }
-  if (mInputDevice->IsKeyDown(Keys::Q))
+  else
   {
-    mPhys->pausePhysics();
-  }
-  if (mInputDevice->IsKeyDown(Keys::E))
-  {
-    mPhys->unpausePhysics();
+    // Check return to menu
+    if (mInputDevice->IsKeyDown(Keys::Space))
+    {
+      mPhys->restartPhysics();
+      mPhys->pausePhysics();
+
+      mMenu = true;
+
+      return;
+    }
+
+    // Player 1
+    if (mInputDevice->IsKeyDown(Keys::W))
+    {
+      mPhys->addPlayer1Speed(+mRacketSpeed);
+    }
+    if (mInputDevice->IsKeyDown(Keys::S))
+    {
+      mPhys->addPlayer1Speed(-mRacketSpeed);
+    }
+
+    // Player 2
+    if (mPlayer2AI)
+    {
+      // AI controlled
+      float ballY = mPhys->getBallPos().y;
+      float racketY = mPhys->getPlayer2Pos().y;
+
+      if (ballY < racketY - mRacketAIZone)
+      {
+        mPhys->addPlayer2Speed(-mRacketSpeed);
+      }
+      if (ballY > racketY + mRacketAIZone)
+      {
+        mPhys->addPlayer2Speed(+mRacketSpeed);
+      }
+    }
+    else
+    {
+      // Human controlled
+      if (mInputDevice->IsKeyDown(Keys::Up))
+      {
+        mPhys->addPlayer2Speed(+mRacketSpeed);
+      }
+      if (mInputDevice->IsKeyDown(Keys::Down))
+      {
+        mPhys->addPlayer2Speed(-mRacketSpeed);
+      }
+    }
   }
 }
