@@ -10,7 +10,7 @@ PingPongGame::PingPongGame()
 
 bool PingPongGame::createGameComponents()
 {
-  mPhys = new PingPongPhysics(mRacketSize, mRacketSize.x, mBallSize, mBallStartSpeed, 1.05f);
+  mPhys = new PingPongPhysics(mRacketSize, mRacketSize.x * 2, mBallSize, mBallStartSpeed, 1.05f);
   PingPongRender* renderer = new PingPongRender(mRenderContext, mPhys, mRacketSize, mBallSize);
   mPhys->pausePhysics();
 

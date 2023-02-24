@@ -20,7 +20,7 @@ protected:
 
   PingPongPhysics* mPhys = nullptr;
 
-  DirectX::SimpleMath::Vector2 mRacketSize = { 0.02f, 0.1f };
+  DirectX::SimpleMath::Vector2 mRacketSize = { 0.01f, 0.1f };
   float mRacketSpeed = 1.0f; // mRacketSpeed units in 1 second
 
   float mRacketAIZone = 0.05f;
