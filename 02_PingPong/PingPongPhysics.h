@@ -15,7 +15,8 @@ struct RacketPhysicBody
 struct BallPhysicBody
 {
   DirectX::SimpleMath::Vector2 mPosition;
-  DirectX::SimpleMath::Vector2 mSpeed;
+  DirectX::SimpleMath::Vector2 mDir;
+  float mSpeed;
   float mSize;
 };
 
@@ -32,7 +33,7 @@ public:
   DirectX::SimpleMath::Vector2 getPlayer2Pos() const { return mPlayer2.mPosition; }
 
   DirectX::SimpleMath::Vector2 getBallPos() const { return mBall.mPosition; }
-  float getBallSpeedValue() const { return mBall.mSpeed.Length(); }
+  float getBallSpeedValue() const { return mBall.mSpeed; }
 
   virtual bool init();
   virtual bool update(float deltaTime);
