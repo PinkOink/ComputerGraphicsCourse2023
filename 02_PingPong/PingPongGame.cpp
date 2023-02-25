@@ -79,11 +79,11 @@ void PingPongGame::processInputDevice()
     if (mState != GAMESTATE::SHOWWIN)
     {
       // Player 1
-      if (mInputDevice->IsKeyDown(Keys::W))
+      if (mInputDevice->IsKeyDown(Keys::W) || (mPlayer2AI && mInputDevice->IsKeyDown(Keys::Up)))
       {
         mPhys->addPlayer1Speed(+mRacketSpeed);
       }
-      if (mInputDevice->IsKeyDown(Keys::S))
+      if (mInputDevice->IsKeyDown(Keys::S) || (mPlayer2AI && mInputDevice->IsKeyDown(Keys::Down)))
       {
         mPhys->addPlayer1Speed(-mRacketSpeed);
       }
