@@ -62,5 +62,7 @@ protected:
 
   float mBallStartSpeed;
   float mBallSpeedScale;
+
+  float mBallSpeedMax = 100.0f;
 };
 

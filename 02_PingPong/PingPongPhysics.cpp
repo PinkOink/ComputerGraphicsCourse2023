@@ -69,34 +69,32 @@ namespace
         ballMovePossible = dist;
 
         DirectX::SimpleMath::Vector2 collisionPoint = ballPos + ballDir * dist;
-        if (collisionPoint.x < rectCenter.x + rectSize.x + ballRadius)
-        {
-          if (collisionPoint.x > rectCenter.x - rectSize.x - ballRadius)
-          {
-            collisionNorm.x = 0.0f;
-          }
-          else
-          {
-            collisionNorm.x = -1.0f;
-          }
-        }
-        else
+
+        if (fabs(collisionPoint.x - (rectCenter.x + rectSize.x + ballRadius)) < 1e-6f)
         {
           collisionNorm.x = +1.0f;
         }
-        if (collisionPoint.y < rectCenter.y + rectSize.y + ballRadius)
+        else if (fabs(collisionPoint.x - (rectCenter.x - rectSize.x - ballRadius)) < 1e-6f)
         {
-          if (collisionPoint.y > rectCenter.y - rectSize.y - ballRadius)
-          {
-            collisionNorm.y = 0.0f;
-          } else
-          {
-            collisionNorm.y = -1.0f;
-          }
-        } else
+          collisionNorm.x = -1.0f;
+        }
+        else
+        {
+          collisionNorm.x = 0.0f;
+        }
+
+        if (fabs(collisionPoint.y - (rectCenter.y + rectSize.y + ballRadius)) < 1e-6f)
         {
           collisionNorm.y = +1.0f;
+        } 
+        else if (fabs(collisionPoint.y - (rectCenter.y - rectSize.y - ballRadius)) < 1e-6f)
+        {
+          collisionNorm.y = -1.0f;
+        } else
+        {
+          collisionNorm.y = 0.0f;
         }
+
         collisionNorm.Normalize();
 
         assert(collisionNorm.Length() > 0.01f);
@@ -189,7 +187,7 @@ bool PingPongPhysics::update(float deltaTime)
       if (racketCollisionDetected)
       {
         // Add speed after collision with racket
-        mBall.mSpeed *= mBallSpeedScale;
+        mBall.mSpeed = std::clamp(mBall.mSpeed * mBallSpeedScale, 0.0f, mBallSpeedMax);
       }
       if (collisionDetected)
       {
