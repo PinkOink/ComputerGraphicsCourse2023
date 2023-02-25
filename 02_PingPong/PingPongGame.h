@@ -9,6 +9,8 @@ class PingPongGame : public Game
 public:
   PingPongGame();
 
+  virtual ~PingPongGame();
+
 protected:
   virtual bool createGameComponents();
 
@@ -16,6 +18,9 @@ protected:
   virtual void processInputDevice();
 
   void onBallExit(int side);
+
+  void printMenuText();
+  void printScore();
 
 protected:
   enum class GAMESTATE
@@ -41,5 +46,8 @@ protected:
 
   float mShowWinTime = 2.0f; // seconds
   float mShowWinTimeCount = 0.0f; // seconds
+
+  unsigned int mPlayer1Score = 0;
+  unsigned int mPlayer2Score = 0;
 };
 

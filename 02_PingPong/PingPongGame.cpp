@@ -3,10 +3,20 @@
 #include "PingPongPhysics.h"
 #include "PingPongRender.h"
 
+#include <iostream>
 
 PingPongGame::PingPongGame()
   : Game("PingPong")
-{}
+{
+  AllocConsole();
+  freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+  printMenuText();
+}
+
+PingPongGame::~PingPongGame()
+{
+  FreeConsole();
+}
 
 bool PingPongGame::createGameComponents()
 {
@@ -49,6 +59,8 @@ void PingPongGame::processInputDevice()
       mState = GAMESTATE::PLAY;
       mPlayer2AI = true;
 
+      std::cout << "PvE game started:" << std::endl;
+
       mPhys->unpausePhysics();
 
       return;
@@ -59,6 +71,8 @@ void PingPongGame::processInputDevice()
       mPlayer2AI = false;
 
       mPhys->unpausePhysics();
+
+      std::cout << "PvP game started:" << std::endl;
 
       return;
     }
@@ -72,6 +86,11 @@ void PingPongGame::processInputDevice()
       mPhys->pausePhysics();
 
       mState = GAMESTATE::MENU;
+
+      mPlayer1Score = 0;
+      mPlayer2Score = 0;
+
+      printMenuText();
 
       return;
     }
@@ -124,4 +143,38 @@ void PingPongGame::onBallExit(int side)
   mPhys->pausePhysics();
   mState = GAMESTATE::SHOWWIN;
   mShowWinTimeCount = 0.0f;
+
+  if (side < 0)
+  {
+    mPlayer1Score++;
+  }
+  if (side > 0)
+  {
+    mPlayer2Score++;
+  }
+
+  printScore();
+}
+
+void PingPongGame::printMenuText()
+{
+  std::cout << std::endl;
+  std::cout << "Ping Pong Game" << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "Press 1 to play PvE" << std::endl;
+  std::cout << "Controlls:" << std::endl;
+  std::cout << "  Use W/S or Up/Down arrows to move your racket" << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "Press 2 to play PvP" << std::endl;
+  std::cout << "Controlls:" << std::endl;
+  std::cout << "  Use W/S arrows to move left racket" << std::endl;
+  std::cout << "  Use Up/Down arrows to move right racket" << std::endl;
+  std::cout << std::endl;
+}
+
+void PingPongGame::printScore()
+{
+  std::cout << mPlayer1Score << ':' << mPlayer2Score << std::endl;
 }
