@@ -58,6 +58,8 @@
     <CopyFileToFolders Include="Resource\Mesh2dPS.hlsl">
       <Filter>Shaders</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Resource\Mesh2dVS.hlsl" />
+    <CopyFileToFolders Include="Resource\Mesh2dVS.hlsl">
+      <Filter>Shaders</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
