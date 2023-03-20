@@ -28,6 +28,7 @@ protected:
   virtual bool createGameComponents() = 0;
 
   virtual bool update();
+  virtual bool updateSubresources();
   virtual bool draw();
 
   virtual void processInputDevice();

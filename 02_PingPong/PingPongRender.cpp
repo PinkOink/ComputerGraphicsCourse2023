@@ -19,6 +19,11 @@ bool PingPongRender::update(float deltaTime)
   return true;
 }
 
+bool PingPongRender::updateSubresources()
+{
+  return true;
+}
+
 bool PingPongRender::draw()
 {
   mRacket1.setPosition({ mPhysics->getPlayer1Pos().x, mPhysics->getPlayer1Pos().y, 0.5f });

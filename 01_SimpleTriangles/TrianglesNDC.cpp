@@ -107,6 +107,11 @@ bool TrianglesNDC::update(float deltaTime)
   return true;
 }
 
+bool TrianglesNDC::updateSubresources()
+{
+  return true;
+}
+
 bool TrianglesNDC::draw()
 {
 	mContext->mContext->RSSetState(mRastState.Get());

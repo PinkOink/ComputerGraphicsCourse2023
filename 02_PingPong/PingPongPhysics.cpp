@@ -209,6 +209,11 @@ bool PingPongPhysics::update(float deltaTime)
   return true;
 }
 
+bool PingPongPhysics::updateSubresources()
+{
+  return true;
+}
+
 bool PingPongPhysics::draw()
 {
   return true;

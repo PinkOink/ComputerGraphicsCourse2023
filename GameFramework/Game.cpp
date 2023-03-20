@@ -140,6 +140,20 @@ bool Game::update()
 	return res;
 }
 
+bool Game::updateSubresources()
+{
+	bool res = true;
+
+	for (auto component : mGameComponents)
+	{
+		res = component->updateSubresources();
+		if (!res)
+			return false;
+	}
+
+	return res;
+}
+
 bool Game::draw()
 {
 	bool res = true;

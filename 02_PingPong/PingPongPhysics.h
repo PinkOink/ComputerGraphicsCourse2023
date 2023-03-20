@@ -39,6 +39,7 @@ public:
 
   virtual bool init();
   virtual bool update(float deltaTime);
+  virtual bool updateSubresources();
   virtual bool draw();
 
   void pausePhysics();
