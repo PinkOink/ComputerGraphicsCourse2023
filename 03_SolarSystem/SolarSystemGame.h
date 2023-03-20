@@ -2,6 +2,9 @@
 
 #include <Game.h>
 
+#include "Camera.h"
+#include "CubeRenderItem.h"
+
 
 class SolarSystemGame : public Game
 {
@@ -12,4 +15,8 @@ public:
 
 protected:
   virtual bool createGameComponents();
+
+protected:
+  Camera* mCamera = nullptr;
+  CubeRenderItem* mCube = nullptr;
 };

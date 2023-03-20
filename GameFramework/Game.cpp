@@ -83,6 +83,11 @@ bool Game::run()
 			if (!res)
 				return false;
 
+			res = updateSubresources();
+			assert(res);
+			if (!res)
+				return false;
+
 			res = draw();
 			assert(res);
 			if (!res)
