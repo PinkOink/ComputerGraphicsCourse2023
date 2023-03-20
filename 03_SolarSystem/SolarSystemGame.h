@@ -14,7 +14,9 @@ public:
   virtual ~SolarSystemGame();
 
 protected:
-  virtual bool createGameComponents();
+  virtual bool createGameComponents() override;
+
+  virtual void processInputDevice() override;
 
 protected:
   Camera* mCamera = nullptr;

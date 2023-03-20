@@ -17,9 +17,13 @@ public:
   virtual bool updateSubresources();
   virtual bool draw();
 
+  void moveCamera(DirectX::SimpleMath::Vector3 dir);
+
   virtual ~Camera() = default;
 
 protected:
+  const float mMoveSpeed = 0.05f;
+
   RenderContext* mContext = nullptr;
   Window* mWindow = nullptr;
 

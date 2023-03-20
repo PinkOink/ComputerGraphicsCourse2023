@@ -18,6 +18,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02_PingPong", "02_PingPong\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03_SolarSystem", "03_SolarSystem\03_SolarSystem.vcxproj", "{150CC8C5-479F-4A1B-9A18-67E72E31E131}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B5CAE9A1-8230-4309-AC19-846864A0E080} = {B5CAE9A1-8230-4309-AC19-846864A0E080}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

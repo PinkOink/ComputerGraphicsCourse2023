@@ -33,7 +33,7 @@ bool Camera::init()
 bool Camera::update(float deltaTime)
 {
   mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + mDirection, { 0.0, 0.0, 1.0 });
-  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25 * 3.14, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 1000.0);
+  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 1000.0);
 
   return true;
 }
@@ -53,4 +53,17 @@ bool Camera::draw()
   mContext->mContext->VSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
 
   return true;
+}
+
+void Camera::moveCamera(DirectX::SimpleMath::Vector3 dir)
+{
+  DirectX::SimpleMath::Vector3 moveForward = mDirection;
+  DirectX::SimpleMath::Vector3 moveRight = mDirection.Cross({ 0.0, 0.0, 1.0 });
+  DirectX::SimpleMath::Vector3 moveUp = { 0.0, 0.0, 1.0 };
+
+  DirectX::SimpleMath::Vector3 moveStep = moveForward * dir.x + moveRight * dir.y + moveUp * dir.z;
+
+  moveStep.Normalize();
+
+  mPosition += moveStep * mMoveSpeed;
 }

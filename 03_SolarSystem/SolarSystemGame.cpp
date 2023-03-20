@@ -42,3 +42,29 @@ bool SolarSystemGame::createGameComponents()
 
   return true;
 }
+
+void SolarSystemGame::processInputDevice()
+{
+  DirectX::SimpleMath::Vector3 moveDir = { 0.0, 0.0, 0.0 };
+
+  if (mInputDevice->IsKeyDown(Keys::W)) {
+    moveDir.x += 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::S)) {
+    moveDir.x -= 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::D)) {
+    moveDir.y += 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::A)) {
+    moveDir.y -= 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::E)) {
+    moveDir.z += 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::Q)) {
+    moveDir.z -= 1.0f;
+  }
+
+  mCamera->moveCamera(moveDir);
+}
