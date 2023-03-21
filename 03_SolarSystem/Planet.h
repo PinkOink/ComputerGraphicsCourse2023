@@ -24,6 +24,7 @@ public:
   virtual bool updateSubresources();
   virtual bool draw();
 
+  const DirectX::SimpleMath::Matrix& getLocalMatrix() const { return mLocalMatrix; };
   const DirectX::SimpleMath::Matrix& getWorldMatrix() const { return mWorldMatrix; };
 
   virtual ~Planet();

@@ -22,6 +22,9 @@ public:
   void activate() { mActivated = true; };
   void deactivate() { mActivated = false; };
 
+  void useLocalTransform() { mUseLocalTransform = true; };
+  void notUseLocalTransform() { mUseLocalTransform = false; };
+
   void rotateCamera(DirectX::SimpleMath::Vector2 dir);
 
   void setPlanet(Planet* planet) { 
@@ -37,6 +40,7 @@ public:
 
 protected:
   bool mActivated = true;
+  bool mUseLocalTransform = false;
 
   Planet* mPlanet;
 

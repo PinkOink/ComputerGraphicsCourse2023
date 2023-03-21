@@ -272,6 +272,13 @@ void SolarSystemGame::processInputDevice()
     mRightArrowPressed = false;
     mCameraOrbit->setPlanet(mPlanets[mCurPlanet = (mCurPlanet + 1) % mPlanetsNum]);
   }
+
+  if (mInputDevice->IsKeyDown(Keys::L)) {
+    mCameraOrbit->useLocalTransform();
+  }
+  if (mInputDevice->IsKeyDown(Keys::K)) {
+    mCameraOrbit->notUseLocalTransform();
+  }
 }
 
 void SolarSystemGame::processMouseMove(const InputDevice::MouseMoveEventArgs& args)

@@ -60,6 +60,10 @@ bool CameraOrbit::updateSubresources()
   if (mActivated)
   {
     DirectX::SimpleMath::Matrix planetMat = mPlanet->getWorldMatrix().Invert();
+    if (mUseLocalTransform)
+    {
+      planetMat *= mPlanet->getLocalMatrix().Invert();
+    }
 
     CameraOrbitCB cb = {};
     cb.viewProj = (planetMat * mView * mProj).Transpose();
