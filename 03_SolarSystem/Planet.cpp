@@ -22,6 +22,7 @@ Planet::Planet(
 
 bool Planet::init()
 {
+  mLocalMatrix = DirectX::SimpleMath::Matrix::Identity;
   mWorldMatrix = DirectX::SimpleMath::Matrix::Identity;
 
   return true;
@@ -32,13 +33,14 @@ bool Planet::update(float deltaTime)
   mLocalRotationAngle += mLocalRotationSpeed * deltaTime;
   mParentRotationAngle += mParentRotationSpeed * deltaTime;
 
+  mLocalMatrix = DirectX::SimpleMath::Matrix::Identity;
   mWorldMatrix = DirectX::SimpleMath::Matrix::Identity;
 
   // Local rotation
-  mWorldMatrix = DirectX::SimpleMath::Matrix::Transform(mWorldMatrix, DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(mLocalRotationAxis, mLocalRotationAngle));
+  mLocalMatrix = DirectX::SimpleMath::Matrix::Transform(mLocalMatrix, DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(mLocalRotationAxis, mLocalRotationAngle));
 
   // Move to parent's orbit in local space
-  mWorldMatrix *= DirectX::SimpleMath::Matrix::CreateTranslation(mInitialPosition);
+  mWorldMatrix = DirectX::SimpleMath::Matrix::CreateTranslation(mInitialPosition);
 
   // Rotate in parent's orbit
   mWorldMatrix = DirectX::SimpleMath::Matrix::Transform(mWorldMatrix, DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(mParentRotationAxis, mParentRotationAngle));
@@ -49,7 +51,7 @@ bool Planet::update(float deltaTime)
     mWorldMatrix *= mParent->getWorldMatrix();
   }
 
-  mRenderItem->setWorldMatrix(mWorldMatrix);
+  mRenderItem->setWorldMatrix(mLocalMatrix * mWorldMatrix);
 
   return true;
 }

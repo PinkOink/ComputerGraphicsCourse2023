@@ -44,6 +44,7 @@ protected:
   float mLocalRotationAngle = 0.0f;
   float mParentRotationAngle = 0.0f;
 
+  DirectX::SimpleMath::Matrix mLocalMatrix;
   DirectX::SimpleMath::Matrix mWorldMatrix;
 };
 
