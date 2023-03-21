@@ -20,9 +20,14 @@ public:
   void moveCamera(DirectX::SimpleMath::Vector3 dir);
   void rotateCamera(DirectX::SimpleMath::Vector2 dir);
 
+  void setPerspectiveProjection() { mPerspective = true; };
+  void setOrthographicProjection() { mPerspective = false; };
+
   virtual ~Camera() = default;
 
 protected:
+  bool mPerspective = true;
+
   const float mMoveSpeed = 5.0f;
   const float mRotateSpeed = 50.0f;
 

@@ -149,6 +149,13 @@ void SolarSystemGame::processInputDevice()
   }
 
   mCamera->moveCamera(moveDir);
+
+  if (mInputDevice->IsKeyDown(Keys::P)) {
+    mCamera->setPerspectiveProjection();
+  }
+  if (mInputDevice->IsKeyDown(Keys::O)) {
+    mCamera->setOrthographicProjection();
+  }
 }
 
 void SolarSystemGame::processMouseMove(const InputDevice::MouseMoveEventArgs& args)

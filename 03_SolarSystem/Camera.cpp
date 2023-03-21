@@ -49,7 +49,14 @@ bool Camera::update(float deltaTime)
 
   mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + curDir, mUpDefault);
 
-  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 1000.0);
+  if (mPerspective)
+  {
+    mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 100.0);
+  }
+  else
+  {
+    mProj = DirectX::SimpleMath::Matrix::CreateOrthographic((float)mWindow->getWidth() / (float)mWindow->getHeight() * 10.0f, 10.0f, 1.0, 100.0);
+  }
 
   return true;
 }
