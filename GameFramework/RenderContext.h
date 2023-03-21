@@ -45,6 +45,11 @@ protected:
 
   D3D11_VIEWPORT mViewport = {};
   Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mBackBufferView = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthStencilView = nullptr;
+
+  Microsoft::WRL::ComPtr<ID3D11Texture2D> mDepthStencilTex = nullptr;
+
+  Microsoft::WRL::ComPtr<ID3D11DepthStencilState> mDepthStencilState = nullptr;
 
   // remove after render targets will be set manually
   float mWidth = 0;

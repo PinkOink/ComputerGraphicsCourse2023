@@ -67,12 +67,44 @@ bool RenderContext::init(Window* window)
 	res = mDevice->CreateRenderTargetView(backBufferTex.Get(), nullptr, &mBackBufferView);
 	assert(SUCCEEDED(res));
 
+	D3D11_TEXTURE2D_DESC depthStencilTexDesc = {};
+	depthStencilTexDesc.ArraySize = 1;
+	depthStencilTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilTexDesc.CPUAccessFlags = 0;
+	depthStencilTexDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilTexDesc.Width = window->getWidth();
+	depthStencilTexDesc.Height = window->getHeight();
+	depthStencilTexDesc.MipLevels = 1;
+	depthStencilTexDesc.ArraySize = 1;
+	depthStencilTexDesc.MiscFlags = 0;
+	depthStencilTexDesc.SampleDesc.Count = 1;
+	depthStencilTexDesc.SampleDesc.Quality = 0;
+	depthStencilTexDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	res = mDevice->CreateTexture2D(&depthStencilTexDesc, NULL, mDepthStencilTex.GetAddressOf());
+	assert(SUCCEEDED(res));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc = {};
+	depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Flags = 0;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	res = mDevice->CreateDepthStencilView(mDepthStencilTex.Get(), &depthStencilViewDesc, mDepthStencilView.GetAddressOf());
+	assert(SUCCEEDED(res));
+
 	mViewport.TopLeftX = 0;
 	mViewport.TopLeftY = 0;
 	mViewport.Width = mWidth;
 	mViewport.Height = mHeight;
 	mViewport.MinDepth = 0;
 	mViewport.MaxDepth = 1.0f;
+
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.StencilEnable = false;
+	res = mDevice->CreateDepthStencilState(&depthStencilDesc, mDepthStencilState.GetAddressOf());
 
   return true;
 }
@@ -95,6 +127,48 @@ bool RenderContext::onResize(unsigned int width, unsigned int height)
 	res = mDevice->CreateRenderTargetView(backBufferTex.Get(), nullptr, &mBackBufferView);
 	assert(SUCCEEDED(res));
 
+	mDepthStencilTex.Reset();
+	mDepthStencilView.Reset();
+
+	D3D11_TEXTURE2D_DESC depthStencilTexDesc = {};
+	depthStencilTexDesc.ArraySize = 1;
+	depthStencilTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilTexDesc.CPUAccessFlags = 0;
+	depthStencilTexDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilTexDesc.Width = width;
+	depthStencilTexDesc.Height = height;
+	depthStencilTexDesc.MipLevels = 1;
+	depthStencilTexDesc.ArraySize = 1;
+	depthStencilTexDesc.MiscFlags = 0;
+	depthStencilTexDesc.SampleDesc.Count = 1;
+	depthStencilTexDesc.SampleDesc.Quality = 0;
+	depthStencilTexDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	res = mDevice->CreateTexture2D(&depthStencilTexDesc, NULL, mDepthStencilTex.GetAddressOf());
+	assert(SUCCEEDED(res));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc = {};
+	depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Flags = 0;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	res = mDevice->CreateDepthStencilView(mDepthStencilTex.Get(), &depthStencilViewDesc, mDepthStencilView.GetAddressOf());
+	assert(SUCCEEDED(res));
+
+	mViewport.TopLeftX = 0;
+	mViewport.TopLeftY = 0;
+	mViewport.Width = mWidth;
+	mViewport.Height = mHeight;
+	mViewport.MinDepth = 0;
+	mViewport.MaxDepth = 1.0f;
+
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.StencilEnable = false;
+	res = mDevice->CreateDepthStencilState(&depthStencilDesc, mDepthStencilState.GetAddressOf());
+
 	mViewport.TopLeftX = 0;
 	mViewport.TopLeftY = 0;
 	mViewport.Width = mWidth;
@@ -114,8 +188,12 @@ void RenderContext::beginFrame()
 
 	mContext->RSSetViewports(1, &mViewport);
 
-	mContext->OMSetRenderTargets(1, mBackBufferView.GetAddressOf(), nullptr);
 	mContext->ClearRenderTargetView(mBackBufferView.Get(), DirectX::Colors::Aqua);
+	mContext->ClearDepthStencilView(mDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	mContext->OMSetRenderTargets(1, mBackBufferView.GetAddressOf(), mDepthStencilView.Get());
+
+	mContext->OMSetDepthStencilState(mDepthStencilState.Get(), 0.0f);
 }
 
 void RenderContext::endFrame()
