@@ -14,8 +14,6 @@ SolarSystemGame::~SolarSystemGame()
 
 bool SolarSystemGame::createGameComponents()
 {
-  mCamera = new Camera(mRenderContext, mWindow);
-
   mInputDevice->MouseMove.AddLambda([this](const InputDevice::MouseMoveEventArgs& args) { this->processMouseMove(args); });
 
   {
@@ -122,7 +120,7 @@ bool SolarSystemGame::createGameComponents()
     DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
     DirectX::SimpleMath::Vector4 color = { 0.2f, 1.0f, 0.1f, 1.0f };
 
-    DirectX::SimpleMath::Vector3 initialPosition = { 0.0, -0.6, 0.0 };
+    DirectX::SimpleMath::Vector3 initialPosition = { 0.0f, -0.6f, 0.0f };
     float localRotationSpeed = 0.0;
     float parentRotationSpeed = 0.0;
     DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
@@ -198,7 +196,12 @@ bool SolarSystemGame::createGameComponents()
       parentRotationAxis);
   }
 
+  mCamera = new Camera(mRenderContext, mWindow);
+  mCameraOrbit = new CameraOrbit(mRenderContext, mWindow, mPlanets[0]);
+  mCameraOrbit->deactivate();
+
   mGameComponents.push_back(mCamera);
+  mGameComponents.push_back(mCameraOrbit);
   mGameComponents.push_back(mPlanets[0]);
   mGameComponents.push_back(mPlanets[1]);
   mGameComponents.push_back(mPlanets[2]);
@@ -239,13 +242,53 @@ void SolarSystemGame::processInputDevice()
 
   if (mInputDevice->IsKeyDown(Keys::P)) {
     mCamera->setPerspectiveProjection();
+    mCameraOrbit->setPerspectiveProjection();
   }
   if (mInputDevice->IsKeyDown(Keys::O)) {
     mCamera->setOrthographicProjection();
+    mCameraOrbit->setOrthographicProjection();
+  }
+
+  if (mInputDevice->IsKeyDown(Keys::D1)) {
+    mCamera->activate();
+    mCameraOrbit->deactivate();
+  }
+  if (mInputDevice->IsKeyDown(Keys::D2)) {
+    mCamera->deactivate();
+    mCameraOrbit->activate();
+  }
+
+  if (mInputDevice->IsKeyDown(Keys::NumPad0)) {
+    mCameraOrbit->setPlanet(mPlanets[0]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad1)) {
+    mCameraOrbit->setPlanet(mPlanets[1]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad2)) {
+    mCameraOrbit->setPlanet(mPlanets[2]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad3)) {
+    mCameraOrbit->setPlanet(mPlanets[3]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad4)) {
+    mCameraOrbit->setPlanet(mPlanets[4]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad5)) {
+    mCameraOrbit->setPlanet(mPlanets[5]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad6)) {
+    mCameraOrbit->setPlanet(mPlanets[6]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad7)) {
+    mCameraOrbit->setPlanet(mPlanets[7]);
+  }
+  if (mInputDevice->IsKeyDown(Keys::NumPad8)) {
+    mCameraOrbit->setPlanet(mPlanets[8]);
   }
 }
 
 void SolarSystemGame::processMouseMove(const InputDevice::MouseMoveEventArgs& args)
 {
   mCamera->rotateCamera(args.Offset);
+  mCameraOrbit->rotateCamera(args.Offset);
 }

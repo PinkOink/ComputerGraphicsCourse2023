@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraOrbit.cpp" />
     <ClCompile Include="CubeRenderItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Planet.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraOrbit.h" />
     <ClInclude Include="CubeRenderItem.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="RenderItem.h" />

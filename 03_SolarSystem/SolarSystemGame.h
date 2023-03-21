@@ -3,6 +3,7 @@
 #include <Game.h>
 
 #include "Camera.h"
+#include "CameraOrbit.h"
 #include "Planet.h"
 
 
@@ -26,6 +27,7 @@ protected:
 
 protected:
   Camera* mCamera = nullptr;
+  CameraOrbit* mCameraOrbit = nullptr;
 
-  Planet* mPlanets[10] = {};
+  Planet* mPlanets[9] = {};
 };

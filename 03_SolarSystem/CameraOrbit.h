@@ -6,11 +6,13 @@
 
 #include <SimpleMath.h>
 
+#include "Planet.h"
 
-class Camera : public GameComponent
+
+class CameraOrbit : public GameComponent
 {
 public:
-  Camera(RenderContext* context, Window* window);
+  CameraOrbit(RenderContext* context, Window* window, Planet* planet);
 
   virtual bool init();
   virtual bool update(float deltaTime);
@@ -20,31 +22,36 @@ public:
   void activate() { mActivated = true; };
   void deactivate() { mActivated = false; };
 
-  void moveCamera(DirectX::SimpleMath::Vector3 dir);
   void rotateCamera(DirectX::SimpleMath::Vector2 dir);
+
+  void setPlanet(Planet* planet) { 
+    mUpRot = 0.0;
+    mRightRot = 0.0;
+    mPlanet = planet;
+  };
 
   void setPerspectiveProjection() { mPerspective = true; };
   void setOrthographicProjection() { mPerspective = false; };
 
-  virtual ~Camera() = default;
+  virtual ~CameraOrbit() = default;
 
 protected:
   bool mActivated = true;
 
+  Planet* mPlanet;
+
   bool mPerspective = true;
 
-  const float mMoveSpeed = 5.0f;
   const float mRotateSpeed = 50.0f;
 
-  DirectX::SimpleMath::Vector3 mMoveDir = { 0.0, 0.0, 0.0 };
   DirectX::SimpleMath::Vector2 mRotateDir = { 0.0, 0.0 };
 
   RenderContext* mContext = nullptr;
   Window* mWindow = nullptr;
 
-  DirectX::SimpleMath::Vector3 mPosition = { 10.0, 0.0, 0.0 };
-  const DirectX::SimpleMath::Vector3 mDirectionDefault = { -1.0f, 0.0, 0.0 };
-  const DirectX::SimpleMath::Vector3 mUpDefault = {0.0, 0.0, 1.0};
+  DirectX::SimpleMath::Vector3 mPositionDefault = { 5.0, 0.0, 0.0 };
+  const DirectX::SimpleMath::Vector3 mFocalDefault = { 0.0f, 0.0, 0.0 };
+  const DirectX::SimpleMath::Vector3 mUpDefault = { 0.0, 0.0, 1.0 };
 
   float mUpRot = 0.0;
   float mRightRot = 0.0;

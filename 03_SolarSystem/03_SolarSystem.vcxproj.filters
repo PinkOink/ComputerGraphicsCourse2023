@@ -36,6 +36,9 @@
     <ClCompile Include="SphereRenderItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CameraOrbit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SolarSystemGame.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SphereRenderItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraOrbit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
