@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <algorithm>
+
 
 struct CameraCB
 {
@@ -14,8 +16,7 @@ Camera::Camera(RenderContext* context, Window* window)
 
 bool Camera::init()
 {
-  mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + mDirection, mUp);
-  mViewInv = mView.Invert();
+  mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + mDirectionDefault, mUpDefault);
   mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0f, 1000.0f);
 
   {
@@ -30,18 +31,23 @@ bool Camera::init()
 
 bool Camera::update(float deltaTime)
 {
-  mPosition = DirectX::SimpleMath::Vector3::Transform(mMoveDir * mMoveSpeed * deltaTime, mViewInv);
-  mMoveDir = { 0.0, 0.0, 0.0 };
-
-  mDirection = DirectX::SimpleMath::Vector3::Transform(mDirection, DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(mUp, -mRotateDir.x * mRotateSpeed * deltaTime));
-  DirectX::SimpleMath::Vector3 rightVec = mDirection.Cross(mUp);
-  mDirection = DirectX::SimpleMath::Vector3::Transform(mDirection, DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(rightVec, -mRotateDir.y * mRotateSpeed * deltaTime));
-  mUp = rightVec.Cross(mDirection);
+  mUpRot = std::clamp(mUpRot + mRotateDir.y * mRotateSpeed * deltaTime, -80.0f, +80.0f);
+  mRightRot += mRotateDir.x * mRotateSpeed * deltaTime;
   mRotateDir = { 0.0, 0.0 };
 
-  mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + mDirection, mUp);
+  DirectX::SimpleMath::Vector3 curDir = DirectX::SimpleMath::Vector3::Transform(mDirectionDefault, DirectX::SimpleMath::Matrix::CreateRotationY(-mUpRot * 3.14f / 180.0f));
+  curDir = DirectX::SimpleMath::Vector3::Transform(curDir, DirectX::SimpleMath::Matrix::CreateRotationZ(-mRightRot * 3.14f / 180.0f));
+  curDir.Normalize();
 
-  mViewInv = mView.Invert();
+  DirectX::SimpleMath::Vector3 curRight = curDir.Cross(mUpDefault);
+  curRight.Normalize();
+
+  mPosition += curDir * mMoveDir.x * mMoveSpeed * deltaTime;
+  mPosition += curRight * mMoveDir.y * mMoveSpeed * deltaTime;
+  mPosition.z += 1.0f * mMoveDir.z * mMoveSpeed * deltaTime;
+  mMoveDir = { 0.0, 0.0, 0.0 };
+
+  mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPosition, mPosition + curDir, mUpDefault);
 
   mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 1000.0);
 
@@ -67,16 +73,6 @@ bool Camera::draw()
 
 void Camera::moveCamera(DirectX::SimpleMath::Vector3 dir)
 {
-  //DirectX::SimpleMath::Vector3 moveForward = mDirection;
-  //DirectX::SimpleMath::Vector3 moveRight = mDirection.Cross({ 0.0, 0.0, 1.0 });
-  //DirectX::SimpleMath::Vector3 moveUp = { 0.0, 0.0, 1.0 };
-
-  //DirectX::SimpleMath::Vector3 moveStep = moveForward * dir.x + moveRight * dir.y + moveUp * dir.z;
-
-  //moveStep.Normalize();
-
-  //mPosition += moveStep * mMoveSpeed;
-
   mMoveDir = dir;
 }
 
