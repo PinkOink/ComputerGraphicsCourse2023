@@ -132,11 +132,14 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CubeRenderItem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Planet.cpp" />
     <ClCompile Include="SolarSystemGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeRenderItem.h" />
+    <ClInclude Include="Planet.h" />
+    <ClInclude Include="RenderItem.h" />
     <ClInclude Include="SolarSystemGame.h" />
   </ItemGroup>
   <ItemGroup>

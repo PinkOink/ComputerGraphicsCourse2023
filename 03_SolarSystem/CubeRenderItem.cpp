@@ -12,11 +12,10 @@ struct CircleCB
 
 CubeRenderItem::CubeRenderItem(
 	RenderContext* context,
-	DirectX::SimpleMath::Vector3 pos,
 	DirectX::SimpleMath::Vector3 scale,
 	DirectX::SimpleMath::Vector4 color
 )
-	: mContext(context), mPos(pos), mScale(scale), mColor(color)
+	: mContext(context), mScale(scale), mColor(color)
 {
 	HRESULT res = S_OK;
 
@@ -69,8 +68,10 @@ CubeRenderItem::CubeRenderItem(
 	// Create Constant Buffer
 	if (SUCCEEDED(res))
 	{
+		mWorldMat = DirectX::SimpleMath::Matrix::Identity;
+
 		CircleCB cb = {};
-		cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+		cb.transform = DirectX::SimpleMath::Matrix::CreateScale(mScale).Transpose();
 		cb.color = mColor;
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
@@ -123,10 +124,15 @@ CubeRenderItem::CubeRenderItem(
 	}
 }
 
+void CubeRenderItem::setWorldMatrix(const DirectX::SimpleMath::Matrix& mat)
+{
+	mWorldMat = DirectX::SimpleMath::Matrix::CreateScale(mScale) * mat;
+}
+
 bool CubeRenderItem::updateSubresources()
 {
 	CircleCB cb = {};
-	cb.transform = (DirectX::SimpleMath::Matrix::CreateScale(mScale) * DirectX::SimpleMath::Matrix::CreateTranslation(mPos)).Transpose();
+	cb.transform = mWorldMat.Transpose();
 	cb.color = mColor;
 
 	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CircleCB));

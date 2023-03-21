@@ -6,41 +6,26 @@ SolarSystemGame::SolarSystemGame()
 {}
 
 SolarSystemGame::~SolarSystemGame()
-{}
+{
+}
 
 bool SolarSystemGame::createGameComponents()
 {
   mCamera = new Camera(mRenderContext, mWindow);
-  mCube = new CubeRenderItem(mRenderContext);
 
   mInputDevice->MouseMove.AddLambda([this](const InputDevice::MouseMoveEventArgs& args) { this->processMouseMove(args); });
 
-  class CubeWrapper : public GameComponent
-  {
-  public:
-    CubeWrapper(CubeRenderItem* cube)
-      : mCube(cube)
-    {}
-
-    virtual bool init() { return true; };
-    virtual bool update(float deltaTime) { return true; };
-    virtual bool updateSubresources() {
-      mCube->updateSubresources();
-      return true;
-    };
-    virtual bool draw() {
-      mCube->draw();
-      return true;
-    };
-
-    virtual ~CubeWrapper() = default;
-
-  protected:
-    CubeRenderItem* mCube;
-  };
+  mPlanets[0] = new Planet(
+    nullptr, 
+    new CubeRenderItem(mRenderContext, { 1.0, 1.0, 1.0 }, { 1.0, 0.0, 1.0, 1.0 }), 
+    { 0.0, 5.0, 0.0 }, 
+    3.0, 
+    3.0, 
+    { 0.0, 0.0, 1.0 }, 
+    { 0.0, 0.0, 1.0 });
 
   mGameComponents.push_back(mCamera);
-  mGameComponents.push_back(new CubeWrapper(mCube));
+  mGameComponents.push_back(mPlanets[0]);
 
   return true;
 }

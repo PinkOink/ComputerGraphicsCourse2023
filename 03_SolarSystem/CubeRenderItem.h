@@ -4,25 +4,24 @@
 
 #include <SimpleMath.h>
 
+#include "RenderItem.h"
 
-class CubeRenderItem
+
+class CubeRenderItem : public RenderItem
 {
 public:
   CubeRenderItem(
     RenderContext* context,
-    DirectX::SimpleMath::Vector3 pos = { 0.0f, 0.0f, 0.0f },
     DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
     DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f }
   );
 
-  void setPosition(DirectX::SimpleMath::Vector3 pos) { mPos = pos; }
-  void setScale(DirectX::SimpleMath::Vector3 scale) { mScale = scale; }
-  void setColor(DirectX::SimpleMath::Vector4 color) { mColor = color; }
+  virtual void setWorldMatrix(const DirectX::SimpleMath::Matrix& mat) override;
 
-  bool updateSubresources();
-  bool draw();
+  virtual bool updateSubresources() override;
+  virtual bool draw() override;
 
-  ~CubeRenderItem();
+  virtual ~CubeRenderItem() override;
 
 protected:
   RenderContext* mContext;
@@ -40,8 +39,9 @@ protected:
 
   Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer = nullptr;
 
-  DirectX::SimpleMath::Vector3 mPos;
   DirectX::SimpleMath::Vector3 mScale;
   DirectX::SimpleMath::Vector4 mColor;
+
+  DirectX::SimpleMath::Matrix mWorldMat;
 };
 

@@ -4,6 +4,7 @@
 
 #include "Camera.h"
 #include "CubeRenderItem.h"
+#include "Planet.h"
 
 
 class SolarSystemGame : public Game
@@ -26,5 +27,6 @@ protected:
 
 protected:
   Camera* mCamera = nullptr;
-  CubeRenderItem* mCube = nullptr;
+
+  Planet* mPlanets[10] = {};
 };
