@@ -193,7 +193,7 @@ void RenderContext::beginFrame()
 
 	mContext->OMSetRenderTargets(1, mBackBufferView.GetAddressOf(), mDepthStencilView.Get());
 
-	mContext->OMSetDepthStencilState(mDepthStencilState.Get(), 0.0f);
+	mContext->OMSetDepthStencilState(mDepthStencilState.Get(), 0u);
 }
 
 void RenderContext::endFrame()
