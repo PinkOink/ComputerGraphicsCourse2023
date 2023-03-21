@@ -1,5 +1,8 @@
 #include "SolarSystemGame.h"
 
+#include "CubeRenderItem.h"
+#include "SphereRenderItem.h"
+
 
 SolarSystemGame::SolarSystemGame()
   : Game("SolarSystem")
@@ -27,7 +30,7 @@ bool SolarSystemGame::createGameComponents()
 
     mPlanets[0] = new Planet(
       nullptr,
-      new CubeRenderItem(mRenderContext, scale, color),
+      new SphereRenderItem(mRenderContext, scale, color),
       initialPosition,
       localRotationSpeed,
       parentRotationSpeed,
@@ -40,7 +43,7 @@ bool SolarSystemGame::createGameComponents()
     DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 0.0f, 1.0f };
 
     DirectX::SimpleMath::Vector3 initialPosition = { 0.0, 5.0, 0.0 };
-    float localRotationSpeed = 0.0;
+    float localRotationSpeed = 3.0;
     float parentRotationSpeed = 3.0;
     DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 0.0, 1.0 };
     DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, 1.0 };
@@ -67,7 +70,7 @@ bool SolarSystemGame::createGameComponents()
 
     mPlanets[2] = new Planet(
       mPlanets[1],
-      new CubeRenderItem(mRenderContext, scale, color),
+      new SphereRenderItem(mRenderContext, scale, color),
       initialPosition,
       localRotationSpeed,
       parentRotationSpeed,
@@ -107,6 +110,26 @@ bool SolarSystemGame::createGameComponents()
 
     mPlanets[4] = new Planet(
       mPlanets[3],
+      new CubeRenderItem(mRenderContext, scale, color),
+      initialPosition,
+      localRotationSpeed,
+      parentRotationSpeed,
+      localRotationAxis,
+      parentRotationAxis);
+  }
+
+  {    
+    DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
+    DirectX::SimpleMath::Vector4 color = { 0.2f, 1.0f, 0.1f, 1.0f };
+
+    DirectX::SimpleMath::Vector3 initialPosition = { 0.0, -0.6, 0.0 };
+    float localRotationSpeed = 0.0;
+    float parentRotationSpeed = 0.0;
+    DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
+    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, -1.0 };
+
+    mPlanets[4] = new Planet(
+      mPlanets[2],
       new CubeRenderItem(mRenderContext, scale, color),
       initialPosition,
       localRotationSpeed,

@@ -134,6 +134,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="SolarSystemGame.cpp" />
+    <ClCompile Include="SphereRenderItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Planet.h" />
     <ClInclude Include="RenderItem.h" />
     <ClInclude Include="SolarSystemGame.h" />
+    <ClInclude Include="SphereRenderItem.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resource\Mesh3dPS.hlsl">
