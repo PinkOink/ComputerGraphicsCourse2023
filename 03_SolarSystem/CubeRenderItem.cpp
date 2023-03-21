@@ -114,9 +114,10 @@ CubeRenderItem::CubeRenderItem(
 	// Create state
 	if (SUCCEEDED(res))
 	{
-		CD3D11_RASTERIZER_DESC rastDesc = {};
+		D3D11_RASTERIZER_DESC rastDesc = {};
 		rastDesc.CullMode = D3D11_CULL_BACK;
 		rastDesc.FillMode = D3D11_FILL_SOLID;
+		rastDesc.DepthClipEnable = true;
 
 		res = mContext->mDevice->CreateRasterizerState(&rastDesc, &mRastState);
 

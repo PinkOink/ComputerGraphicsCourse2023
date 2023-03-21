@@ -92,11 +92,11 @@ bool RenderContext::init(Window* window)
 	res = mDevice->CreateDepthStencilView(mDepthStencilTex.Get(), &depthStencilViewDesc, mDepthStencilView.GetAddressOf());
 	assert(SUCCEEDED(res));
 
-	mViewport.TopLeftX = 0;
-	mViewport.TopLeftY = 0;
+	mViewport.TopLeftX = 0.0f;
+	mViewport.TopLeftY = 0.0f;
 	mViewport.Width = mWidth;
 	mViewport.Height = mHeight;
-	mViewport.MinDepth = 0;
+	mViewport.MinDepth = 0.0f;
 	mViewport.MaxDepth = 1.0f;
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
@@ -155,11 +155,11 @@ bool RenderContext::onResize(unsigned int width, unsigned int height)
 	res = mDevice->CreateDepthStencilView(mDepthStencilTex.Get(), &depthStencilViewDesc, mDepthStencilView.GetAddressOf());
 	assert(SUCCEEDED(res));
 
-	mViewport.TopLeftX = 0;
-	mViewport.TopLeftY = 0;
+	mViewport.TopLeftX = 0.0f;
+	mViewport.TopLeftY = 0.0f;
 	mViewport.Width = mWidth;
 	mViewport.Height = mHeight;
-	mViewport.MinDepth = 0;
+	mViewport.MinDepth = 0.0f;
 	mViewport.MaxDepth = 1.0f;
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
