@@ -26,16 +26,26 @@ bool SolarSystemGame::createGameComponents()
 
   mPlanets[1] = new Planet(
     mPlanets[0],
-    new CubeRenderItem(mRenderContext, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0, 1.0 }), 
+    new CubeRenderItem(mRenderContext, { 0.7, 0.7, 0.7 }, { 1.0, 1.0, 0.0, 1.0 }), 
     { 0.0, 5.0, 0.0 }, 
-    2.0, 
+    0.0, 
     3.0, 
     { 0.0, 1.0, 0.0 }, 
     { 0.0, 0.0, 1.0 });
 
+  mPlanets[2] = new Planet(
+    mPlanets[1],
+    new CubeRenderItem(mRenderContext, { 0.3, 0.3, 0.3 }, { 1.0, 0.0, 0.0, 1.0 }), 
+    { 2.0, 0.0, 0.0 }, 
+    0.0, 
+    3.0, 
+    { 0.0, 1.0, 0.0 }, 
+    { 0.0, 1.0, 0.0 });
+
   mGameComponents.push_back(mCamera);
   mGameComponents.push_back(mPlanets[0]);
   mGameComponents.push_back(mPlanets[1]);
+  mGameComponents.push_back(mPlanets[2]);
 
   return true;
 }
