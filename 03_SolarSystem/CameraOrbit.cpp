@@ -100,7 +100,7 @@ void CameraOrbit::addRadius(int step)
 {
   if (mActivated)
   {
-    mRadiusAdd = step;
+    mRadiusAdd = (float)step;
   }
 }
 
