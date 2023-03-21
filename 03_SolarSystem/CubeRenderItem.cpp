@@ -43,23 +43,23 @@ CubeRenderItem::CubeRenderItem(
 	if (SUCCEEDED(res))
 	{
 		int indeces[] = {
-			0, 3, 1,
-			0, 1, 2,
+			0, 1, 3,
+			0, 2, 1,
 
-			3, 7, 5,
-			3, 5, 1,
+			3, 5, 7,
+			3, 1, 5,
 
-			0, 4, 7,
-			0, 7, 3,
+			0, 7, 4,
+			0, 3, 7,
 
-			4, 0, 2,
-			4, 2, 6,
+			4, 2, 0,
+			4, 6, 2,
 
-			1, 5, 6,
-			1, 6, 2,
+			1, 6, 5,
+			1, 2, 6,
 
-			7, 4, 6,
-			7, 6, 5
+			7, 6, 4,
+			7, 5, 6
 		};
 
 		mIndexBuffer = mContext->createIndexBuffer(indeces, sizeof(indeces));
