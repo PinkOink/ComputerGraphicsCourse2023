@@ -79,7 +79,7 @@ bool SolarSystemGame::createGameComponents()
   }
 
   {    
-    DirectX::SimpleMath::Vector3 scale = { 0.4f, 0.2f, 0.1f };
+    DirectX::SimpleMath::Vector3 scale = { 0.4f, 0.2f, 1.1f };
     DirectX::SimpleMath::Vector4 color = { 0.5f, 0.3f, 0.1f, 1.0f };
 
     DirectX::SimpleMath::Vector3 initialPosition = { 8.0, 0.0, 0.0 };
@@ -102,15 +102,15 @@ bool SolarSystemGame::createGameComponents()
     DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
     DirectX::SimpleMath::Vector4 color = { 1.0f, 0.0f, 0.1f, 1.0f };
 
-    DirectX::SimpleMath::Vector3 initialPosition = { 1.0, 0.0, 0.0 };
+    DirectX::SimpleMath::Vector3 initialPosition = { 2.0, 0.0, 0.0 };
     float localRotationSpeed = 0.0;
-    float parentRotationSpeed = 2.0;
+    float parentRotationSpeed = 6.0;
     DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
-    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, -1.0 };
+    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 1.0, 0.0 };
 
     mPlanets[4] = new Planet(
-      mPlanets[3],
-      new CubeRenderItem(mRenderContext, scale, color),
+      mPlanets[0],
+      new SphereRenderItem(mRenderContext, scale, color),
       initialPosition,
       localRotationSpeed,
       parentRotationSpeed,
@@ -128,8 +128,68 @@ bool SolarSystemGame::createGameComponents()
     DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
     DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, -1.0 };
 
-    mPlanets[4] = new Planet(
+    mPlanets[5] = new Planet(
       mPlanets[2],
+      new CubeRenderItem(mRenderContext, scale, color),
+      initialPosition,
+      localRotationSpeed,
+      parentRotationSpeed,
+      localRotationAxis,
+      parentRotationAxis);
+  }
+
+  {    
+    DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
+    DirectX::SimpleMath::Vector4 color = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+    DirectX::SimpleMath::Vector3 initialPosition = { 1.0, 0.0, 0.0 };
+    float localRotationSpeed = 0.0;
+    float parentRotationSpeed = 0.0;
+    DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
+    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, 1.0 };
+
+    mPlanets[6] = new Planet(
+      mPlanets[3],
+      new CubeRenderItem(mRenderContext, scale, color),
+      initialPosition,
+      localRotationSpeed,
+      parentRotationSpeed,
+      localRotationAxis,
+      parentRotationAxis);
+  }
+
+  {    
+    DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
+    DirectX::SimpleMath::Vector4 color = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+    DirectX::SimpleMath::Vector3 initialPosition = { 0.0, 1.0, 0.0 };
+    float localRotationSpeed = 0.0;
+    float parentRotationSpeed = 0.0;
+    DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
+    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, 1.0 };
+
+    mPlanets[7] = new Planet(
+      mPlanets[3],
+      new CubeRenderItem(mRenderContext, scale, color),
+      initialPosition,
+      localRotationSpeed,
+      parentRotationSpeed,
+      localRotationAxis,
+      parentRotationAxis);
+  }
+
+  {    
+    DirectX::SimpleMath::Vector3 scale = { 0.1f, 0.1f, 0.1f };
+    DirectX::SimpleMath::Vector4 color = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+    DirectX::SimpleMath::Vector3 initialPosition = { 0.0, 0.0, 1.0 };
+    float localRotationSpeed = 0.0;
+    float parentRotationSpeed = 0.0;
+    DirectX::SimpleMath::Vector3 localRotationAxis = { 0.0, 1.0, 1.0 };
+    DirectX::SimpleMath::Vector3 parentRotationAxis = { 0.0, 0.0, 1.0 };
+
+    mPlanets[8] = new Planet(
+      mPlanets[3],
       new CubeRenderItem(mRenderContext, scale, color),
       initialPosition,
       localRotationSpeed,
@@ -144,6 +204,10 @@ bool SolarSystemGame::createGameComponents()
   mGameComponents.push_back(mPlanets[2]);
   mGameComponents.push_back(mPlanets[3]);
   mGameComponents.push_back(mPlanets[4]);
+  mGameComponents.push_back(mPlanets[5]);
+  mGameComponents.push_back(mPlanets[6]);
+  mGameComponents.push_back(mPlanets[7]);
+  mGameComponents.push_back(mPlanets[8]);
 
   return true;
 }
