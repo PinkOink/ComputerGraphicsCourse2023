@@ -197,7 +197,7 @@ bool SolarSystemGame::createGameComponents()
   }
 
   mCamera = new Camera(mRenderContext, mWindow);
-  mCameraOrbit = new CameraOrbit(mRenderContext, mWindow, mPlanets[0]);
+  mCameraOrbit = new CameraOrbit(mRenderContext, mWindow, mPlanets[mCurPlanet]);
   mCameraOrbit->deactivate();
 
   mGameComponents.push_back(mCamera);
@@ -258,32 +258,19 @@ void SolarSystemGame::processInputDevice()
     mCameraOrbit->activate();
   }
 
-  if (mInputDevice->IsKeyDown(Keys::NumPad0)) {
-    mCameraOrbit->setPlanet(mPlanets[0]);
+  if (mInputDevice->IsKeyDown(Keys::Left)) {
+    mLeftArrowPressed = true;
   }
-  if (mInputDevice->IsKeyDown(Keys::NumPad1)) {
-    mCameraOrbit->setPlanet(mPlanets[1]);
+  if (mInputDevice->IsKeyDown(Keys::Right)) {
+    mRightArrowPressed = true;
   }
-  if (mInputDevice->IsKeyDown(Keys::NumPad2)) {
-    mCameraOrbit->setPlanet(mPlanets[2]);
+  if (!mInputDevice->IsKeyDown(Keys::Left) && mLeftArrowPressed) {
+    mLeftArrowPressed = false;
+    mCameraOrbit->setPlanet(mPlanets[mCurPlanet = (mCurPlanet > 0) ? (mCurPlanet - 1) : (mPlanetsNum - 1)]);
   }
-  if (mInputDevice->IsKeyDown(Keys::NumPad3)) {
-    mCameraOrbit->setPlanet(mPlanets[3]);
-  }
-  if (mInputDevice->IsKeyDown(Keys::NumPad4)) {
-    mCameraOrbit->setPlanet(mPlanets[4]);
-  }
-  if (mInputDevice->IsKeyDown(Keys::NumPad5)) {
-    mCameraOrbit->setPlanet(mPlanets[5]);
-  }
-  if (mInputDevice->IsKeyDown(Keys::NumPad6)) {
-    mCameraOrbit->setPlanet(mPlanets[6]);
-  }
-  if (mInputDevice->IsKeyDown(Keys::NumPad7)) {
-    mCameraOrbit->setPlanet(mPlanets[7]);
-  }
-  if (mInputDevice->IsKeyDown(Keys::NumPad8)) {
-    mCameraOrbit->setPlanet(mPlanets[8]);
+  if (!mInputDevice->IsKeyDown(Keys::Right) && mRightArrowPressed) {
+    mRightArrowPressed = false;
+    mCameraOrbit->setPlanet(mPlanets[mCurPlanet = (mCurPlanet + 1) % mPlanetsNum]);
   }
 }
 

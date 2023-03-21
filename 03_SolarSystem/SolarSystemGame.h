@@ -29,5 +29,11 @@ protected:
   Camera* mCamera = nullptr;
   CameraOrbit* mCameraOrbit = nullptr;
 
+  const int mPlanetsNum = 9;
   Planet* mPlanets[9] = {};
+
+  int mCurPlanet = 0;
+
+  bool mLeftArrowPressed = false;
+  bool mRightArrowPressed = false;
 };
