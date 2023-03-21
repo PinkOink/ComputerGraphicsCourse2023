@@ -13,6 +13,8 @@ bool SolarSystemGame::createGameComponents()
   mCamera = new Camera(mRenderContext, mWindow);
   mCube = new CubeRenderItem(mRenderContext);
 
+  mInputDevice->MouseMove.AddLambda([this](const InputDevice::MouseMoveEventArgs& args) { this->processMouseMove(args); });
+
   class CubeWrapper : public GameComponent
   {
   public:
@@ -48,23 +50,28 @@ void SolarSystemGame::processInputDevice()
   DirectX::SimpleMath::Vector3 moveDir = { 0.0, 0.0, 0.0 };
 
   if (mInputDevice->IsKeyDown(Keys::W)) {
-    moveDir.x += 1.0f;
+    moveDir.z -= 1.0f;
   }
   if (mInputDevice->IsKeyDown(Keys::S)) {
-    moveDir.x -= 1.0f;
-  }
-  if (mInputDevice->IsKeyDown(Keys::D)) {
-    moveDir.y += 1.0f;
-  }
-  if (mInputDevice->IsKeyDown(Keys::A)) {
-    moveDir.y -= 1.0f;
-  }
-  if (mInputDevice->IsKeyDown(Keys::E)) {
     moveDir.z += 1.0f;
   }
+  if (mInputDevice->IsKeyDown(Keys::D)) {
+    moveDir.x += 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::A)) {
+    moveDir.x -= 1.0f;
+  }
+  if (mInputDevice->IsKeyDown(Keys::E)) {
+    moveDir.y += 1.0f;
+  }
   if (mInputDevice->IsKeyDown(Keys::Q)) {
-    moveDir.z -= 1.0f;
+    moveDir.y -= 1.0f;
   }
 
   mCamera->moveCamera(moveDir);
+}
+
+void SolarSystemGame::processMouseMove(const InputDevice::MouseMoveEventArgs& args)
+{
+  mCamera->rotateCamera(args.Offset);
 }

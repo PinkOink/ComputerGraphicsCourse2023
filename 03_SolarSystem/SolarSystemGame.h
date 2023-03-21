@@ -14,9 +14,15 @@ public:
   virtual ~SolarSystemGame();
 
 protected:
+  SolarSystemGame(const SolarSystemGame& rhs) = delete;
+  SolarSystemGame(SolarSystemGame&& rhs) = delete;
+  SolarSystemGame& operator=(const SolarSystemGame& rhs) = delete;
+  SolarSystemGame& operator=(SolarSystemGame&& rhs) = delete;
+
   virtual bool createGameComponents() override;
 
   virtual void processInputDevice() override;
+  virtual void processMouseMove(const InputDevice::MouseMoveEventArgs& args);
 
 protected:
   Camera* mCamera = nullptr;
