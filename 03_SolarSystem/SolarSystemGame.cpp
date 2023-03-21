@@ -279,6 +279,13 @@ void SolarSystemGame::processInputDevice()
   if (mInputDevice->IsKeyDown(Keys::K)) {
     mCameraOrbit->notUseLocalTransform();
   }
+
+  if (mInputDevice->IsKeyDown(Keys::W)) {
+    mCameraOrbit->addRadius(-1.0f);
+  }
+  if (mInputDevice->IsKeyDown(Keys::S)) {
+    mCameraOrbit->addRadius(+1.0f);
+  }
 }
 
 void SolarSystemGame::processMouseMove(const InputDevice::MouseMoveEventArgs& args)

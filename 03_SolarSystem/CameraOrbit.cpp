@@ -39,7 +39,11 @@ bool CameraOrbit::update(float deltaTime)
 
     DirectX::SimpleMath::Vector3 curPos = DirectX::SimpleMath::Vector3::Transform(mPositionDefault, DirectX::SimpleMath::Matrix::CreateRotationY(-mUpRot * 3.14f / 180.0f));
     curPos = DirectX::SimpleMath::Vector3::Transform(curPos, DirectX::SimpleMath::Matrix::CreateRotationZ(-mRightRot * 3.14f / 180.0f));
-    //curPos.Normalize();
+    curPos.Normalize();
+
+    mRadius = std::clamp(mRadius + mRadiusAdd * mRadiusSpeed * deltaTime, 0.01f, 1000.0f);
+    mRadiusAdd = 0.0;
+    curPos *= mRadius;
 
     mView = DirectX::SimpleMath::Matrix::CreateLookAt(curPos, mFocalDefault, mUpDefault);
 
@@ -89,6 +93,14 @@ void CameraOrbit::rotateCamera(DirectX::SimpleMath::Vector2 dir)
   if (mActivated)
   {
     mRotateDir = 0.25 * dir;
+  }
+}
+
+void CameraOrbit::addRadius(int step)
+{
+  if (mActivated)
+  {
+    mRadiusAdd = step;
   }
 }
 

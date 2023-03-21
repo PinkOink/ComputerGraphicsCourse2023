@@ -26,6 +26,7 @@ public:
   void notUseLocalTransform() { mUseLocalTransform = false; };
 
   void rotateCamera(DirectX::SimpleMath::Vector2 dir);
+  void addRadius(int step);
 
   void setPlanet(Planet* planet) { 
     mUpRot = 0.0;
@@ -47,18 +48,21 @@ protected:
   bool mPerspective = true;
 
   const float mRotateSpeed = 50.0f;
+  const float mRadiusSpeed = 5.0f;
 
   DirectX::SimpleMath::Vector2 mRotateDir = { 0.0, 0.0 };
+  float mRadiusAdd = 0.0f;
 
   RenderContext* mContext = nullptr;
   Window* mWindow = nullptr;
 
-  DirectX::SimpleMath::Vector3 mPositionDefault = { 5.0, 0.0, 0.0 };
+  DirectX::SimpleMath::Vector3 mPositionDefault = { 1.0, 0.0, 0.0 };
   const DirectX::SimpleMath::Vector3 mFocalDefault = { 0.0f, 0.0, 0.0 };
   const DirectX::SimpleMath::Vector3 mUpDefault = { 0.0, 0.0, 1.0 };
 
   float mUpRot = 0.0;
   float mRightRot = 0.0;
+  float mRadius = 3.0f;
 
   DirectX::SimpleMath::Matrix mView = {};
   DirectX::SimpleMath::Matrix mProj = {};
