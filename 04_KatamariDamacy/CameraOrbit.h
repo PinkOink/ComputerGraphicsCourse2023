@@ -22,6 +22,8 @@ public:
   void rotateCamera(DirectX::SimpleMath::Vector2 dir);
   void addRadius(int step);
 
+  DirectX::SimpleMath::Vector2 getPlaneDir();
+
   virtual ~CameraOrbit() = default;
 
 protected:
@@ -42,7 +44,7 @@ protected:
 
   float mUpRot = 0.0;
   float mRightRot = 0.0;
-  float mRadius = 3.0f;
+  float mRadius = 20.0f;
 
   DirectX::SimpleMath::Matrix mView = {};
   DirectX::SimpleMath::Matrix mProj = {};

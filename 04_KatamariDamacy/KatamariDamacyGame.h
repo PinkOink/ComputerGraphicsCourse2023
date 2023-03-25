@@ -44,8 +44,11 @@ protected:
   virtual void processMouseMove(const InputDevice::MouseMoveEventArgs& args);
 
 protected:
-  PlayerComponent* mPlayer;
+  PlayerComponent* mPlayer = nullptr;
 
-  RenderItemWrapper* mFloor;
+  RenderItemWrapper* mFloor = nullptr;
+
+  const float mBorderX = 10.0f;
+  const float mBorderY = 10.0f;
 };
 

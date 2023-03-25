@@ -46,7 +46,7 @@ bool CameraOrbit::update(float deltaTime)
 
   mView = DirectX::SimpleMath::Matrix::CreateLookAt(curPos, mFocalDefault, mUpDefault);
 
-  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 100.0);
+  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 200.0);
 
   return true;
 }
@@ -78,5 +78,14 @@ void CameraOrbit::rotateCamera(DirectX::SimpleMath::Vector2 dir)
 void CameraOrbit::addRadius(int step)
 {
   mRadiusAdd = (float)step;
+}
+
+DirectX::SimpleMath::Vector2 CameraOrbit::getPlaneDir()
+{
+  DirectX::SimpleMath::Vector3 dir = mPositionDefault;
+
+  dir = DirectX::SimpleMath::Vector3::Transform(dir, DirectX::SimpleMath::Matrix::CreateRotationZ(-mRightRot * 3.14f / 180.0f));
+
+  return DirectX::SimpleMath::Vector2(-dir.x, -dir.y);
 }
 
