@@ -28,10 +28,10 @@ protected:
   RenderItem* mRenderItem;
   CameraOrbit* mCamera;
 
-  float mCurRadius;
+  float mCurRadius = 0.0f;
 
-  float mCurZ;
-  float mPhysZ;
+  float mCurZ = 0.0f;
+  float mPhysZ = 0.0f;
 
   const float mCorrectionZSpeed = 50.0f;
   const float mMoveSpeed = 10.0f;

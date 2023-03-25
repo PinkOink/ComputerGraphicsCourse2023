@@ -27,6 +27,7 @@ bool PlayerComponent::init()
 
 bool PlayerComponent::update(float deltaTime)
 {
+  DirectX::SimpleMath::Vector2 mPrevPos = mCurPos;
   if (mPhysZ > mCurZ) {
     mCurZ += std::fmin(mCorrectionZSpeed * deltaTime, mPhysZ - mCurZ);
   }
@@ -35,18 +36,24 @@ bool PlayerComponent::update(float deltaTime)
   moveWorldForwardDir.Normalize();
   moveWorldRightDir.Normalize();
 
-  DirectX::SimpleMath::Vector2 moveWorldDir = moveWorldForwardDir * mMoveDir.x + moveWorldRightDir * mMoveDir.y;
-  moveWorldDir.Normalize();
+  DirectX::SimpleMath::Vector2 moveWorld = moveWorldForwardDir * mMoveDir.x + moveWorldRightDir * mMoveDir.y;
+  moveWorld.Normalize();
   mMoveDir = { 0.0, 0.0 };
 
-  mCurPos.x = std::clamp(mCurPos.x + moveWorldDir.x * mMoveSpeed * deltaTime, -mBorderX, +mBorderX);
-  mCurPos.y = std::clamp(mCurPos.y + moveWorldDir.y * mMoveSpeed * deltaTime, -mBorderY, +mBorderY);
+  mCurPos.x = std::clamp(mCurPos.x + moveWorld.x * mMoveSpeed * deltaTime, -mBorderX, +mBorderX);
+  mCurPos.y = std::clamp(mCurPos.y + moveWorld.y * mMoveSpeed * deltaTime, -mBorderY, +mBorderY);
+
+  DirectX::SimpleMath::Vector3 moveWorldRight = { (mCurPos - mPrevPos).y, -(mCurPos - mPrevPos).x, 0.0 };
 
   mWorldMatrix = DirectX::SimpleMath::Matrix::CreateTranslation({ mCurPos.x, mCurPos.y, mCurZ });
+  if ((mCurPos - mPrevPos).Length() > 0)
+  {
+    mLocalMatrix *= DirectX::SimpleMath::Matrix::CreateFromAxisAngle(moveWorldRight, -(mCurPos - mPrevPos).Length() / mCurRadius);
+  }
 
   mCamera->update(deltaTime);
 
-  mRenderItem->setWorldMatrix(mWorldMatrix);
+  mRenderItem->setWorldMatrix(mLocalMatrix * mWorldMatrix);
 
   return true;
 }
