@@ -1,6 +1,7 @@
+#include "pch.h"
 #include "SphereRenderItem.h"
 
-#include <SimpleMath.h>
+#include "SimpleMath.h"
 
 
 namespace

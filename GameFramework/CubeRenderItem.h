@@ -1,16 +1,16 @@
 #pragma once
 
-#include <RenderContext.h>
+#include "RenderContext.h"
 
-#include <SimpleMath.h>
+#include "SimpleMath.h"
 
 #include "RenderItem.h"
 
 
-class SphereRenderItem : public RenderItem
+class CubeRenderItem : public RenderItem
 {
 public:
-  SphereRenderItem(
+  CubeRenderItem(
     RenderContext* context,
     DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
     DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f }
@@ -21,12 +21,10 @@ public:
   virtual bool updateSubresources() override;
   virtual bool draw() override;
 
-  virtual ~SphereRenderItem() override;
+  virtual ~CubeRenderItem() override;
 
 protected:
   RenderContext* mContext;
-
-  int mIndexNum = 0;
 
   D3D11_PRIMITIVE_TOPOLOGY mTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
   Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRastState = nullptr;

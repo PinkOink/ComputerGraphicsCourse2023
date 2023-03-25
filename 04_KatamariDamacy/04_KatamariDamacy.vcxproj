@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{150cc8c5-479f-4a1b-9a18-67e72e31e131}</ProjectGuid>
-    <RootNamespace>My03SolarSystem</RootNamespace>
+    <ProjectGuid>{9a5af335-467e-4dd8-877e-52e46bf0c816}</ProjectGuid>
+    <RootNamespace>My04KatamariDamacy</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -131,31 +131,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraOrbit.cpp" />
+    <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Planet.cpp" />
-    <ClCompile Include="SolarSystemGame.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraOrbit.h" />
-    <ClInclude Include="Planet.h" />
-    <ClInclude Include="SolarSystemGame.h" />
+    <ClInclude Include="KatamariDamacyGame.h" />
+    <ClInclude Include="PlayerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resource\Mesh3dPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Resource\Mesh3dVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <FileType>Document</FileType>
     </CopyFileToFolders>
   </ItemGroup>

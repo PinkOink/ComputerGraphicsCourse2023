@@ -1,7 +1,7 @@
 #include "SolarSystemGame.h"
 
-#include "CubeRenderItem.h"
-#include "SphereRenderItem.h"
+#include <CubeRenderItem.h>
+#include <SphereRenderItem.h>
 
 
 SolarSystemGame::SolarSystemGame()
@@ -281,10 +281,10 @@ void SolarSystemGame::processInputDevice()
   }
 
   if (mInputDevice->IsKeyDown(Keys::W)) {
-    mCameraOrbit->addRadius(-1.0f);
+    mCameraOrbit->addRadius(-1);
   }
   if (mInputDevice->IsKeyDown(Keys::S)) {
-    mCameraOrbit->addRadius(+1.0f);
+    mCameraOrbit->addRadius(+1);
   }
 }
 

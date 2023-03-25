@@ -1,6 +1,7 @@
+#include "pch.h"
 #include "CubeRenderItem.h"
 
-#include <SimpleMath.h>
+#include "SimpleMath.h"
 
 
 struct CircleCB
