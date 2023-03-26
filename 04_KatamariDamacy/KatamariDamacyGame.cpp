@@ -13,15 +13,30 @@ bool KatamariDamacyGame::createGameComponents()
 {
   mInputDevice->MouseMove.AddLambda([this](const InputDevice::MouseMoveEventArgs& args) { this->processMouseMove(args); });
 
-  auto floorRenderItem = new CubeRenderItem(mRenderContext, { mBorderX, mBorderY, 1.0 }, { 1.0, 1.0, 1.0, 1.0 });
+  {
+    float playerRadius = 1.0;
+    mPlayer = new PlayerComponent(new CubeRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), mRenderContext, mWindow, playerRadius, mBorderX, mBorderY);
+    mGameComponents.push_back(mPlayer);
+  }
 
-  floorRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ 0.0, 0.0, -1.0 }));
+  {
+    auto floorRenderItem = new CubeRenderItem(mRenderContext, { mBorderX, mBorderY, 1.0 }, { 1.0, 1.0, 1.0, 1.0 });
 
-  mFloor = new RenderItemWrapper(floorRenderItem);
-  mPlayer = new PlayerComponent(new CubeRenderItem(mRenderContext, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 0.0, 1.0 }), mRenderContext, mWindow, 1.0, mBorderX, mBorderY);
+    floorRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ 0.0, 0.0, -1.0 }));
 
-  mGameComponents.push_back(mPlayer);
-  mGameComponents.push_back(mFloor);
+    mFloor = new RenderItemWrapper(floorRenderItem);
+
+    mGameComponents.push_back(mFloor);
+  }
+
+  ObjectComponent* object; 
+  {
+    float objectRadius = 0.3f;
+    object = new ObjectComponent(new CubeRenderItem(mRenderContext, { objectRadius, objectRadius, objectRadius }, { 1.0f, 0.7f, 0.0f, 1.0f }), objectRadius, { -5.0f, -5.0f });
+    mObjects.push_back(object);
+
+    mGameComponents.push_back(object);
+  }
 
   return true;
 }

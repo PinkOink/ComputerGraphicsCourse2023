@@ -4,6 +4,7 @@
 #include <CubeRenderItem.h>
 
 #include "PlayerComponent.h"
+#include "ObjectComponent.h"
 
 
 class RenderItemWrapper : public GameComponent
@@ -45,7 +46,7 @@ protected:
 
 protected:
   PlayerComponent* mPlayer = nullptr;
-
+  std::vector<ObjectComponent*> mObjects;
   RenderItemWrapper* mFloor = nullptr;
 
   const float mBorderX = 10.0f;

@@ -134,11 +134,13 @@
     <ClCompile Include="CameraOrbit.cpp" />
     <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraOrbit.h" />
     <ClInclude Include="KatamariDamacyGame.h" />
+    <ClInclude Include="ObjectComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
   </ItemGroup>
   <ItemGroup>
