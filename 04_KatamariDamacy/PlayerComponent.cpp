@@ -1,11 +1,14 @@
 #include "PlayerComponent.h"
 
+#include "ObjectComponent.h"
+
 #include <algorithm>
 
 
-PlayerComponent::PlayerComponent(RenderItem* renderItem, RenderContext* context, Window* window, float radiusDefault, float borderX, float borderY)
-  : mRenderItem(renderItem), 
-  mCamera(new CameraOrbit(context, window, this)), 
+PlayerComponent::PlayerComponent(RenderItem* renderItem, RenderContext* context, Window* window, float radiusDefault, float borderX, float borderY, std::vector<ObjectComponent*>& objects)
+  : mRenderItem(renderItem),
+  mCamera(new CameraOrbit(context, window, this)),
+  mObjects(objects),
   mCurRadius(radiusDefault),
   mCurZ(radiusDefault),
   mPhysZ(radiusDefault),
@@ -16,6 +19,8 @@ PlayerComponent::PlayerComponent(RenderItem* renderItem, RenderContext* context,
 
 bool PlayerComponent::init()
 {
+  mLocalMatrix = DirectX::SimpleMath::Matrix::Identity;
+  mLocalStepMatrix = DirectX::SimpleMath::Matrix::Identity;
   mWorldMatrix = DirectX::SimpleMath::Matrix::CreateTranslation({ 0.0, 0.0, mCurZ });
 
   mRenderItem->setWorldMatrix(mWorldMatrix);
@@ -48,7 +53,30 @@ bool PlayerComponent::update(float deltaTime)
   mWorldMatrix = DirectX::SimpleMath::Matrix::CreateTranslation({ mCurPos.x, mCurPos.y, mCurZ });
   if ((mCurPos - mPrevPos).Length() > 0)
   {
-    mLocalMatrix *= DirectX::SimpleMath::Matrix::CreateFromAxisAngle(moveWorldRight, -(mCurPos - mPrevPos).Length() / mCurRadius);
+    mLocalStepMatrix = DirectX::SimpleMath::Matrix::CreateFromAxisAngle(moveWorldRight, -(mCurPos - mPrevPos).Length() / mCurRadius);
+    mLocalMatrix *= mLocalStepMatrix;
+  }
+  else
+  {
+    mLocalStepMatrix = DirectX::SimpleMath::Matrix::Identity;
+  }
+
+  for (ObjectComponent* obj : mObjects)
+  {
+    if (obj->isFreeObject())
+    {
+      float objRadius = obj->getRadius();
+      if (objRadius < mCurRadius)
+      {
+        DirectX::SimpleMath::Vector3 objPos = obj->getWorldPos();
+        DirectX::SimpleMath::Vector3 dist = getWorldPos() - objPos;
+
+        if (dist.Length() <= objRadius + mCurRadius)
+        {
+          obj->setPlayerComponent(this);
+        }
+      }
+    }
   }
 
   mCamera->update(deltaTime);

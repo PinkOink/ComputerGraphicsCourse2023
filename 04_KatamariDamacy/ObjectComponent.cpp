@@ -10,6 +10,8 @@ ObjectComponent::ObjectComponent(RenderItem* renderItem, float radius, DirectX::
 
 bool ObjectComponent::init()
 {
+  mLocalMatrix = DirectX::SimpleMath::Matrix::Identity;
+
   mRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ mPos.x, mPos.y, mRadius }));
 
   return true;
@@ -17,7 +19,15 @@ bool ObjectComponent::init()
 
 bool ObjectComponent::update(float deltaTime)
 {
-  mRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ mPos.x, mPos.y, mRadius }));
+  if (mPlayer != nullptr)
+  {
+    mLocalMatrix *= mPlayer->getLocalAddMatrix();
+    mRenderItem->setWorldMatrix(mLocalMatrix * mPlayer->getWorldMatrix());
+  }
+  else
+  {
+    mRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ mPos.x, mPos.y, mRadius }));
+  }
 
   return true;
 }

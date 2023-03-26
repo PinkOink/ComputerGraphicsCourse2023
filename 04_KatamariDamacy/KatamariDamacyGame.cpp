@@ -15,7 +15,14 @@ bool KatamariDamacyGame::createGameComponents()
 
   {
     float playerRadius = 1.0;
-    mPlayer = new PlayerComponent(new CubeRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), mRenderContext, mWindow, playerRadius, mBorderX, mBorderY);
+    mPlayer = new PlayerComponent(
+      new CubeRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), 
+      mRenderContext, 
+      mWindow, 
+      playerRadius, 
+      mBorderX, 
+      mBorderY,
+      mObjects);
     mGameComponents.push_back(mPlayer);
   }
 
