@@ -41,7 +41,7 @@ protected:
   float mCurZ = 0.0f;
   float mPhysZ = 0.0f;
 
-  const float mCorrectionZSpeed = 50.0f;
+  const float mCorrectionZSpeed = 10.0f;
   const float mMoveSpeed = 10.0f;
 
   DirectX::SimpleMath::Vector2 mCurPos = { 0.0, 0.0 };

@@ -74,6 +74,7 @@ bool PlayerComponent::update(float deltaTime)
         if (dist.Length() <= objRadius + mCurRadius)
         {
           obj->setPlayerComponent(this);
+          mPhysZ += 2 * objRadius;
         }
       }
     }
