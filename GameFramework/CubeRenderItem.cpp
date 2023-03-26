@@ -14,7 +14,9 @@ struct CircleCB
 CubeRenderItem::CubeRenderItem(
 	RenderContext* context,
 	DirectX::SimpleMath::Vector3 scale,
-	DirectX::SimpleMath::Vector4 color
+	DirectX::SimpleMath::Vector4 color,
+	const std::wstring& vertexShaderFilename,
+	const std::wstring& pixelShaderFilename
 )
 	: mContext(context), mScale(scale), mColor(color)
 {
@@ -83,7 +85,7 @@ CubeRenderItem::CubeRenderItem(
 	{
 		ID3DBlob* vertexBC = nullptr;
 
-		mVertexShader = mContext->createVertexShader(L"./Resource/Mesh3dVS.hlsl", &vertexBC, "main");
+		mVertexShader = mContext->createVertexShader(vertexShaderFilename, &vertexBC, "main");
 
 		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 			D3D11_INPUT_ELEMENT_DESC {
@@ -109,7 +111,7 @@ CubeRenderItem::CubeRenderItem(
 	// Create Pixel Shader
 	if (SUCCEEDED(res))
 	{
-		mPixelShader = mContext->createPixelShader(L"./Resource/Mesh3dPS.hlsl", "main");
+		mPixelShader = mContext->createPixelShader(pixelShaderFilename, "main");
 	}
 
 	// Create state

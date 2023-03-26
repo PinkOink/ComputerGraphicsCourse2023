@@ -49,6 +49,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="Resource\Katamari3dPS.hlsl">
+      <Filter>Shaders</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resource\Katamari3dVS.hlsl">
+      <Filter>Shaders</Filter>
+    </CopyFileToFolders>
     <CopyFileToFolders Include="Resource\Mesh3dPS.hlsl">
       <Filter>Shaders</Filter>
     </CopyFileToFolders>

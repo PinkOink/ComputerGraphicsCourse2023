@@ -13,7 +13,9 @@ public:
   SphereRenderItem(
     RenderContext* context,
     DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
-    DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f }
+    DirectX::SimpleMath::Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f },
+    const std::wstring& vertexShaderFilename = L"./Resource/Mesh3dVS.hlsl",
+    const std::wstring& pixelShaderFilename = L"./Resource/Mesh3dPS.hlsl"
   );
 
   virtual void setWorldMatrix(const DirectX::SimpleMath::Matrix& mat) override;

@@ -18,7 +18,13 @@ bool KatamariDamacyGame::createGameComponents()
   {
     float playerRadius = 1.0;
     mPlayer = new PlayerComponent(
-      new SphereRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), 
+      new SphereRenderItem(
+        mRenderContext, 
+        { playerRadius, playerRadius, playerRadius }, 
+        { 0.0, 1.0, 0.0, 1.0 }/*,
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl"*/
+      ),
       mRenderContext, 
       mWindow, 
       playerRadius, 
@@ -29,7 +35,13 @@ bool KatamariDamacyGame::createGameComponents()
   }
 
   {
-    auto floorRenderItem = new CubeRenderItem(mRenderContext, { mBorderX, mBorderY, 1.0 }, { 1.0, 1.0, 1.0, 1.0 });
+    auto floorRenderItem = new CubeRenderItem(
+      mRenderContext, 
+      { mBorderX, mBorderY, 1.0 }, 
+      { 1.0, 1.0, 1.0, 1.0 }/*,
+      L"./Resource/Katamari3dVS.hlsl",
+      L"./Resource/Katamari3dPS.hlsl"*/
+    );
 
     floorRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ 0.0, 0.0, -1.0 }));
 
@@ -41,14 +53,28 @@ bool KatamariDamacyGame::createGameComponents()
   ObjectComponent* object; 
   {
     float objectRadius = 0.3f;
-    object = new ObjectComponent(new CubeRenderItem(mRenderContext, { objectRadius, objectRadius, objectRadius }, { 1.0f, 0.7f, 0.0f, 1.0f }), objectRadius, { -5.0f, -5.0f });
+    object = new ObjectComponent(
+      new CubeRenderItem(
+        mRenderContext, 
+        { objectRadius, objectRadius, objectRadius }, 
+        { 1.0f, 0.7f, 0.0f, 1.0f }/*,
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl"*/
+    ), objectRadius, { -5.0f, -5.0f });
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);
   }  
   {
     float objectRadius = 1.0f;
-    object = new ObjectComponent(new SphereRenderItem(mRenderContext, { objectRadius, objectRadius, objectRadius }, { 1.0f, 0.7f, 1.0f, 1.0f }), objectRadius, { 15.0f, -5.0f });
+    object = new ObjectComponent(
+      new SphereRenderItem(
+        mRenderContext, 
+        { objectRadius, objectRadius, objectRadius }, 
+        { 1.0f, 0.7f, 1.0f, 1.0f }/*, 
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl"*/
+      ), objectRadius, {15.0f, -5.0f});
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);

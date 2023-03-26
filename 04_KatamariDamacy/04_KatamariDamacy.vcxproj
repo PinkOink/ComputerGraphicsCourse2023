@@ -144,6 +144,14 @@
     <ClInclude Include="PlayerComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="Resource\Katamari3dPS.hlsl">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resource\Katamari3dVS.hlsl">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
     <CopyFileToFolders Include="Resource\Mesh3dPS.hlsl">
       <FileType>Document</FileType>
     </CopyFileToFolders>
