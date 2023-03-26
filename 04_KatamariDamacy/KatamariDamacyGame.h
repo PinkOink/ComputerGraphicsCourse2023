@@ -49,7 +49,7 @@ protected:
   std::vector<ObjectComponent*> mObjects;
   RenderItemWrapper* mFloor = nullptr;
 
-  const float mBorderX = 10.0f;
-  const float mBorderY = 10.0f;
+  const float mBorderX = 50.0f;
+  const float mBorderY = 50.0f;
 };
 

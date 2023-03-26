@@ -75,6 +75,7 @@ bool PlayerComponent::update(float deltaTime)
         {
           obj->setPlayerComponent(this);
           mPhysZ += 2 * objRadius;
+          mCurRadius += 2 * objRadius;
         }
       }
     }

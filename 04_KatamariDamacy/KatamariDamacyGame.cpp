@@ -1,5 +1,7 @@
 #include "KatamariDamacyGame.h"
 
+#include <SphereRenderItem.h>
+
 
 KatamariDamacyGame::KatamariDamacyGame()
 {
@@ -16,7 +18,7 @@ bool KatamariDamacyGame::createGameComponents()
   {
     float playerRadius = 1.0;
     mPlayer = new PlayerComponent(
-      new CubeRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), 
+      new SphereRenderItem(mRenderContext, { playerRadius, playerRadius, playerRadius }, { 0.0, 1.0, 0.0, 1.0 }), 
       mRenderContext, 
       mWindow, 
       playerRadius, 
@@ -40,6 +42,13 @@ bool KatamariDamacyGame::createGameComponents()
   {
     float objectRadius = 0.3f;
     object = new ObjectComponent(new CubeRenderItem(mRenderContext, { objectRadius, objectRadius, objectRadius }, { 1.0f, 0.7f, 0.0f, 1.0f }), objectRadius, { -5.0f, -5.0f });
+    mObjects.push_back(object);
+
+    mGameComponents.push_back(object);
+  }  
+  {
+    float objectRadius = 1.0f;
+    object = new ObjectComponent(new SphereRenderItem(mRenderContext, { objectRadius, objectRadius, objectRadius }, { 1.0f, 0.7f, 1.0f, 1.0f }), objectRadius, { 15.0f, -5.0f });
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);
