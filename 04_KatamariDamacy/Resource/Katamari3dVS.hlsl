@@ -1,7 +1,9 @@
 
 struct VertexIn
 {
-    float4 pos : POSITION;
+    float3 pos : POSITION;
+    float3 normal : NORMAL;
+    float3 texCoord : TEXCOORD;
 };
 
 struct VertexOut
@@ -18,7 +20,6 @@ cbuffer SceneCB : register(b0)
 cbuffer MeshCB : register(b1)
 {
     float4x4 transform;
-    float4 color;
 };
 
 
@@ -26,8 +27,8 @@ VertexOut main(VertexIn input)
 {
     VertexOut output;
     
-    output.pos = mul(mul(input.pos, transform), viewProj);
-    output.col = color;
+    output.pos = mul(mul(float4(input.pos, 1.0), transform), viewProj);
+    output.col = float4(1.0, 1.0, 1.0, 1.0);
     
     return output;
 }
