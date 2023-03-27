@@ -3,13 +3,13 @@ struct VertexIn
 {
     float3 pos : POSITION;
     float3 normal : NORMAL;
-    float3 texCoord : TEXCOORD;
+    float2 texCoord : TEXCOORD;
 };
 
 struct VertexOut
 {
     float4 pos : SV_POSITION;
-    float4 col : COLOR;
+    float2 texCoord : TEXCOORD;
 };
 
 cbuffer SceneCB : register(b0)
@@ -28,7 +28,7 @@ VertexOut main(VertexIn input)
     VertexOut output;
     
     output.pos = mul(mul(float4(input.pos, 1.0), transform), viewProj);
-    output.col = float4(1.0, 1.0, 1.0, 1.0);
+    output.texCoord = input.texCoord;
     
     return output;
 }

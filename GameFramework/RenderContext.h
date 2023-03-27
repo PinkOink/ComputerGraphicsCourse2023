@@ -27,6 +27,8 @@ public:
   ID3D11Buffer* createConstantBuffer(void* initialMem, unsigned int bufferSize);
   void updateConstantBuffer(ID3D11Buffer* buf, void* updateMem, unsigned int bufferSize);
 
+  void createTexture(const std::wstring& texstureFileName, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView);
+
   ID3D11VertexShader* createVertexShader(const std::wstring& fileName, ID3DBlob** vsBlob, const std::string& entrypoint = "VSMain", const D3D_SHADER_MACRO* defines = nullptr);
   ID3D11PixelShader* createPixelShader(const std::wstring& fileName, const std::string& entrypoint = "PSMain", const D3D_SHADER_MACRO* defines = nullptr);
 

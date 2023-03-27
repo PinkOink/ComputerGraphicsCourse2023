@@ -3,6 +3,7 @@
 
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
+#include <DDSTextureLoader.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -289,6 +290,11 @@ void RenderContext::updateConstantBuffer(ID3D11Buffer* buf, void* updateMem, uns
 	mContext->Map(buf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	memcpy(mappedResource.pData, updateMem, bufferSize);
 	mContext->Unmap(buf, 0);
+}
+
+void RenderContext::createTexture(const std::wstring& texstureFileName, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView)
+{
+	DirectX::CreateDDSTextureFromFile(mDevice.Get(), texstureFileName.c_str(), texture, textureView);
 }
 
 ID3D11VertexShader* RenderContext::createVertexShader(const std::wstring& fileName, ID3DBlob** vsBlob, const std::string& entrypoint, const D3D_SHADER_MACRO* defines)

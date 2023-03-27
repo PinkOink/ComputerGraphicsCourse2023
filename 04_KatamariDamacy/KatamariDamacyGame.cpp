@@ -1,6 +1,7 @@
 #include "KatamariDamacyGame.h"
 
 #include <SphereRenderItem.h>
+#include <MeshRenderItem.h>
 
 
 KatamariDamacyGame::KatamariDamacyGame()
@@ -15,12 +16,19 @@ bool KatamariDamacyGame::createGameComponents()
 {
   mInputDevice->MouseMove.AddLambda([this](const InputDevice::MouseMoveEventArgs& args) { this->processMouseMove(args); });
 
+  //auto gunRenderItem = new MeshRenderItem(
+  //  mRenderContext,
+  //  "./Models/Gun.obj",
+  //  L"./Resource/Katamari3dVS.hlsl",
+  //  L"./Resource/Katamari3dPS.hlsl"
+  //);
+
   {
     float playerRadius = 1.0;
     mPlayer = new PlayerComponent(
       new SphereRenderItem(
-        mRenderContext, 
-        { playerRadius, playerRadius, playerRadius }, 
+        mRenderContext,
+        { playerRadius, playerRadius, playerRadius },
         { 0.0, 1.0, 0.0, 1.0 }/*,
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl"*/
@@ -75,6 +83,21 @@ bool KatamariDamacyGame::createGameComponents()
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl"*/
       ), objectRadius, {15.0f, -5.0f});
+    mObjects.push_back(object);
+
+    mGameComponents.push_back(object);
+  }
+  {
+    float objectRadius = 0.5f;
+    object = new ObjectComponent(
+      new MeshRenderItem(
+        mRenderContext,
+        "./Models/Gun.obj",
+        L"./Models/Gun.dds",
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl",
+        { 5.0, 5.0, 5.0 }
+      ), objectRadius, {-15.0f, 15.0f});
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);
