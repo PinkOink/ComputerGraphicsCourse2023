@@ -27,7 +27,6 @@
     <ClInclude Include="Keys.h" />
     <ClInclude Include="MeshRenderItem.h" />
     <ClInclude Include="RenderItem.h" />
-    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SphereRenderItem.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="pch.h" />
@@ -41,7 +40,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputDevice.cpp" />
     <ClCompile Include="MeshRenderItem.cpp" />
-    <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SphereRenderItem.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="pch.cpp">
@@ -54,9 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Delegates.natvis" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -153,12 +148,19 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <Lib>
+      <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)DirectXTK;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -171,6 +173,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -179,6 +182,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <Lib>
+      <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)DirectXTK;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
