@@ -21,7 +21,8 @@ MeshRenderItem::MeshRenderItem(
 	const std::wstring& textureFilename,
 	const std::wstring& vertexShaderFilename,
 	const std::wstring& pixelShaderFilename,
-	DirectX::SimpleMath::Vector3 scale
+	DirectX::SimpleMath::Vector3 scale,
+	DirectX::SimpleMath::Vector3 posOffset
 )
 	: mContext(context), mScale(scale)
 {
@@ -43,7 +44,6 @@ MeshRenderItem::MeshRenderItem(
 
 	auto& attrib = reader.GetAttrib();
 	auto& shapes = reader.GetShapes();
-	//auto& materials = reader.GetMaterials();
 
 	std::vector<DirectX::SimpleMath::Vector3> positions;
 	std::vector<DirectX::SimpleMath::Vector3> normals;
@@ -63,9 +63,9 @@ MeshRenderItem::MeshRenderItem(
 				tinyobj::index_t idx = shapes[shapeIdx].mesh.indices[index_offset + vertexIdx];
 
 				positions.push_back({ 
-					attrib.vertices[3 * size_t(idx.vertex_index) + 0], 
-					attrib.vertices[3 * size_t(idx.vertex_index) + 1],
-					attrib.vertices[3 * size_t(idx.vertex_index) + 2] 
+					attrib.vertices[3 * size_t(idx.vertex_index) + 0] + posOffset.x,
+					attrib.vertices[3 * size_t(idx.vertex_index) + 1] + posOffset.y,
+					attrib.vertices[3 * size_t(idx.vertex_index) + 2] + posOffset.z
 					});
 
 				// Check if `normal_index` is zero or positive. negative = no normal data

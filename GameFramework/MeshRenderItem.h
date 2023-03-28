@@ -16,7 +16,8 @@ public:
     const std::wstring& textureFilename,
     const std::wstring& vertexShaderFilename,
     const std::wstring& pixelShaderFilename,
-    DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f }
+    DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
+    DirectX::SimpleMath::Vector3 posOffset = { 0.0f, 0.0f, 0.0f }
   );
 
   virtual void setWorldMatrix(const DirectX::SimpleMath::Matrix& mat) override;

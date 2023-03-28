@@ -58,7 +58,22 @@ bool KatamariDamacyGame::createGameComponents()
     mGameComponents.push_back(mFloor);
   }
 
-  ObjectComponent* object; 
+  ObjectComponent* object;
+  // For debug
+  //{
+  //  float objectRadius = 1.0f;
+  //  object = new ObjectComponent(
+  //    new SphereRenderItem(
+  //      mRenderContext,
+  //      { objectRadius, objectRadius, objectRadius },
+  //      { 1.0f, 0.7f, 1.0f, 1.0f }/*,
+  //      L"./Resource/Katamari3dVS.hlsl",
+  //      L"./Resource/Katamari3dPS.hlsl"*/
+  //  ), objectRadius, { 0.0f, 0.0f });
+  //  mObjects.push_back(object);
+
+  //  mGameComponents.push_back(object);
+  //}
   {
     float objectRadius = 0.3f;
     object = new ObjectComponent(
@@ -86,7 +101,7 @@ bool KatamariDamacyGame::createGameComponents()
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);
-  }
+  }  
   {
     float objectRadius = 0.5f;
     object = new ObjectComponent(
@@ -96,8 +111,40 @@ bool KatamariDamacyGame::createGameComponents()
         L"./Models/Gun.dds",
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl",
-        { 5.0, 5.0, 5.0 }
-      ), objectRadius, {-15.0f, 15.0f});
+        { 3.0, 3.0, 3.0 }
+      ), objectRadius, {-10.0f, 10.0f});
+    mObjects.push_back(object);
+
+    mGameComponents.push_back(object);
+  }
+  {
+    float objectRadius = 1.0f;
+    object = new ObjectComponent(
+      new MeshRenderItem(
+        mRenderContext,
+        "./Models/drawer.obj",
+        L"./Models/drawer.dds",
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl",
+        { 0.4, 0.4, 0.4 },
+        { 0.0, -2.0, 0.5 }
+      ), objectRadius, {10.0f, 10.0f});
+    mObjects.push_back(object);
+
+    mGameComponents.push_back(object);
+  }
+  {
+    float objectRadius = 0.7f;
+    object = new ObjectComponent(
+      new MeshRenderItem(
+        mRenderContext,
+        "./Models/10200_Pineapple_v1-L2.obj",
+        L"./Models/10200_Pineapple.dds",
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl",
+        { 0.1f * objectRadius, 0.1f * objectRadius, 0.1f * objectRadius },
+        { 0.0, 0.0, -10.0 }
+      ), objectRadius, {-5.0f, 0.0f});
     mObjects.push_back(object);
 
     mGameComponents.push_back(object);
