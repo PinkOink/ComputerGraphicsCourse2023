@@ -142,8 +142,9 @@ CubeRenderItem::CubeRenderItem(
 	if (SUCCEEDED(res))
 	{
 		ID3DBlob* vertexBC = nullptr;
+		D3D_SHADER_MACRO macros[] = { "CUBE", "1", NULL, NULL };
 
-		mVertexShader = mContext->createVertexShader(vertexShaderFilename, &vertexBC, "main");
+		mVertexShader = mContext->createVertexShader(vertexShaderFilename, &vertexBC, "main", macros);
 
 		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 			D3D11_INPUT_ELEMENT_DESC {
@@ -185,7 +186,9 @@ CubeRenderItem::CubeRenderItem(
 	// Create Pixel Shader
 	if (SUCCEEDED(res))
 	{
-		mPixelShader = mContext->createPixelShader(pixelShaderFilename, "main");
+		D3D_SHADER_MACRO macros[] = { "CUBE", "1", NULL, NULL };
+
+		mPixelShader = mContext->createPixelShader(pixelShaderFilename, "main", macros);
 	}
 
 	// Create state

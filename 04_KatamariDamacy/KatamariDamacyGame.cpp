@@ -35,9 +35,9 @@ bool KatamariDamacyGame::createGameComponents()
       new SphereRenderItem(
         mRenderContext,
         { playerRadius, playerRadius, playerRadius },
-        { 0.0, 1.0, 0.0, 1.0 }/*,
+        { 0.0, 1.0, 0.0, 1.0 },
         L"./Resource/Katamari3dVS.hlsl",
-        L"./Resource/Katamari3dPS.hlsl"*/
+        L"./Resource/Katamari3dPS.hlsl"
       ),
       mRenderContext, 
       mWindow, 
@@ -52,9 +52,9 @@ bool KatamariDamacyGame::createGameComponents()
     auto floorRenderItem = new CubeRenderItem(
       mRenderContext, 
       { mBorderX, mBorderY, 1.0 }, 
-      { 1.0, 1.0, 1.0, 1.0 }/*,
+      { 1.0, 1.0, 1.0, 1.0 },
       L"./Resource/Katamari3dVS.hlsl",
-      L"./Resource/Katamari3dPS.hlsl"*/
+      L"./Resource/Katamari3dPS.hlsl"
     );
 
     floorRenderItem->setWorldMatrix(DirectX::SimpleMath::Matrix::CreateTranslation({ 0.0, 0.0, -1.0 }));
@@ -86,9 +86,9 @@ bool KatamariDamacyGame::createGameComponents()
       new CubeRenderItem(
         mRenderContext, 
         { objectRadius, objectRadius, objectRadius }, 
-        { 1.0f, 0.7f, 0.0f, 1.0f }/*,
+        { 1.0f, 0.7f, 0.0f, 1.0f },
         L"./Resource/Katamari3dVS.hlsl",
-        L"./Resource/Katamari3dPS.hlsl"*/
+        L"./Resource/Katamari3dPS.hlsl"
     ), objectRadius, { -5.0f, -5.0f });
     mObjects.push_back(object);
 
@@ -100,9 +100,9 @@ bool KatamariDamacyGame::createGameComponents()
       new SphereRenderItem(
         mRenderContext, 
         { objectRadius, objectRadius, objectRadius }, 
-        { 1.0f, 0.7f, 1.0f, 1.0f }/*, 
+        { 1.0f, 0.7f, 1.0f, 1.0f }, 
         L"./Resource/Katamari3dVS.hlsl",
-        L"./Resource/Katamari3dPS.hlsl"*/
+        L"./Resource/Katamari3dPS.hlsl"
       ), objectRadius, {15.0f, -5.0f});
     mObjects.push_back(object);
 
