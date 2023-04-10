@@ -24,6 +24,12 @@ bool KatamariDamacyGame::createGameComponents()
   //);
 
   {
+    mLight = new DirectionalLight(mRenderContext);
+
+    mGameComponents.push_back(mLight);
+  }
+
+  {
     float playerRadius = 1.0;
     mPlayer = new PlayerComponent(
       new SphereRenderItem(
@@ -133,22 +139,22 @@ bool KatamariDamacyGame::createGameComponents()
 
     mGameComponents.push_back(object);
   }
-  {
-    float objectRadius = 0.7f;
-    object = new ObjectComponent(
-      new MeshRenderItem(
-        mRenderContext,
-        "./Models/10200_Pineapple_v1-L2.obj",
-        L"./Models/10200_Pineapple.dds",
-        L"./Resource/Katamari3dVS.hlsl",
-        L"./Resource/Katamari3dPS.hlsl",
-        { 0.1f * objectRadius, 0.1f * objectRadius, 0.1f * objectRadius },
-        { 0.0, 0.0, -10.0 }
-      ), objectRadius, {-5.0f, 0.0f});
-    mObjects.push_back(object);
+  //{
+  //  float objectRadius = 0.7f;
+  //  object = new ObjectComponent(
+  //    new MeshRenderItem(
+  //      mRenderContext,
+  //      "./Models/10200_Pineapple_v1-L2.obj",
+  //      L"./Models/10200_Pineapple.dds",
+  //      L"./Resource/Katamari3dVS.hlsl",
+  //      L"./Resource/Katamari3dPS.hlsl",
+  //      { 0.1f * objectRadius, 0.1f * objectRadius, 0.1f * objectRadius },
+  //      { 0.0, 0.0, -10.0 }
+  //    ), objectRadius, {-5.0f, 0.0f});
+  //  mObjects.push_back(object);
 
-    mGameComponents.push_back(object);
-  }
+  //  mGameComponents.push_back(object);
+  //}
 
   return true;
 }

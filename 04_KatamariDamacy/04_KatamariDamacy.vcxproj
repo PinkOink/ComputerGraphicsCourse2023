@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraOrbit.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectComponent.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraOrbit.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="KatamariDamacyGame.h" />
     <ClInclude Include="ObjectComponent.h" />
     <ClInclude Include="PlayerComponent.h" />

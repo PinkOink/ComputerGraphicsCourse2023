@@ -5,6 +5,7 @@
 
 #include "PlayerComponent.h"
 #include "ObjectComponent.h"
+#include "DirectionalLight.h"
 
 
 class RenderItemWrapper : public GameComponent
@@ -45,6 +46,7 @@ protected:
   virtual void processMouseMove(const InputDevice::MouseMoveEventArgs& args);
 
 protected:
+  DirectionalLight* mLight = nullptr;
   PlayerComponent* mPlayer = nullptr;
   std::vector<ObjectComponent*> mObjects;
   RenderItemWrapper* mFloor = nullptr;

@@ -7,6 +7,9 @@
 struct CameraOrbitCB
 {
   DirectX::SimpleMath::Matrix viewProj;
+
+  DirectX::SimpleMath::Vector3 cameraPosWorld;
+  float padding;
 };
 
 
@@ -23,6 +26,7 @@ bool CameraOrbit::init()
   {
     CameraOrbitCB cb = {};
     cb.viewProj = (mView * mProj).Transpose();
+    cb.cameraPosWorld = mPositionDefault;
 
     mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
   }
@@ -57,6 +61,7 @@ bool CameraOrbit::updateSubresources()
 
   CameraOrbitCB cb = {};
   cb.viewProj = (planetMat * mView * mProj).Transpose();
+  cb.cameraPosWorld = DirectX::SimpleMath::Vector3::Transform(mPositionDefault, DirectX::SimpleMath::Matrix::CreateRotationY(-mUpRot * 3.14f / 180.0f));
 
   mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CameraOrbitCB));
 

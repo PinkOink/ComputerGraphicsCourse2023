@@ -4,11 +4,35 @@
 #include <SimpleMath.h>
 
 
+struct Vertex
+{
+	Vertex() {}
+	Vertex(
+		const DirectX::SimpleMath::Vector3& p,
+		const DirectX::SimpleMath::Vector3& n,
+		const DirectX::SimpleMath::Vector2& uv) :
+		Position(p),
+		Normal(n),
+		TexC(uv) {}
+	Vertex(
+		float px, float py, float pz,
+		float nx, float ny, float nz,
+		float u, float v) :
+		Position(px, py, pz),
+		Normal(nx, ny, nz),
+		TexC(u, v) {}
+
+	DirectX::SimpleMath::Vector3 Position;
+	DirectX::SimpleMath::Vector3 Normal;
+	DirectX::SimpleMath::Vector2 TexC;
+};
+
+
 namespace
 {
 	struct MeshData
 	{
-		std::vector<DirectX::SimpleMath::Vector4> Vertices;
+		std::vector<Vertex> Vertices;
 		std::vector<int> Indices32;
 	};
 
@@ -23,8 +47,8 @@ namespace
 		// Poles: note that there will be texture coordinate distortion as there is
 		// not a unique point on the texture map to assign to the pole when mapping
 		// a rectangular texture onto a sphere.
-		DirectX::SimpleMath::Vector4 topVertex(0.0f, +radius, 0.0f, 1.0f);
-		DirectX::SimpleMath::Vector4 bottomVertex(0.0f, -radius, 0.0f, 1.0f);
+		Vertex topVertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, 0.0f);
+		Vertex bottomVertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f);
 
 		meshData.Vertices.push_back(topVertex);
 
@@ -41,13 +65,18 @@ namespace
 			{
 				float theta = j * thetaStep;
 
-				DirectX::SimpleMath::Vector4 v;
+				Vertex v;
 
 				// spherical to cartesian
-				v.x = radius * sinf(phi) * cosf(theta);
-				v.y = radius * cosf(phi);
-				v.z = radius * sinf(phi) * sinf(theta);
-				v.w = 1.0f;
+				v.Position.x = radius * sinf(phi) * cosf(theta);
+				v.Position.y = radius * cosf(phi);
+				v.Position.z = radius * sinf(phi) * sinf(theta);
+
+				v.Normal = v.Position;
+				v.Normal.Normalize();
+
+				v.TexC.x = theta / 3.141592654f / 2.0f;
+				v.TexC.y = phi / 3.141592654f;
 
 				meshData.Vertices.push_back(v);
 			}
@@ -112,9 +141,10 @@ namespace
 }
 
 
-struct CircleCB
+struct SphereCB
 {
 	DirectX::SimpleMath::Matrix transform;
+	DirectX::SimpleMath::Matrix transformInv;
 	DirectX::SimpleMath::Vector4 color;
 };
 
@@ -137,7 +167,7 @@ SphereRenderItem::SphereRenderItem(
 	// Create Vertex Buffer
 	if (SUCCEEDED(res))
 	{
-		mVertexBuffer = mContext->createVertexBuffer(meshData.Vertices.data(), (unsigned int)meshData.Vertices.size() * sizeof(DirectX::SimpleMath::Vector4));
+		mVertexBuffer = mContext->createVertexBuffer(meshData.Vertices.data(), (unsigned int)meshData.Vertices.size() * sizeof(Vertex));
 	}
 
 	// Create Index Buffer
@@ -153,8 +183,9 @@ SphereRenderItem::SphereRenderItem(
 	{
 		mWorldMat = DirectX::SimpleMath::Matrix::Identity;
 
-		CircleCB cb = {};
+		SphereCB cb = {};
 		cb.transform = DirectX::SimpleMath::Matrix::CreateScale(mScale).Transpose();
+		cb.transformInv = cb.transform.Invert().Transpose();
 		cb.color = mColor;
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
@@ -171,11 +202,27 @@ SphereRenderItem::SphereRenderItem(
 			D3D11_INPUT_ELEMENT_DESC {
 				"POSITION",
 				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
+				DXGI_FORMAT_R32G32B32_FLOAT,
 				0,
 				0,
 				D3D11_INPUT_PER_VERTEX_DATA,
-				0}
+				0},
+			D3D11_INPUT_ELEMENT_DESC {
+				"NORMAL",
+				0,
+				DXGI_FORMAT_R32G32B32_FLOAT,
+				0,
+				sizeof(DirectX::SimpleMath::Vector3),
+				D3D11_INPUT_PER_VERTEX_DATA,
+				0},
+			D3D11_INPUT_ELEMENT_DESC {
+				"TEXCOORD",
+				0,
+				DXGI_FORMAT_R32G32_FLOAT,
+				0,
+				2 * sizeof(DirectX::SimpleMath::Vector3),
+				D3D11_INPUT_PER_VERTEX_DATA,
+				0},
 		};
 
 		res = mContext->mDevice->CreateInputLayout(
@@ -215,11 +262,12 @@ void SphereRenderItem::setWorldMatrix(const DirectX::SimpleMath::Matrix& mat)
 
 bool SphereRenderItem::updateSubresources()
 {
-	CircleCB cb = {};
+	SphereCB cb = {};
 	cb.transform = mWorldMat.Transpose();
+	cb.transformInv = cb.transform.Invert().Transpose();
 	cb.color = mColor;
 
-	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CircleCB));
+	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(SphereCB));
 
 	return true;
 }
@@ -234,7 +282,7 @@ bool SphereRenderItem::draw()
 	mContext->mContext->VSSetShader(mVertexShader.Get(), nullptr, 0);
 	mContext->mContext->PSSetShader(mPixelShader.Get(), nullptr, 0);
 
-	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector4) };
+	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector2) };
 	UINT offsets[] = { 0 };
 	mContext->mContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), strides, offsets);
 	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

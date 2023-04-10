@@ -8,10 +8,10 @@
 
 
 
-struct CircleCB
+struct MeshCB
 {
 	DirectX::SimpleMath::Matrix transform;
-	DirectX::SimpleMath::Vector4 color;
+	DirectX::SimpleMath::Matrix transformInv;
 };
 
 
@@ -106,8 +106,9 @@ MeshRenderItem::MeshRenderItem(
 	{
 		mWorldMat = DirectX::SimpleMath::Matrix::Identity;
 
-		CircleCB cb = {};
+		MeshCB cb = {};
 		cb.transform = DirectX::SimpleMath::Matrix::CreateScale(mScale).Transpose();
+		cb.transformInv = cb.transform.Invert().Transpose();
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
 	}
@@ -207,10 +208,11 @@ void MeshRenderItem::setWorldMatrix(const DirectX::SimpleMath::Matrix& mat)
 
 bool MeshRenderItem::updateSubresources()
 {
-	CircleCB cb = {};
+	MeshCB cb = {};
 	cb.transform = mWorldMat.Transpose();
+	cb.transformInv = cb.transform.Invert().Transpose();
 
-	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CircleCB));
+	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(MeshCB));
 
 	return true;
 }
