@@ -31,6 +31,7 @@ cbuffer DirectionalLightCB : register(b2)
     float pad3;
 
     float3 lightDir;
+    float pad4;
 };
 
 
@@ -51,9 +52,11 @@ float4 main(PixelIn input) : SV_TARGET
     objColor = float3(1.0, 1.0, 1.0);
 #endif
     
+    float4 diffuseLight = float4(objColor * diffuseIntensity * max(dot(input.normal, lightDir), 0.0), 1.0);
+    
     float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
     
-    litColor = ambientLight;
+    litColor = diffuseLight + ambientLight;
     
     return litColor;
 }
