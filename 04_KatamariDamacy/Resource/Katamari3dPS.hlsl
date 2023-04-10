@@ -3,8 +3,10 @@
 //#define CUBE 1
 
 
+#if MESH
 Texture2D tex : register(t0);
 SamplerState texSampler : register(s0);
+#endif
 
 struct PixelIn
 {
@@ -22,8 +24,11 @@ struct PixelIn
 cbuffer DirectionalLightCB : register(b2)
 {
     float3 diffuseIntensity;
+    float pad1;
     float3 specularIntensity;
+    float pad2;
     float3 ambientIntensity;
+    float pad3;
 
     float3 lightDir;
 };
@@ -33,15 +38,22 @@ float4 main(PixelIn input) : SV_TARGET
 {
     input.normal = normalize(input.normal);
     
+    float4 litColor;
+    float3 objColor;
+    
 #if MESH
     float3 texVal = tex.Sample(texSampler, input.texCoord);
     
-    float4 litColor = float4(texVal, 1.0);
+    objColor = texVal;
+#elif SPHERE || CUBE
+    objColor = input.color.xyz;
+#else
+    objColor = float3(1.0, 1.0, 1.0);
+#endif
+    
+    float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
+    
+    litColor = ambientLight;
     
     return litColor;
-#elif SPHERE || CUBE
-    return input.color;
-#else
-    return float4(1.0, 1.0, 1.0, 1.0);
-#endif
 }

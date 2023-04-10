@@ -8,10 +8,14 @@
 struct DirectionalLightCB
 {
   DirectX::SimpleMath::Vector3 diffuseIntensity = { 1.0, 1.0, 1.0 };
+  float pad1;
   DirectX::SimpleMath::Vector3 specularIntensity = { 1.0, 1.0, 1.0 };
-  DirectX::SimpleMath::Vector3 ambientIntensity = { 1.0, 1.0, 1.0 };
+  float pad2;
+  DirectX::SimpleMath::Vector3 ambientIntensity = { 0.2, 0.2, 0.2 };
+  float pad3;
 
   DirectX::SimpleMath::Vector3 lightDir = { 0.0, 0.0, 1.0 };
+  float pad4;
 };
 
 
