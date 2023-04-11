@@ -49,6 +49,8 @@ protected:
   DirectX::SimpleMath::Matrix mView = {};
   DirectX::SimpleMath::Matrix mProj = {};
 
+  DirectX::SimpleMath::Vector3 mCurPos;
+
   Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer = nullptr;
 };
 

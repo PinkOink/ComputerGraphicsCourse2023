@@ -48,6 +48,8 @@ bool CameraOrbit::update(float deltaTime)
   mRadiusAdd = 0.0;
   curPos *= mRadius;
 
+  mCurPos = curPos;
+
   mView = DirectX::SimpleMath::Matrix::CreateLookAt(curPos, mFocalDefault, mUpDefault);
 
   mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0, 200.0);
@@ -61,7 +63,7 @@ bool CameraOrbit::updateSubresources()
 
   CameraOrbitCB cb = {};
   cb.viewProj = (planetMat * mView * mProj).Transpose();
-  cb.cameraPosWorld = DirectX::SimpleMath::Vector3::Transform(mPositionDefault, DirectX::SimpleMath::Matrix::CreateRotationY(-mUpRot * 3.14f / 180.0f));
+  cb.cameraPosWorld = mCurPos + mPlayer->getWorldPos();
 
   mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CameraOrbitCB));
 
@@ -71,6 +73,7 @@ bool CameraOrbit::updateSubresources()
 bool CameraOrbit::draw()
 {
   mContext->mContext->VSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
+  mContext->mContext->PSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
 
   return true;
 }

@@ -21,6 +21,13 @@ struct PixelIn
 };
 
 
+cbuffer SceneCB : register(b0)
+{
+    float4x4 viewProj;
+    
+    float3 cameraPosWorld;
+};
+
 cbuffer DirectionalLightCB : register(b2)
 {
     float3 diffuseIntensity;
@@ -52,11 +59,16 @@ float4 main(PixelIn input) : SV_TARGET
     objColor = float3(1.0, 1.0, 1.0);
 #endif
     
-    float4 diffuseLight = float4(objColor * diffuseIntensity * max(dot(input.normal, lightDir), 0.0), 1.0);
+    float4 diffuseLight = float4(diffuseIntensity * objColor * max(dot(input.normal, lightDir), 0.0), 1.0);
+    
+    float3 viewDir = normalize(cameraPosWorld - input.posW);
+    float3 reflectDir = reflect(-lightDir, input.normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float4 specularLight = float4(specularIntensity * objColor * spec, 1.0);
     
     float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
     
-    litColor = diffuseLight + ambientLight;
+    litColor = diffuseLight + specularLight + ambientLight;
     
     return litColor;
 }
