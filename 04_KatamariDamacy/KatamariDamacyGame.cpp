@@ -52,7 +52,7 @@ bool KatamariDamacyGame::createGameComponents()
     auto floorRenderItem = new CubeRenderItem(
       mRenderContext, 
       { mBorderX, mBorderY, 1.0 }, 
-      { { 0.7, 0.7, 0.7, 1.0 }, { 1.0f, 1.0f, 1.0f }, 50.0 },
+      { { 0.7f, 0.7f, 0.7f, 1.0f }, { 1.0f, 1.0f, 1.0f }, 50.0f },
       L"./Resource/Katamari3dVS.hlsl",
       L"./Resource/Katamari3dPS.hlsl"
     );
@@ -134,8 +134,8 @@ bool KatamariDamacyGame::createGameComponents()
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl",
         { { 0.5f, 0.2f, 0.2f }, 30.0 },
-        { 0.4, 0.4, 0.4 },
-        { 0.0, -2.0, 0.5 }
+        { 0.4f, 0.4f, 0.4f },
+        { 0.0f, -2.0f, 0.5f }
       ), objectRadius, {10.0f, 10.0f});
     mObjects.push_back(object);
 
