@@ -15,8 +15,6 @@ struct PixelIn
     float3 normal : NORMAL;
 #if MESH
     float2 texCoord : TEXCOORD;
-#elif SPHERE || CUBE
-    float4 color : COLOR;
 #endif
 };
 
@@ -41,6 +39,16 @@ cbuffer DirectionalLightCB : register(b2)
     float pad4;
 };
 
+cbuffer MaterialCB : register(b3)
+{
+#if SPHERE || CUBE
+    float4 color;
+#endif
+    
+    float3 specCoefs;
+    float specParam;
+}
+
 
 float4 main(PixelIn input) : SV_TARGET
 {
@@ -54,7 +62,7 @@ float4 main(PixelIn input) : SV_TARGET
     
     objColor = texVal;
 #elif SPHERE || CUBE
-    objColor = input.color.xyz;
+    objColor = color.xyz;
 #else
     objColor = float3(1.0, 1.0, 1.0);
 #endif
@@ -63,8 +71,8 @@ float4 main(PixelIn input) : SV_TARGET
     
     float3 viewDir = normalize(cameraPosWorld - input.posW);
     float3 reflectDir = reflect(-lightDir, input.normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    float4 specularLight = float4(specularIntensity * objColor * spec, 1.0);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specParam);
+    float4 specularLight = float4(specularIntensity * specCoefs * spec, 1.0);
     
     float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
     

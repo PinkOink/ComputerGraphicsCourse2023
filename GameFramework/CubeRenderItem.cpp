@@ -32,18 +32,17 @@ struct CubeCB
 {
 	DirectX::SimpleMath::Matrix transform;
 	DirectX::SimpleMath::Matrix transformInv;
-	DirectX::SimpleMath::Vector4 color;
 };
 
 
 CubeRenderItem::CubeRenderItem(
 	RenderContext* context,
 	DirectX::SimpleMath::Vector3 scale,
-	DirectX::SimpleMath::Vector4 color,
+	CubeMaterial material,
 	const std::wstring& vertexShaderFilename,
 	const std::wstring& pixelShaderFilename
 )
-	: mContext(context), mScale(scale), mColor(color)
+	: mContext(context), mScale(scale)
 {
 	HRESULT res = S_OK;
 
@@ -133,9 +132,10 @@ CubeRenderItem::CubeRenderItem(
 		CubeCB cb = {};
 		cb.transform = DirectX::SimpleMath::Matrix::CreateScale(mScale).Transpose();
 		cb.transformInv = cb.transform.Invert().Transpose();
-		cb.color = mColor;
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
+
+		mMaterialCB = mContext->createConstantBuffer(&material, sizeof(CubeMaterial));
 	}
 
 	// Create Vertex Shader and Input Layout
@@ -215,7 +215,6 @@ bool CubeRenderItem::updateSubresources()
 	CubeCB cb = {};
 	cb.transform = mWorldMat.Transpose();
 	cb.transformInv = cb.transform.Invert().Transpose();
-	cb.color = mColor;
 
 	mContext->updateConstantBuffer(mConstantBuffer.Get(), &cb, sizeof(CubeCB));
 
@@ -238,6 +237,7 @@ bool CubeRenderItem::draw()
 	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	mContext->mContext->VSSetConstantBuffers(1, 1, mConstantBuffer.GetAddressOf());
+	mContext->mContext->PSSetConstantBuffers(3, 1, mMaterialCB.GetAddressOf());
 
 	mContext->mContext->DrawIndexedInstanced(36, 1, 0, 0, 0);
 

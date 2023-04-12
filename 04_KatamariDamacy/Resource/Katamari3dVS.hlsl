@@ -17,8 +17,6 @@ struct VertexOut
     float3 normal : NORMAL;
 #if MESH
     float2 texCoord : TEXCOORD;
-#elif SPHERE || CUBE
-    float4 color : COLOR;
 #endif
 };
 
@@ -34,9 +32,6 @@ cbuffer MeshCB : register(b1)
 {
     float4x4 world;
     float4x4 worldInv;
-#if SPHERE || CUBE
-    float4 color;
-#endif
 };
 
 
@@ -49,8 +44,6 @@ VertexOut main(VertexIn input)
     output.normal = mul(float4(input.normal, 0.0), world).xyz;
 #if MESH
     output.texCoord = input.texCoord;
-#elif SPHERE || CUBE
-    output.color = color;
 #endif
     
     return output;

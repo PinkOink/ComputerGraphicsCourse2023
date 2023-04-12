@@ -7,6 +7,13 @@
 #include "RenderItem.h"
 
 
+struct MeshMaterial
+{
+  DirectX::SimpleMath::Vector3 specCoefs = { 1.0f, 1.0f, 1.0f };
+  float specParam = 1.0;
+};
+
+
 class MeshRenderItem : public RenderItem
 {
 public:
@@ -16,6 +23,7 @@ public:
     const std::wstring& textureFilename,
     const std::wstring& vertexShaderFilename,
     const std::wstring& pixelShaderFilename,
+    MeshMaterial material = {},
     DirectX::SimpleMath::Vector3 scale = { 1.0f, 1.0f, 1.0f },
     DirectX::SimpleMath::Vector3 posOffset = { 0.0f, 0.0f, 0.0f }
   );
@@ -46,6 +54,7 @@ protected:
   int mVerticesNum = 0;
 
   Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11Buffer> mMaterialCB = nullptr;
 
   Microsoft::WRL::ComPtr<ID3D11Resource> mTexture = nullptr;
   Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mTextureView = nullptr;

@@ -21,6 +21,7 @@ MeshRenderItem::MeshRenderItem(
 	const std::wstring& textureFilename,
 	const std::wstring& vertexShaderFilename,
 	const std::wstring& pixelShaderFilename,
+	MeshMaterial material,
 	DirectX::SimpleMath::Vector3 scale,
 	DirectX::SimpleMath::Vector3 posOffset
 )
@@ -111,6 +112,8 @@ MeshRenderItem::MeshRenderItem(
 		cb.transformInv = cb.transform.Invert().Transpose();
 
 		mConstantBuffer = mContext->createConstantBuffer(&cb, sizeof(cb));
+
+		mMaterialCB = mContext->createConstantBuffer(&material, sizeof(MeshMaterial));
 	}
 
 	// Create Texture and Sampler
@@ -237,6 +240,7 @@ bool MeshRenderItem::draw()
 	mContext->mContext->IASetVertexBuffers(0, 3, vertexBuffers, strides, offsets);
 
 	mContext->mContext->VSSetConstantBuffers(1, 1, mConstantBuffer.GetAddressOf());
+	mContext->mContext->PSSetConstantBuffers(3, 1, mMaterialCB.GetAddressOf());
 
 	mContext->mContext->PSSetShaderResources(0, 1, mTextureView.GetAddressOf());
 	mContext->mContext->PSSetSamplers(0, 1, mSamplerState.GetAddressOf());

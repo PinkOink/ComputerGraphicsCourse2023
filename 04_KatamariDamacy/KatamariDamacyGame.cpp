@@ -35,7 +35,7 @@ bool KatamariDamacyGame::createGameComponents()
       new SphereRenderItem(
         mRenderContext,
         { playerRadius, playerRadius, playerRadius },
-        { 0.0, 1.0, 0.0, 1.0 },
+        { {0.0, 1.0, 0.0, 1.0}, { 1.0f, 1.0f, 1.0f }, 100.0 },
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl"
       ),
@@ -52,7 +52,7 @@ bool KatamariDamacyGame::createGameComponents()
     auto floorRenderItem = new CubeRenderItem(
       mRenderContext, 
       { mBorderX, mBorderY, 1.0 }, 
-      { 1.0, 1.0, 1.0, 1.0 },
+      { { 0.7, 0.7, 0.7, 1.0 }, { 1.0f, 1.0f, 1.0f }, 50.0 },
       L"./Resource/Katamari3dVS.hlsl",
       L"./Resource/Katamari3dPS.hlsl"
     );
@@ -86,7 +86,7 @@ bool KatamariDamacyGame::createGameComponents()
       new CubeRenderItem(
         mRenderContext, 
         { objectRadius, objectRadius, objectRadius }, 
-        { 1.0f, 0.7f, 0.0f, 1.0f },
+        { { 1.0f, 0.7f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 1000.0 },
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl"
     ), objectRadius, { -5.0f, -5.0f });
@@ -100,7 +100,7 @@ bool KatamariDamacyGame::createGameComponents()
       new SphereRenderItem(
         mRenderContext, 
         { objectRadius, objectRadius, objectRadius }, 
-        { 1.0f, 0.7f, 1.0f, 1.0f }, 
+        { { 0.7f, 0.5f, 0.7f, 1.0f }, { 0.0f, 0.0f, 1.0f }, 2.0 },
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl"
       ), objectRadius, {15.0f, -5.0f});
@@ -117,6 +117,7 @@ bool KatamariDamacyGame::createGameComponents()
         L"./Models/Gun.dds",
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl",
+        { { 1.0f, 1.0f, 1.0f }, 10.0 },
         { 3.0, 3.0, 3.0 }
       ), objectRadius, {-10.0f, 10.0f});
     mObjects.push_back(object);
@@ -132,6 +133,7 @@ bool KatamariDamacyGame::createGameComponents()
         L"./Models/drawer.dds",
         L"./Resource/Katamari3dVS.hlsl",
         L"./Resource/Katamari3dPS.hlsl",
+        { { 0.5f, 0.2f, 0.2f }, 30.0 },
         { 0.4, 0.4, 0.4 },
         { 0.0, -2.0, 0.5 }
       ), objectRadius, {10.0f, 10.0f});
@@ -139,22 +141,23 @@ bool KatamariDamacyGame::createGameComponents()
 
     mGameComponents.push_back(object);
   }
-  //{
-  //  float objectRadius = 0.7f;
-  //  object = new ObjectComponent(
-  //    new MeshRenderItem(
-  //      mRenderContext,
-  //      "./Models/10200_Pineapple_v1-L2.obj",
-  //      L"./Models/10200_Pineapple.dds",
-  //      L"./Resource/Katamari3dVS.hlsl",
-  //      L"./Resource/Katamari3dPS.hlsl",
-  //      { 0.1f * objectRadius, 0.1f * objectRadius, 0.1f * objectRadius },
-  //      { 0.0, 0.0, -10.0 }
-  //    ), objectRadius, {-5.0f, 0.0f});
-  //  mObjects.push_back(object);
+  {
+    float objectRadius = 0.7f;
+    object = new ObjectComponent(
+      new MeshRenderItem(
+        mRenderContext,
+        "./Models/10200_Pineapple_v1-L2.obj",
+        L"./Models/10200_Pineapple.dds",
+        L"./Resource/Katamari3dVS.hlsl",
+        L"./Resource/Katamari3dPS.hlsl",
+        { { 0.0f, 0.0f, 1.0f }, 4.0 },
+        { 0.1f * objectRadius, 0.1f * objectRadius, 0.1f * objectRadius },
+        { 0.0, 0.0, -10.0 }
+      ), objectRadius, {-5.0f, 0.0f});
+    mObjects.push_back(object);
 
-  //  mGameComponents.push_back(object);
-  //}
+    mGameComponents.push_back(object);
+  }
 
   return true;
 }
