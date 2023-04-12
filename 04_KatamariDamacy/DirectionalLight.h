@@ -34,6 +34,8 @@ public:
 protected:
   RenderContext* mContext;
 
+  const float mRotateSpeed = 3.0f;
+
   DirectionalLightCB mLightData;;
   
   Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer = nullptr;

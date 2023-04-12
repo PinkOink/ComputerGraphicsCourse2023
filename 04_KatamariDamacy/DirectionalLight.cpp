@@ -15,6 +15,9 @@ bool DirectionalLight::init()
 
 bool DirectionalLight::update(float deltaTime)
 {
+  mLightData.lightDir = DirectX::SimpleMath::Vector3::TransformNormal(mLightData.lightDir, DirectX::SimpleMath::Matrix::CreateRotationX(mRotateSpeed * deltaTime));
+  mLightData.lightDir.Normalize();
+
   return true;
 }
 
