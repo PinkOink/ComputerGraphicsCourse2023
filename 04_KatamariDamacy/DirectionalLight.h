@@ -44,8 +44,7 @@ protected:
 
   const unsigned int mShadowMapSize = 8192;
 
-  //const float mRotateSpeed = 3.0f;
-  const float mRotateSpeed = 0.0f;
+  const float mRotateSpeed = 3.0f;
 
   DirectionalLightCB mLightData;;
   
