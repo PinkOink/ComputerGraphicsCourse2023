@@ -54,11 +54,12 @@ cbuffer MaterialCB : register(b3)
 }
 
 
-float ShadowCalculation(float4 posLightSpace)
+float ShadowCalculation(float4 posLightSpace, float3 normal)
 {
     float3 projPos = posLightSpace.xyz / posLightSpace.w;
     projPos.xy = projPos.xy * float2(0.5, -0.5) + float2(0.5, 0.5);
-    return shadow.SampleCmp(shadowSampler, projPos.xy, projPos.z - 0.001).r;
+    float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.0005);
+    return shadow.SampleCmp(shadowSampler, projPos.xy, projPos.z - bias).r;
 }
 
 
@@ -88,7 +89,7 @@ float4 main(PixelIn input) : SV_TARGET
     
     float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
     
-    float shadowed = ShadowCalculation(mul(float4(input.posW, 1.0), lightViewProj));
+    float shadowed = ShadowCalculation(mul(float4(input.posW, 1.0), lightViewProj), input.normal);
     
     litColor = (1.0 - shadowed) * diffuseLight + (1.0 - shadowed) * specularLight + ambientLight;
     
