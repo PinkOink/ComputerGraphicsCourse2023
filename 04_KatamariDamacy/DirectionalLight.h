@@ -18,6 +18,8 @@ struct DirectionalLightCB
 
   DirectX::SimpleMath::Vector3 lightDir = { 0.0f, 0.0f, 1.0f };
   float pad4;
+
+  DirectX::SimpleMath::Matrix viewProj;
 };
 
 
@@ -40,7 +42,7 @@ protected:
   PlayerComponent* mPlayer;
   std::vector<RenderItem*> mGeometry;
 
-  const unsigned int mShadowMapSize = 2048;
+  const unsigned int mShadowMapSize = 8192;
 
   //const float mRotateSpeed = 3.0f;
   const float mRotateSpeed = 0.0f;
@@ -58,5 +60,6 @@ protected:
   Microsoft::WRL::ComPtr<ID3D11Texture2D> mShadowTex = nullptr;
   Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mShadowTargetView = nullptr;
   Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mShadowResourceView = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11SamplerState> mShadowSamplerState = nullptr;
 };
 

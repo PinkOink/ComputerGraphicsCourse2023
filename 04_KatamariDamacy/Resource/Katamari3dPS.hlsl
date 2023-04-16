@@ -7,6 +7,8 @@
 Texture2D tex : register(t0);
 SamplerState texSampler : register(s0);
 #endif
+Texture2D shadow : register(t1);
+SamplerComparisonState shadowSampler : register(s1);
 
 struct PixelIn
 {
@@ -37,6 +39,8 @@ cbuffer DirectionalLightCB : register(b2)
 
     float3 lightDir;
     float pad4;
+    
+    float4x4 lightViewProj;
 };
 
 cbuffer MaterialCB : register(b3)
@@ -47,6 +51,14 @@ cbuffer MaterialCB : register(b3)
     
     float3 specCoefs;
     float specParam;
+}
+
+
+float ShadowCalculation(float4 posLightSpace)
+{
+    float3 projPos = posLightSpace.xyz / posLightSpace.w;
+    projPos.xy = projPos.xy * float2(0.5, -0.5) + float2(0.5, 0.5);
+    return shadow.SampleCmp(shadowSampler, projPos.xy, projPos.z - 0.001).r;
 }
 
 
@@ -76,7 +88,9 @@ float4 main(PixelIn input) : SV_TARGET
     
     float4 ambientLight = float4(ambientIntensity * objColor, 1.0);
     
-    litColor = diffuseLight + specularLight + ambientLight;
+    float shadowed = ShadowCalculation(mul(float4(input.posW, 1.0), lightViewProj));
+    
+    litColor = (1.0 - shadowed) * diffuseLight + (1.0 - shadowed) * specularLight + ambientLight;
     
     return litColor;
 }

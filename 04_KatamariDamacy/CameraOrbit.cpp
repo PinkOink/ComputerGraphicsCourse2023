@@ -100,8 +100,8 @@ DirectX::SimpleMath::Vector2 CameraOrbit::getPlaneDir()
 std::vector<DirectX::SimpleMath::Vector4> CameraOrbit::getFrustumCornersWorldSpace()
 {
     std::vector<DirectX::SimpleMath::Vector4> corners;
-
-    DirectX::SimpleMath::Matrix viewProjInv = (mView * mProj).Invert();
+    DirectX::SimpleMath::Matrix planetMat = mPlayer->getWorldMatrix().Invert();
+    DirectX::SimpleMath::Matrix viewProjInv = (planetMat * mView * mProj).Invert();
 
     for (int i = 0; i < 2; ++i)
     {

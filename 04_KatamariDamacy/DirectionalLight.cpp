@@ -56,6 +56,23 @@ bool DirectionalLight::init()
 		res = mContext->mDevice->CreateShaderResourceView(mShadowTex.Get(), &srvDesc, mShadowResourceView.GetAddressOf());
 		assert(SUCCEEDED(res));
 
+		D3D11_SAMPLER_DESC samplerDesc = {};
+		samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.MaxAnisotropy = 0;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_GREATER;
+		samplerDesc.BorderColor[0] = 1.0;
+		samplerDesc.BorderColor[1] = 1.0;
+		samplerDesc.BorderColor[2] = 1.0;
+		samplerDesc.BorderColor[3] = 1.0;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = 1;
+
+		res = mContext->mDevice->CreateSamplerState(&samplerDesc, mShadowSamplerState.GetAddressOf());
+		assert(SUCCEEDED(res));
+
 		mShadowViewport.TopLeftX = 0.0f;
 		mShadowViewport.TopLeftY = 0.0f;
 		mShadowViewport.Width = (FLOAT)mShadowMapSize;
@@ -109,8 +126,6 @@ bool DirectionalLight::update(float deltaTime)
 
 bool DirectionalLight::updateSubresources()
 {
-  mContext->updateConstantBuffer(mConstantBuffer.Get(), &mLightData, sizeof(mLightData));
-
 	std::vector<DirectX::SimpleMath::Vector4> corners = mPlayer->getCamera()->getFrustumCornersWorldSpace();
 	DirectX::SimpleMath::Vector3 center = DirectX::SimpleMath::Vector3::Zero;
 	for (auto& corner : corners)
@@ -150,6 +165,9 @@ bool DirectionalLight::updateSubresources()
 	cb.viewProj = (view * proj).Transpose();
   mContext->updateConstantBuffer(mShadowCB.Get(), &cb, sizeof(ShadowCB));
 
+	mLightData.viewProj = cb.viewProj;
+	mContext->updateConstantBuffer(mConstantBuffer.Get(), &mLightData, sizeof(mLightData));
+
   return true;
 }
 
@@ -173,6 +191,10 @@ bool DirectionalLight::draw()
 
 	mContext->beginFrame();
   mContext->mContext->PSSetConstantBuffers(2, 1, mConstantBuffer.GetAddressOf());
+  mContext->mContext->PSSetConstantBuffers(2, 1, mConstantBuffer.GetAddressOf());
+
+	mContext->mContext->PSSetShaderResources(1, 1, mShadowResourceView.GetAddressOf());
+	mContext->mContext->PSSetSamplers(1, 1, mShadowSamplerState.GetAddressOf());
 
   return true;
 }
