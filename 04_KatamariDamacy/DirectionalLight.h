@@ -4,6 +4,8 @@
 #include <RenderContext.h>
 #include <SimpleMath.h>
 
+#include "PlayerComponent.h"
+
 
 struct DirectionalLightCB
 {
@@ -22,22 +24,39 @@ struct DirectionalLightCB
 class DirectionalLight : public GameComponent
 {
 public:
-  DirectionalLight(RenderContext* context, DirectionalLightCB lightData = {});
+  DirectionalLight(RenderContext* context, PlayerComponent* player, DirectionalLightCB lightData = {});
 
   virtual bool init();
   virtual bool update(float deltaTime);
   virtual bool updateSubresources();
   virtual bool draw();
 
+  void setGeometries(std::vector<RenderItem*>& geometry) { mGeometry = geometry; }
+
   virtual ~DirectionalLight();
 
 protected:
   RenderContext* mContext;
+  PlayerComponent* mPlayer;
+  std::vector<RenderItem*> mGeometry;
 
-  const float mRotateSpeed = 3.0f;
+  const unsigned int mShadowMapSize = 2048;
+
+  //const float mRotateSpeed = 3.0f;
+  const float mRotateSpeed = 0.0f;
 
   DirectionalLightCB mLightData;;
   
   Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowCB = nullptr;
+
+  D3D11_VIEWPORT mShadowViewport = {};
+  Microsoft::WRL::ComPtr<ID3D11DepthStencilState> mShadowState = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11VertexShader> mShadowVS = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11InputLayout> mShadowLayout = nullptr;
+
+  Microsoft::WRL::ComPtr<ID3D11Texture2D> mShadowTex = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mShadowTargetView = nullptr;
+  Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mShadowResourceView = nullptr;
 };
 

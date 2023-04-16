@@ -33,6 +33,8 @@ public:
   virtual bool updateSubresources() override;
   virtual bool draw() override;
 
+  virtual bool drawGeometry() override;
+
   virtual ~MeshRenderItem() override;
 
 protected:

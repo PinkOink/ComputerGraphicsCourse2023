@@ -250,5 +250,23 @@ bool MeshRenderItem::draw()
 	return true;
 }
 
+bool MeshRenderItem::drawGeometry()
+{
+	mContext->mContext->RSSetState(mRastState.Get());
+
+	mContext->mContext->IASetPrimitiveTopology(mTopology);
+
+	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector3) };
+	UINT offsets[] = { 0, };
+
+	mContext->mContext->IASetVertexBuffers(0, 1, mPositionsBuffer.GetAddressOf(), strides, offsets);
+
+	mContext->mContext->VSSetConstantBuffers(1, 1, mConstantBuffer.GetAddressOf());
+
+	mContext->mContext->Draw(mVerticesNum, 0);
+
+	return true;
+}
+
 MeshRenderItem::~MeshRenderItem()
 {}

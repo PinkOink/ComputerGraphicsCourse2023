@@ -26,7 +26,8 @@ public:
   const DirectX::SimpleMath::Matrix& getLocalMatrix() const { return mLocalMatrix; };
   const DirectX::SimpleMath::Matrix& getLocalAddMatrix() const { return mLocalStepMatrix; };
   const DirectX::SimpleMath::Matrix& getWorldMatrix() const { return mWorldMatrix; };
-  DirectX::SimpleMath::Vector3 getWorldPos() const { return DirectX::SimpleMath::Vector3(mCurPos.x, mCurPos.y, mCurZ); };
+  DirectX::SimpleMath::Vector3 getWorldPos() const { return DirectX::SimpleMath::Vector3(mCurPos.x, mCurPos.y, mCurZ); }
+  CameraOrbit* getCamera() { return mCamera; }
 
   virtual ~PlayerComponent();
 

@@ -23,6 +23,7 @@ public:
   void addRadius(int step);
 
   DirectX::SimpleMath::Vector2 getPlaneDir();
+  std::vector<DirectX::SimpleMath::Vector4> getFrustumCornersWorldSpace();
 
   virtual ~CameraOrbit() = default;
 

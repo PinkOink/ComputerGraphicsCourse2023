@@ -11,5 +11,7 @@ public:
   virtual bool updateSubresources() = 0;
   virtual bool draw() = 0;
 
+  virtual bool drawGeometry() = 0;
+
   virtual ~RenderItem() = default;
 };

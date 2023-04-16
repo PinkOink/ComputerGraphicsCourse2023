@@ -49,6 +49,7 @@ protected:
   DirectionalLight* mLight = nullptr;
   PlayerComponent* mPlayer = nullptr;
   std::vector<ObjectComponent*> mObjects;
+  std::vector<RenderItem*> mGeometry;
   RenderItemWrapper* mFloor = nullptr;
 
   const float mBorderX = 50.0f;

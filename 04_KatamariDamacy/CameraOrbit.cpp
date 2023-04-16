@@ -21,7 +21,7 @@ CameraOrbit::CameraOrbit(RenderContext* context, Window* window, PlayerComponent
 bool CameraOrbit::init()
 {
   mView = DirectX::SimpleMath::Matrix::CreateLookAt(mPositionDefault, mFocalDefault, mUpDefault);
-  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0f, 1000.0f);
+  mProj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(0.25f * 3.14f, (float)mWindow->getWidth() / (float)mWindow->getHeight(), 1.0f, 200.0f);
 
   {
     CameraOrbitCB cb = {};
@@ -95,5 +95,29 @@ DirectX::SimpleMath::Vector2 CameraOrbit::getPlaneDir()
   dir = DirectX::SimpleMath::Vector3::Transform(dir, DirectX::SimpleMath::Matrix::CreateRotationZ(-mRightRot * 3.14f / 180.0f));
 
   return DirectX::SimpleMath::Vector2(-dir.x, -dir.y);
+}
+
+std::vector<DirectX::SimpleMath::Vector4> CameraOrbit::getFrustumCornersWorldSpace()
+{
+    std::vector<DirectX::SimpleMath::Vector4> corners;
+
+    DirectX::SimpleMath::Matrix viewProjInv = (mView * mProj).Invert();
+
+    for (int i = 0; i < 2; ++i)
+    {
+      for (int j = 0; j < 2; ++j)
+      {
+        for (int k = 0; k < 2; ++k)
+        {
+          DirectX::SimpleMath::Vector4 cornerWorld = DirectX::SimpleMath::Vector4::Transform(
+            DirectX::SimpleMath::Vector4(i * 2.0f - 1.0f, j * 2.0f - 1.0f, (float)k, 1.0f),
+            viewProjInv);
+
+          corners.push_back(cornerWorld / cornerWorld.w);
+        }
+      }
+    }
+
+    return corners;
 }
 

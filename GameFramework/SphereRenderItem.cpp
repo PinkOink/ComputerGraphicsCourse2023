@@ -297,6 +297,24 @@ bool SphereRenderItem::draw()
 	return true;
 }
 
+bool SphereRenderItem::drawGeometry()
+{
+	mContext->mContext->RSSetState(mRastState.Get());
+
+	mContext->mContext->IASetPrimitiveTopology(mTopology);
+
+	UINT strides[] = { sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector3) + sizeof(DirectX::SimpleMath::Vector2) };
+	UINT offsets[] = { 0 };
+	mContext->mContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), strides, offsets);
+	mContext->mContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	mContext->mContext->VSSetConstantBuffers(1, 1, mConstantBuffer.GetAddressOf());
+
+	mContext->mContext->DrawIndexedInstanced(mIndexNum, 1, 0, 0, 0);
+
+	return true;
+}
+
 SphereRenderItem::~SphereRenderItem()
 {}
 
