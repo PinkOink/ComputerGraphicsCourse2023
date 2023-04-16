@@ -58,7 +58,7 @@ float ShadowCalculation(float4 posLightSpace)
 {
     float3 projPos = posLightSpace.xyz / posLightSpace.w;
     projPos.xy = projPos.xy * float2(0.5, -0.5) + float2(0.5, 0.5);
-    return shadow.SampleCmp(shadowSampler, projPos.xy, projPos.z - 0.0008).r;
+    return shadow.SampleCmp(shadowSampler, projPos.xy, projPos.z - 0.001).r;
 }
 
 
