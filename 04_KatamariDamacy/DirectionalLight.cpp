@@ -15,8 +15,6 @@ DirectionalLight::DirectionalLight(RenderContext* context, PlayerComponent* play
 bool DirectionalLight::init()
 {
   mConstantBuffer = mContext->createConstantBuffer(&mLightData, sizeof(mLightData));
-	ShadowCB cb = {};
-  mShadowCB = mContext->createConstantBuffer(&cb, sizeof(ShadowCB));
 
 	// Create Shadow Map stuff
 	{
@@ -118,14 +116,6 @@ bool DirectionalLight::init()
 
 bool DirectionalLight::update(float deltaTime)
 {
-  mLightData.lightDir = DirectX::SimpleMath::Vector3::TransformNormal(mLightData.lightDir, DirectX::SimpleMath::Matrix::CreateRotationX(mRotateSpeed * deltaTime));
-  mLightData.lightDir.Normalize();
-
-  return true;
-}
-
-bool DirectionalLight::updateSubresources()
-{
 	std::vector<DirectX::SimpleMath::Vector4> corners = mPlayer->getCamera()->getFrustumCornersWorldSpace();
 	DirectX::SimpleMath::Vector3 center = DirectX::SimpleMath::Vector3::Zero;
 	for (auto& corner : corners)
@@ -161,11 +151,16 @@ bool DirectionalLight::updateSubresources()
 	}
 	DirectX::SimpleMath::Matrix proj = DirectX::SimpleMath::Matrix::CreateOrthographicOffCenter(xMin, xMax, yMin, yMax, zMin, zMax);
 
-	ShadowCB cb = {};
-	cb.viewProj = (view * proj).Transpose();
-  mContext->updateConstantBuffer(mShadowCB.Get(), &cb, sizeof(ShadowCB));
+	mLightData.viewProj = (view * proj).Transpose();
 
-	mLightData.viewProj = cb.viewProj;
+  mLightData.lightDir = DirectX::SimpleMath::Vector3::TransformNormal(mLightData.lightDir, DirectX::SimpleMath::Matrix::CreateRotationX(mRotateSpeed * deltaTime));
+  mLightData.lightDir.Normalize();
+
+  return true;
+}
+
+bool DirectionalLight::updateSubresources()
+{
 	mContext->updateConstantBuffer(mConstantBuffer.Get(), &mLightData, sizeof(mLightData));
 
   return true;
@@ -178,7 +173,7 @@ bool DirectionalLight::draw()
 
 	mContext->mContext->IASetInputLayout(mShadowLayout.Get());
 	mContext->mContext->VSSetShader(mShadowVS.Get(), nullptr, 0);
-	mContext->mContext->VSSetConstantBuffers(0, 1, mShadowCB.GetAddressOf());
+	mContext->mContext->VSSetConstantBuffers(0, 1, mConstantBuffer.GetAddressOf());
 	mContext->mContext->RSSetViewports(1, &mShadowViewport);
 	mContext->mContext->PSSetShader(nullptr, nullptr, 0);
 	mContext->mContext->OMSetRenderTargets(0, nullptr, mShadowTargetView.Get());
@@ -190,7 +185,6 @@ bool DirectionalLight::draw()
 	}
 
 	mContext->beginFrame();
-  mContext->mContext->PSSetConstantBuffers(2, 1, mConstantBuffer.GetAddressOf());
   mContext->mContext->PSSetConstantBuffers(2, 1, mConstantBuffer.GetAddressOf());
 
 	mContext->mContext->PSSetShaderResources(1, 1, mShadowResourceView.GetAddressOf());

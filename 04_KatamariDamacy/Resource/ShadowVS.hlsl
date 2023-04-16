@@ -1,6 +1,16 @@
 
 cbuffer LightCB : register(b0)
 {
+    float3 diffuseIntensity;
+    float pad1;
+    float3 specularIntensity;
+    float pad2;
+    float3 ambientIntensity;
+    float pad3;
+
+    float3 lightDir;
+    float pad4;
+
     float4x4 viewProj;
 };
 
